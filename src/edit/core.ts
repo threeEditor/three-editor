@@ -19,17 +19,17 @@ export default class EditManager extends EventEmitter {
         wrap.appendChild( this.renderer.domElement );
         
         this.sceneManager = new SceneManager(this.scene, this.renderer);
-        this.bindEvents();            
+        this.bindEvents();   
+        
+      
     }
 
-
+    get currentScene() {
+        return this.sceneManager.currentScene;
+    }
 
     bindEvents() {
         window.addEventListener('resize', this.onWindowResize)
-        this.on('add', (e) => {
-            console.log(e);
-            console.log('scene add ...')
-        })
     }
 
     onWindowResize() {
