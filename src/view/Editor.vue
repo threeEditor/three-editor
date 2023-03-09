@@ -29,7 +29,9 @@ MyCanvas.mounted = () => {
 }
 
 MyCanvas.beforeUnmount = () => {
-  
+  if(editManager) {
+    editManager.destroy();
+  }
 }
 </script>
 <style lang="scss"></style>
