@@ -20,7 +20,7 @@ let editManager: EditManager | null = null;
 MyCanvas.mounted = () => {
   const instance = getCurrentInstance()
   if(instance === null) {
-    console.warn('canvas is null1')
+    console.warn('canvas is null');
     return;
   }
   const wrap = instance.refs.MyCanvasWrap as HTMLElement;
