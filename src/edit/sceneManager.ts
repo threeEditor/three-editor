@@ -6,22 +6,24 @@ import MaterialManager from "./materialManager";
 import { loadGLTF } from "./loader";
 import { EventEmitter } from "eventemitter3";
 import { SceneManagerEvent } from "./event";
-
+import Renderer from "./renderer";
+import EditManager from "./core";
 export default class SceneManager extends EventEmitter {
+  public editManager: EditManager;
   public materialManager: MaterialManager;
   public loopStamp: number | null = null;
   public scene: THREE.Scene;
-  public renderer: THREE.WebGLRenderer;
+  public renderer: Renderer;
   public defaultCamera: THREE.PerspectiveCamera | null = null;
-
   get currentScene() {
     return this.scene;
   }
 
-  constructor(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
+  constructor() {
     super();
-    this.scene = scene;
-    this.renderer = renderer;
+    this.editManager = new EditManager();
+    this.scene = new THREE.Scene();
+    this.renderer = new Renderer();
     this.materialManager = new MaterialManager();
   }
 
@@ -53,7 +55,7 @@ export default class SceneManager extends EventEmitter {
     camera.position.set(10, 10, 10);
     camera.lookAt(0, 0, 0);
 
-    new OrbitControls(camera, this.renderer.domElement);
+    new OrbitControls(camera, this.renderer.instance!.domElement);
     this.defaultCamera = camera;
 
     // // TODO 加载场景
@@ -107,7 +109,7 @@ export default class SceneManager extends EventEmitter {
   loop() {
     this.loopStamp = requestAnimationFrame(this.loop.bind(this));
     if (this.renderer && this.scene && this.defaultCamera) {
-      this.renderer.render(this.scene, this.defaultCamera);
+      this.renderer.update();
     }
   }
 
