@@ -18,7 +18,7 @@ export default class Renderer {
     this.setInstance();
   }
   setInstance() {
-    this.clearColor = "#010101";
+    // this.clearColor = "#010101";
     this.instance = new THREE.WebGLRenderer({
       alpha: true,
       antialias: true,
@@ -28,7 +28,7 @@ export default class Renderer {
     this.instance.domElement.style.left = "0";
     this.instance.domElement.style.width = "100%";
     this.instance.domElement.style.height = "100%";
-    this.instance.setClearColor(this.clearColor);
+    // this.instance.setClearColor(this.clearColor);
     this.instance.setPixelRatio(this.config!.pixelRatio!);
     this.instance.setSize(this.config!.width!, this.config!.height!);
 
