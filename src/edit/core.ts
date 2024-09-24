@@ -62,6 +62,7 @@ export default class EditManager extends EventEmitter {
     if (this.camera) this.camera.resize();
   }
   destroy() {
-    this.renderer?.destory();
+    if (this.renderer) this.renderer.destory();
+    if (this.renderStamp) window.cancelAnimationFrame(this.renderStamp);
   }
 }
