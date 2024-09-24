@@ -42,7 +42,7 @@ export default class Camera {
   resize() {
     if (this.instance && this.config) {
       this.instance.aspect = this.config.width! / this.config.height!;
-      this.instance.updateMatrixWorld();
+      this.instance.updateProjectionMatrix();
     }
   }
 
