@@ -1,18 +1,11 @@
-import { useEffect, useRef } from "react";
 import "./App.css";
-import EditManager from "./edit/core";
+import ViewPort from "./components/viewport";
+
 function App() {
-  const instance = useRef<EditManager>();
-  useEffect(() => {
-    const appDom = document.getElementById("editCanvas");
-    if (appDom && !instance.current) {
-      instance.current = new EditManager(appDom);
-    }
-  }, []);
   return (
-    <>
-      <div id="editCanvas"></div>
-    </>
+    <div className="editor-manager">
+      <ViewPort />
+    </div>
   );
 }
 
