@@ -51,7 +51,7 @@ export default class SceneManager extends EventEmitter {
     this.materialManager.destroy();
   }
 
-  loadScene = (sceneConfig: ISceneConfig) => {    
+  loadScene = (sceneConfig: ISceneConfig) => {
     const { sceneWidth, sceneHeight } = this;
     const camera = new THREE.PerspectiveCamera(
       75,

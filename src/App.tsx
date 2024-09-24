@@ -1,21 +1,19 @@
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import "./App.css";
-import ViewPort from "./components/viewport";
-
+import EditManager from "./edit/core";
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <>
-    <h2>ThreeJs-editor</h2>
-    <div style={{
-      width: '600px',
-      height: '400px',
-      border: '1px solid'
-    }}>
-    <ViewPort />
-    </div>
-    
-  </>;
+  const instance = useRef<EditManager>();
+  useEffect(() => {
+    const appDom = document.getElementById("editCanvas");
+    if (appDom && !instance.current) {
+      instance.current = new EditManager(appDom);
+    }
+  }, []);
+  return (
+    <>
+      <div id="editCanvas"></div>
+    </>
+  );
 }
 
 export default App;
