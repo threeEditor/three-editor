@@ -65,12 +65,12 @@ export default class SceneManager extends EventEmitter {
     new OrbitControls(camera, this.renderer.domElement);
     this.defaultCamera = camera;
 
-    // // // TODO 加载场景
-    const boxGeometry = new THREE.BoxGeometry(4, 4, 4);
-    // const boxMaterial = this.materialManager.getMaterial('basic', { color: 0xff0000 });
-    const boxMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
-    const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
-    this.scene.add(boxMesh);
+    // // // // TODO 加载场景
+    // const boxGeometry = new THREE.BoxGeometry(4, 4, 4);
+    // // const boxMaterial = this.materialManager.getMaterial('basic', { color: 0xff0000 });
+    // const boxMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+    // const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+    // this.scene.add(boxMesh);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(1, 1, 0);
