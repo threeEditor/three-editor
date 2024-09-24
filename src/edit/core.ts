@@ -6,6 +6,7 @@ import Camera from "./camera"; // 导入相机
 import Config from "./config"; // 导入配置管理器
 import Renderer from "./renderer"; // 导入渲染器
 import Sizes from "./sizes"; // 导入尺寸管理器
+import { defaultSceneConfig, ISceneConfig } from "@/sceneConfig/config";
 
 export default class EditManager extends EventEmitter {
   static instance: EditManager; // 单例实例
@@ -36,11 +37,7 @@ export default class EditManager extends EventEmitter {
     this.camera = new Camera(); // 创建相机
     this.setRender(); // 设置渲染器
 
-    // TEST 创建立方体并添加到场景中
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    this.scene?.add(cube);
+    this.sceneManager = new SceneManager(); // 创建场景管理器
 
     // 监听窗口尺寸变化
     this.sizes.on("resize", () => {
@@ -56,6 +53,13 @@ export default class EditManager extends EventEmitter {
       this.wrap?.appendChild(this.renderer.instance.domElement); // 添加渲染器DOM元素到包裹元素
     } else {
       console.log("setRender error"); // 渲染器设置错误
+    }
+  }
+  setUp(sceneConfig: ISceneConfig = defaultSceneConfig) {
+    if (this.sceneManager) {
+      this.sceneManager.setScene(sceneConfig);
+    } else {
+      console.warn("Missing sceneManager"); // 警告缺少场景管理器
     }
   }
 
