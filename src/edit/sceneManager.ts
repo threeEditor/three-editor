@@ -7,21 +7,30 @@ import { loadGLTF } from "./loader";
 import { EventEmitter } from "eventemitter3";
 import { SceneManagerEvent } from "./event";
 
+interface ISceneManager {
+  scene: THREE.Scene;
+  renderer: THREE.WebGLRenderer;
+  width: number;
+  height: number;
+}
 export default class SceneManager extends EventEmitter {
   public materialManager: MaterialManager;
   public loopStamp: number | null = null;
   public scene: THREE.Scene;
   public renderer: THREE.WebGLRenderer;
   public defaultCamera: THREE.PerspectiveCamera | null = null;
-
+  private sceneWidth: number;
+  private sceneHeight: number;
   get currentScene() {
     return this.scene;
   }
 
-  constructor(scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
+  constructor({ scene, renderer, width, height }: ISceneManager) {
     super();
     this.scene = scene;
     this.renderer = renderer;
+    this.sceneWidth = width;
+    this.sceneHeight = height;
     this.materialManager = new MaterialManager();
   }
 
@@ -30,7 +39,6 @@ export default class SceneManager extends EventEmitter {
     this.clearScene();
 
     this.loadScene(sceneConfig);
-
     if (this.loopStamp) {
       cancelAnimationFrame(this.loopStamp);
       this.loopStamp = null;
@@ -43,10 +51,11 @@ export default class SceneManager extends EventEmitter {
     this.materialManager.destroy();
   }
 
-  loadScene = (sceneConfig: ISceneConfig) => {
+  loadScene = (sceneConfig: ISceneConfig) => {    
+    const { sceneWidth, sceneHeight } = this;
     const camera = new THREE.PerspectiveCamera(
       75,
-      window.innerWidth / window.innerHeight,
+      sceneWidth / sceneHeight,
       0.1,
       1000
     );
@@ -56,12 +65,12 @@ export default class SceneManager extends EventEmitter {
     new OrbitControls(camera, this.renderer.domElement);
     this.defaultCamera = camera;
 
-    // // TODO 加载场景
-    // const boxGeometry = new THREE.BoxGeometry(4, 4, 4);
-    // // const boxMaterial = this.materialManager.getMaterial('basic', { color: 0xff0000 });
-    // const boxMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
-    // const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
-    // this.scene.add(boxMesh);
+    // // // TODO 加载场景
+    const boxGeometry = new THREE.BoxGeometry(4, 4, 4);
+    // const boxMaterial = this.materialManager.getMaterial('basic', { color: 0xff0000 });
+    const boxMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+    const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+    this.scene.add(boxMesh);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(1, 1, 0);
@@ -107,6 +116,7 @@ export default class SceneManager extends EventEmitter {
   loop() {
     this.loopStamp = requestAnimationFrame(this.loop.bind(this));
     if (this.renderer && this.scene && this.defaultCamera) {
+      // console.log('loop')
       this.renderer.render(this.scene, this.defaultCamera);
     }
   }
