@@ -8,7 +8,7 @@ export default class Sizes extends EventEmitter {
     width: number;
     height: number;
   };
-  $sizeViewport: any;
+  _sizeViewport: any;
   /**
    * Constructor
    */
@@ -20,13 +20,13 @@ export default class Sizes extends EventEmitter {
       width: 0,
       height: 0,
     };
-    this.$sizeViewport = document.createElement("div");
-    this.$sizeViewport.style.width = "100vw";
-    this.$sizeViewport.style.height = "100vh";
-    this.$sizeViewport.style.position = "absolute";
-    this.$sizeViewport.style.top = 0;
-    this.$sizeViewport.style.left = 0;
-    this.$sizeViewport.style.pointerEvents = "none";
+    this._sizeViewport = document.createElement("div");
+    this._sizeViewport.style.width = "100vw";
+    this._sizeViewport.style.height = "100vh";
+    this._sizeViewport.style.position = "absolute";
+    this._sizeViewport.style.top = 0;
+    this._sizeViewport.style.left = 0;
+    this._sizeViewport.style.pointerEvents = "none";
 
     // Resize event
     this.resize = this.resize.bind(this);
@@ -39,10 +39,10 @@ export default class Sizes extends EventEmitter {
    * Resize
    */
   resize() {
-    document.body.appendChild(this.$sizeViewport);
-    this.viewport.width = this.$sizeViewport.offsetWidth;
-    this.viewport.height = this.$sizeViewport.offsetHeight;
-    document.body.removeChild(this.$sizeViewport);
+    document.body.appendChild(this._sizeViewport);
+    this.viewport.width = this._sizeViewport.offsetWidth;
+    this.viewport.height = this._sizeViewport.offsetHeight;
+    document.body.removeChild(this._sizeViewport);
 
     this.width = window.innerWidth;
     this.height = window.innerHeight;

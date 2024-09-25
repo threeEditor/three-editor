@@ -1,20 +1,25 @@
 import * as THREE from "three";
 import EditManager from "./core";
-import Config from "./config";
-import Camera from "./camera";
+import Config from "./utils/config";
+interface IRendererPropsType {
+  scene: THREE.Scene;
+  camera: THREE.PerspectiveCamera;
+  config: Config;
+}
 export default class Renderer {
   editManager: EditManager;
   instance: THREE.WebGLRenderer | null = null;
   clearColor: string = "#010101";
   context: WebGLRenderingContext | WebGL2RenderingContext | null = null;
-  config: Config | null = null;
-  scene: THREE.Scene | null;
-  camera: Camera | null;
-  constructor() {
+  scene: THREE.Scene | null = null;
+  camera: THREE.PerspectiveCamera;
+  config: Config;
+
+  constructor(_options: IRendererPropsType) {
     this.editManager = new EditManager();
-    this.config = this.editManager.config;
-    this.scene = this.editManager.scene;
-    this.camera = this.editManager.camera;
+    this.scene = _options.scene;
+    this.camera = _options.camera;
+    this.config = _options.config;
     this.setInstance();
   }
   setInstance() {
@@ -46,7 +51,9 @@ export default class Renderer {
   }
 
   update() {
-    this.instance?.render(this.scene!, this.camera?.instance!);
+    if (this.scene && this.camera) {
+      this.instance?.render(this.scene, this.camera);
+    }
   }
 
   destory() {

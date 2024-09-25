@@ -1,7 +1,6 @@
 import * as THREE from "three";
-import { EventEmitter } from "eventemitter3";
 
-export default class Time extends EventEmitter {
+export default class Time {
   start: number;
   current: number;
   elapsed: number;
@@ -10,7 +9,6 @@ export default class Time extends EventEmitter {
   ticker?: number | null;
   playing: boolean;
   constructor() {
-    super();
     this.start = Date.now();
     this.current = this.start;
     this.elapsed = 0;
@@ -37,10 +35,6 @@ export default class Time extends EventEmitter {
 
     if (this.delta > 60) {
       this.delta = 60;
-    }
-
-    if (this.playing) {
-      this.emit("loop");
     }
   }
 
