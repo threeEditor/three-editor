@@ -1,42 +1,31 @@
 import * as THREE from "three";
-import EditManager from "./core";
 import Sizes from "./utils/sizes";
 import Config from "./utils/config";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 interface ICamera {
   scene: THREE.Scene;
+  wrap: HTMLElement;
+  config: Config;
+  sizes: Sizes;
 }
 export default class Camera {
-  editManager: EditManager;
-  instance: THREE.PerspectiveCamera;
-  sizes: Sizes | null;
-  scene: THREE.Scene | null;
-  wrap: HTMLElement | null;
+  public instance: THREE.PerspectiveCamera;
   control: OrbitControls | null = null;
-  config: Config | null;
-  constructor(
-    _options: ICamera = {
-      scene: new THREE.Scene(),
-    }
-  ) {
-    this.scene = _options.scene;
-
-    this.editManager = new EditManager();
-    this.wrap = this.editManager.wrap;
-    this.config = this.editManager.config;
-    this.sizes = this.editManager.sizes;
+  config: Config;
+  constructor(_options: ICamera) {
+    this.config = _options.config;
     this.instance = new THREE.PerspectiveCamera(
       60,
-      this.sizes?.width! / this.sizes?.height!,
+      _options.sizes?.width! / _options.sizes?.height!,
       0.1,
       1500
     );
     this.instance.position.set(20, 20, 20);
-    if (this.scene) {
-      this.scene.add(this.instance);
+    if (_options.scene) {
+      _options.scene.add(this.instance);
     }
 
-    this.control = new OrbitControls(this.instance!, this.wrap);
+    this.control = new OrbitControls(this.instance!, _options.wrap);
     this.control.update();
   }
 

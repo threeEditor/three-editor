@@ -32,10 +32,16 @@ export default class EditManager extends EventEmitter {
     this.sizes = new Sizes(); // 初始化尺寸管理器
     this.time = new Time(); // 初始化时间管理器
 
-    this.sceneManager = new SceneManager(); // 创建场景管理器
+    this.sceneManager = new SceneManager({
+      wrap: this.wrap,
+      config: this.config,
+    }); // 创建场景管理器
 
     this.camera = new Camera({
       scene: this.sceneManager.scene,
+      sizes: this.sizes,
+      config: this.config,
+      wrap: this.wrap,
     });
     this.sceneManager.setCamera(this.camera);
     this.sceneManager.setRender();

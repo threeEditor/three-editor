@@ -1,8 +1,10 @@
 import * as THREE from "three";
 import EditManager from "./core";
+import Config from "./utils/config";
 interface IRendererPropsType {
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
+  config: Config;
 }
 export default class Renderer {
   editManager: EditManager;
@@ -11,15 +13,14 @@ export default class Renderer {
   context: WebGLRenderingContext | WebGL2RenderingContext | null = null;
   scene: THREE.Scene | null = null;
   camera: THREE.PerspectiveCamera;
+  config: Config;
 
-  constructor({ scene, camera }: IRendererPropsType) {
+  constructor(_options: IRendererPropsType) {
     this.editManager = new EditManager();
-    this.scene = scene;
-    this.camera = camera;
+    this.scene = _options.scene;
+    this.camera = _options.camera;
+    this.config = _options.config;
     this.setInstance();
-  }
-  get currentConfig() {
-    return this.editManager.config;
   }
   setInstance() {
     // this.clearColor = "#010101";
@@ -33,11 +34,8 @@ export default class Renderer {
     this.instance.domElement.style.width = "100%";
     this.instance.domElement.style.height = "100%";
     // this.instance.setClearColor(this.clearColor);
-    this.instance.setPixelRatio(this.currentConfig!.pixelRatio!);
-    this.instance.setSize(
-      this.currentConfig!.width!,
-      this.currentConfig!.height!
-    );
+    this.instance.setPixelRatio(this.config!.pixelRatio!);
+    this.instance.setSize(this.config!.width!, this.config!.height!);
 
     //Encode
     this.instance.outputColorSpace = THREE.SRGBColorSpace;
@@ -48,11 +46,8 @@ export default class Renderer {
   }
 
   resize() {
-    this.instance!.setSize(
-      this.currentConfig!.width!,
-      this.currentConfig!.height!
-    );
-    this.instance?.setPixelRatio(this.currentConfig!.pixelRatio!);
+    this.instance!.setSize(this.config!.width!, this.config!.height!);
+    this.instance?.setPixelRatio(this.config!.pixelRatio!);
   }
 
   update() {
