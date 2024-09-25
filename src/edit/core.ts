@@ -1,23 +1,19 @@
-import * as THREE from "three"; // 导入Three.js库
-import { EventEmitter } from "eventemitter3"; // 导入事件发射器
 import SceneManager from "./sceneManager"; // 导入场景管理器
 import Time from "./utils/time"; // 导入时间管理器
-import Camera from "./camera"; // 导入相机
+import Camera from "./cameraManager"; // 导入相机
 import Config from "./utils/config"; // 导入配置管理器
 import Sizes from "./utils/sizes"; // 导入尺寸管理器
 import { defaultSceneConfig, ISceneConfig } from "@/sceneConfig/config";
 
 export default class EditManager {
-  wrap: HTMLElement | null = null; // 包裹元素
-  sceneManager!: SceneManager; // 场景管理器
-  time!: Time; // 时间管理器
-  camera!: Camera; // 相机
-  config!: Config; // 配置管理器
-  sizes!: Sizes; // 尺寸管理器
-  renderStamp?: number; // 渲染时间戳
-  get currentScene() {
-    return this.sceneManager.scene;
-  }
+  public sceneManager!: SceneManager; // 场景管理器
+  private wrap: HTMLElement | null = null; // 包裹元素
+
+  private time!: Time; // 时间管理器
+  private camera!: Camera; // 相机
+  private config!: Config; // 配置管理器
+  private sizes!: Sizes; // 尺寸管理器
+  private renderStamp?: number; // 渲染时间戳
 
   constructor(wrap: HTMLElement | null = null) {
     this.wrap = wrap; // 设置包裹元素

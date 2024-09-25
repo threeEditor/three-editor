@@ -6,7 +6,7 @@ import { loadGLTF } from "./utils/loader";
 import { EventEmitter } from "eventemitter3";
 import { SceneManagerEvent } from "./event";
 import Renderer from "./renderer";
-import Camera from "./camera";
+import CameraManager from "./cameraManager";
 import Config from "./utils/config";
 import Sizes from "./utils/sizes";
 interface IPropsType {
@@ -18,14 +18,12 @@ interface IPropsType {
 export default class SceneManager extends EventEmitter {
   public materialManager: MaterialManager;
   public scene: THREE.Scene = new THREE.Scene();
-  public cameraManager!: Camera;
+  public cameraManager!: CameraManager;
   public renderer!: Renderer;
   private sizes: Sizes;
   private config: Config;
   private wrap: HTMLElement;
-  get currentScene() {
-    return this.scene;
-  }
+
   constructor(options: IPropsType) {
     super();
     const { sizes, config, wrap } = options;
@@ -37,19 +35,19 @@ export default class SceneManager extends EventEmitter {
   }
 
   init() {
-    this.cameraManager = new Camera({
+    this.cameraManager = new CameraManager({
       scene: this.scene,
       config: this.config,
       wrap: this.wrap,
       sizes: this.sizes,
     });
 
+    // 初始化渲染器
     this.renderer = new Renderer({
       scene: this.scene,
       cameraManager: this.cameraManager,
       config: this.config,
-    }); // 初始化渲染器
-
+    }); 
     this.wrap.appendChild(this.renderer.instance.domElement); // 添加渲染器DOM元素到包裹元素
   }
 

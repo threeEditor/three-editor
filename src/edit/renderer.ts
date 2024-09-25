@@ -1,16 +1,16 @@
 import * as THREE from "three";
 import Config from "./utils/config";
-import Camera from "./camera";
+import CameraManager from "./cameraManager";
 interface IRendererPropsType {
   scene: THREE.Scene;
-  cameraManager: Camera;
+  cameraManager: CameraManager;
   config: Config;
 }
 export default class Renderer {
   public instance!: THREE.WebGLRenderer;
   private scene: THREE.Scene | null = null;
   private config: Config;
-  private cameraManager: Camera;
+  private cameraManager: CameraManager;
   private context: WebGLRenderingContext | WebGL2RenderingContext | null = null;
 
   constructor(options: IRendererPropsType) {

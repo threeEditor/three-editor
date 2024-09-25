@@ -2,13 +2,15 @@ import * as THREE from "three";
 import Sizes from "./utils/sizes";
 import Config from "./utils/config";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
 interface ICamera {
   scene: THREE.Scene;
   wrap: HTMLElement;
   config: Config;
   sizes: Sizes;
 }
-export default class Camera {
+
+export default class CameraManager {
   public instance: THREE.PerspectiveCamera;
   private control: OrbitControls | null = null;
   private config: Config;
