@@ -1,28 +1,52 @@
 import { ISceneConfig } from "@/sceneConfig/config";
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 import MaterialManager from "./materialManager";
-import { loadGLTF } from "./loader";
+import { loadGLTF } from "./utils/loader";
 import { EventEmitter } from "eventemitter3";
 import { SceneManagerEvent } from "./event";
 import EditManager from "./core";
+import Renderer from "./renderer";
+import Camera from "./camera";
 
 export default class SceneManager extends EventEmitter {
   public materialManager: MaterialManager;
-  public scene: THREE.Scene;
+  public scene: THREE.Scene = new THREE.Scene();
   editManager: EditManager;
+  renderer!: Renderer;
+  currentCamera: THREE.PerspectiveCamera | null = null;
   get currentScene() {
     return this.scene;
   }
-
+  get currentWrap() {
+    return this.editManager.wrap;
+  }
+  get defaultCamera() {
+    return this.editManager.camera;
+  }
   constructor() {
     super();
     this.editManager = new EditManager();
-    this.scene = this.editManager.scene;
     this.materialManager = new MaterialManager();
   }
-
+  setCamera(camera: Camera) {
+    this.currentCamera = camera.instance;
+  }
+  setRender() {
+    if (this.currentCamera) {
+      this.renderer = new Renderer({
+        scene: this.scene,
+        camera: this.currentCamera,
+      }); // 初始化渲染器
+      if (this.renderer && this.renderer.instance) {
+        this.currentWrap?.appendChild(this.renderer.instance.domElement); // 添加渲染器DOM元素到包裹元素
+      } else {
+        console.warn("setRender error"); // 渲染器设置错误
+      }
+    } else {
+      console.warn("setRender error");
+    }
+  }
   setScene(sceneConfig: ISceneConfig) {
     // 清空场景中的对象
     this.clearScene();
@@ -76,8 +100,18 @@ export default class SceneManager extends EventEmitter {
         break;
     }
   }
-
-  destroy() {
+  update() {
+    if (this.renderer) {
+      this.renderer.update();
+    }
+  }
+  resize() {
+    if (this.renderer) this.renderer.resize();
+  }
+  destory() {
+    if (this.renderer) {
+      this.renderer.destory();
+    }
     this.clearScene();
   }
 }

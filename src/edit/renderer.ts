@@ -1,21 +1,25 @@
 import * as THREE from "three";
 import EditManager from "./core";
-import Config from "./config";
-import Camera from "./camera";
+interface IRendererPropsType {
+  scene: THREE.Scene;
+  camera: THREE.PerspectiveCamera;
+}
 export default class Renderer {
   editManager: EditManager;
   instance: THREE.WebGLRenderer | null = null;
   clearColor: string = "#010101";
   context: WebGLRenderingContext | WebGL2RenderingContext | null = null;
-  config: Config | null = null;
-  scene: THREE.Scene | null;
-  camera: Camera | null;
-  constructor() {
+  scene: THREE.Scene | null = null;
+  camera: THREE.PerspectiveCamera;
+
+  constructor({ scene, camera }: IRendererPropsType) {
     this.editManager = new EditManager();
-    this.config = this.editManager.config;
-    this.scene = this.editManager.scene;
-    this.camera = this.editManager.camera;
+    this.scene = scene;
+    this.camera = camera;
     this.setInstance();
+  }
+  get currentConfig() {
+    return this.editManager.config;
   }
   setInstance() {
     // this.clearColor = "#010101";
@@ -29,8 +33,11 @@ export default class Renderer {
     this.instance.domElement.style.width = "100%";
     this.instance.domElement.style.height = "100%";
     // this.instance.setClearColor(this.clearColor);
-    this.instance.setPixelRatio(this.config!.pixelRatio!);
-    this.instance.setSize(this.config!.width!, this.config!.height!);
+    this.instance.setPixelRatio(this.currentConfig!.pixelRatio!);
+    this.instance.setSize(
+      this.currentConfig!.width!,
+      this.currentConfig!.height!
+    );
 
     //Encode
     this.instance.outputColorSpace = THREE.SRGBColorSpace;
@@ -41,12 +48,17 @@ export default class Renderer {
   }
 
   resize() {
-    this.instance!.setSize(this.config!.width!, this.config!.height!);
-    this.instance?.setPixelRatio(this.config!.pixelRatio!);
+    this.instance!.setSize(
+      this.currentConfig!.width!,
+      this.currentConfig!.height!
+    );
+    this.instance?.setPixelRatio(this.currentConfig!.pixelRatio!);
   }
 
   update() {
-    this.instance?.render(this.scene!, this.camera?.instance!);
+    if (this.scene && this.camera) {
+      this.instance?.render(this.scene, this.camera);
+    }
   }
 
   destory() {
