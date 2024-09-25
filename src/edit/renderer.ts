@@ -57,7 +57,9 @@ export default class Renderer {
   }
 
   destory() {
-    this.instance?.renderLists.dispose();
-    this.instance?.dispose();
+    if(!this.instance) return;
+    this.instance.renderLists.dispose();
+    this.instance.dispose();
+    this.instance.domElement.parentNode?.removeChild(this.instance.domElement);
   }
 }

@@ -8,7 +8,6 @@ import Sizes from "./utils/sizes"; // 导入尺寸管理器
 import { defaultSceneConfig, ISceneConfig } from "@/sceneConfig/config";
 
 export default class EditManager extends EventEmitter {
-  static instance: EditManager; // 单例实例
   wrap: HTMLElement | null = null; // 包裹元素
   sceneManager!: SceneManager; // 场景管理器
   time!: Time; // 时间管理器
@@ -16,13 +15,12 @@ export default class EditManager extends EventEmitter {
   config!: Config; // 配置管理器
   sizes!: Sizes; // 尺寸管理器
   renderStamp?: number; // 渲染时间戳
+  get currentScene() {
+    return this.sceneManager.scene;
+  }
 
   constructor(wrap: HTMLElement | null = null) {
     super(); // 调用父类构造函数
-    if (EditManager.instance) {
-      return EditManager.instance; // 确保单例模式
-    }
-    EditManager.instance = this; // 设置实例
     this.wrap = wrap; // 设置包裹元素
     if (!this.wrap) {
       console.warn("Missing wrap"); // 警告缺少包裹元素
@@ -52,9 +50,7 @@ export default class EditManager extends EventEmitter {
     });
     this.render();
   }
-  get currentScene() {
-    return this.sceneManager.scene;
-  }
+
   setUp(sceneConfig: ISceneConfig = defaultSceneConfig) {
     if (this.sceneManager) {
       this.sceneManager.setScene(sceneConfig);
@@ -66,7 +62,7 @@ export default class EditManager extends EventEmitter {
   render() {
     if (this.camera) this.camera.update();
     if (this.sceneManager) this.sceneManager.update(); // 更新渲染器
-    this.renderStamp = window.requestAnimationFrame(() => this.render()); // 循环渲染
+    this.renderStamp = requestAnimationFrame(() => this.render()); // 循环渲染
   }
 
   resize() {
@@ -77,6 +73,6 @@ export default class EditManager extends EventEmitter {
 
   destroy() {
     if (this.sceneManager) this.sceneManager.destory(); // 销毁渲染器
-    if (this.renderStamp) window.cancelAnimationFrame(this.renderStamp); // 取消动画帧
+    if (this.renderStamp) cancelAnimationFrame(this.renderStamp); // 取消动画帧
   }
 }

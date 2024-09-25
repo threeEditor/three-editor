@@ -10,8 +10,8 @@ interface ICamera {
 }
 export default class Camera {
   public instance: THREE.PerspectiveCamera;
-  control: OrbitControls | null = null;
-  config: Config;
+  private control: OrbitControls | null = null;
+  private config: Config;
   constructor(_options: ICamera) {
     this.config = _options.config;
     this.instance = new THREE.PerspectiveCamera(

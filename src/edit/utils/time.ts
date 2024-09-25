@@ -26,13 +26,9 @@ export default class Time {
   }
   tick() {
     this.ticker = window.requestAnimationFrame(this.tick);
-
     const current = Date.now();
-
     this.delta = current - this.current;
-
     this.elapsed = (current - this.start) / 1000;
-
     if (this.delta > 60) {
       this.delta = 60;
     }

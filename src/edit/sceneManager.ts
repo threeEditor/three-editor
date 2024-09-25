@@ -29,6 +29,8 @@ export default class SceneManager extends EventEmitter {
     this.wrap = _options.wrap;
     this.materialManager = new MaterialManager();
   }
+
+
   setCamera(camera: Camera | THREE.PerspectiveCamera) {
     if (camera instanceof Camera) {
       this.currentCamera = camera.instance;
