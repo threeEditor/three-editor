@@ -8,56 +8,54 @@ import { SceneManagerEvent } from "./event";
 import Renderer from "./renderer";
 import Camera from "./camera";
 import Config from "./utils/config";
+import Sizes from "./utils/sizes";
 interface IPropsType {
   wrap: HTMLElement;
   config: Config;
+  sizes: Sizes;
 }
 
 export default class SceneManager extends EventEmitter {
   public materialManager: MaterialManager;
   public scene: THREE.Scene = new THREE.Scene();
-  renderer!: Renderer;
-  currentCamera: THREE.PerspectiveCamera | null = null;
-  config: Config;
-  wrap: HTMLElement;
+  public cameraManager!: Camera;
+  public renderer!: Renderer;
+  private sizes: Sizes;
+  private config: Config;
+  private wrap: HTMLElement;
   get currentScene() {
     return this.scene;
   }
-  constructor(_options: IPropsType) {
+  constructor(options: IPropsType) {
     super();
-    this.config = _options.config;
-    this.wrap = _options.wrap;
+    const { sizes, config, wrap } = options;
+    this.config = config;
+    this.wrap = wrap;
+    this.sizes = sizes;
     this.materialManager = new MaterialManager();
+    this.init();
   }
 
+  init() {
+    this.cameraManager = new Camera({
+      scene: this.scene,
+      config: this.config,
+      wrap: this.wrap,
+      sizes: this.sizes,
+    });
 
-  setCamera(camera: Camera | THREE.PerspectiveCamera) {
-    if (camera instanceof Camera) {
-      this.currentCamera = camera.instance;
-    } else {
-      this.currentCamera = camera;
-    }
+    this.renderer = new Renderer({
+      scene: this.scene,
+      cameraManager: this.cameraManager,
+      config: this.config,
+    }); // 初始化渲染器
+
+    this.wrap.appendChild(this.renderer.instance.domElement); // 添加渲染器DOM元素到包裹元素
   }
-  setRender() {
-    if (this.currentCamera) {
-      this.renderer = new Renderer({
-        scene: this.scene,
-        camera: this.currentCamera,
-        config: this.config,
-      }); // 初始化渲染器
-      if (this.renderer && this.renderer.instance) {
-        this.wrap?.appendChild(this.renderer.instance.domElement); // 添加渲染器DOM元素到包裹元素
-      } else {
-        console.warn("setRender error"); // 渲染器设置错误
-      }
-    } else {
-      console.warn("setRender error");
-    }
-  }
+
   setScene(sceneConfig: ISceneConfig) {
     // 清空场景中的对象
     this.clearScene();
-
     this.loadScene(sceneConfig);
   }
 
@@ -66,7 +64,7 @@ export default class SceneManager extends EventEmitter {
     this.materialManager.destroy();
   }
 
-  loadScene = (sceneConfig: ISceneConfig) => {
+  loadScene(sceneConfig: ISceneConfig) {
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(1, 1, 0);
     this.scene.add(directionalLight);
@@ -77,7 +75,7 @@ export default class SceneManager extends EventEmitter {
     this.emit(SceneManagerEvent.SCENELOAD, { sceneConfig });
   };
 
-  add(option: any, callback?: (result: any) => void) {
+  add(option: any) {
     switch (option.type) {
       case "model":
         this.addModel(option.model, option.callback);
@@ -107,18 +105,17 @@ export default class SceneManager extends EventEmitter {
         break;
     }
   }
+
   update() {
-    if (this.renderer) {
-      this.renderer.update();
-    }
+    this.renderer.update();
   }
+
   resize() {
-    if (this.renderer) this.renderer.resize();
+    this.renderer.resize();
   }
+
   destory() {
-    if (this.renderer) {
-      this.renderer.destory();
-    }
+    this.renderer.destory();
     this.clearScene();
   }
 }

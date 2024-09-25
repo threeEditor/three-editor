@@ -7,7 +7,7 @@ import Config from "./utils/config"; // 导入配置管理器
 import Sizes from "./utils/sizes"; // 导入尺寸管理器
 import { defaultSceneConfig, ISceneConfig } from "@/sceneConfig/config";
 
-export default class EditManager extends EventEmitter {
+export default class EditManager {
   wrap: HTMLElement | null = null; // 包裹元素
   sceneManager!: SceneManager; // 场景管理器
   time!: Time; // 时间管理器
@@ -20,7 +20,6 @@ export default class EditManager extends EventEmitter {
   }
 
   constructor(wrap: HTMLElement | null = null) {
-    super(); // 调用父类构造函数
     this.wrap = wrap; // 设置包裹元素
     if (!this.wrap) {
       console.warn("Missing wrap"); // 警告缺少包裹元素
@@ -33,16 +32,8 @@ export default class EditManager extends EventEmitter {
     this.sceneManager = new SceneManager({
       wrap: this.wrap,
       config: this.config,
-    }); // 创建场景管理器
-
-    this.camera = new Camera({
-      scene: this.sceneManager.scene,
       sizes: this.sizes,
-      config: this.config,
-      wrap: this.wrap,
-    });
-    this.sceneManager.setCamera(this.camera);
-    this.sceneManager.setRender();
+    }); // 创建场景管理器
 
     // 监听窗口尺寸变化
     this.sizes.on("resize", () => {
@@ -60,7 +51,6 @@ export default class EditManager extends EventEmitter {
   }
 
   render() {
-    if (this.camera) this.camera.update();
     if (this.sceneManager) this.sceneManager.update(); // 更新渲染器
     this.renderStamp = requestAnimationFrame(() => this.render()); // 循环渲染
   }
@@ -68,7 +58,7 @@ export default class EditManager extends EventEmitter {
   resize() {
     if (this.config) this.config.resize(); // 调整配置
     if (this.sceneManager) this.sceneManager.resize(); // 调整渲染器
-    if (this.camera) this.camera.resize(); // 调整相机
+    
   }
 
   destroy() {

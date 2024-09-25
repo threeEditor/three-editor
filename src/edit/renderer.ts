@@ -1,29 +1,27 @@
 import * as THREE from "three";
-import EditManager from "./core";
 import Config from "./utils/config";
+import Camera from "./camera";
 interface IRendererPropsType {
   scene: THREE.Scene;
-  camera: THREE.PerspectiveCamera;
+  cameraManager: Camera;
   config: Config;
 }
 export default class Renderer {
-  editManager: EditManager;
-  instance: THREE.WebGLRenderer | null = null;
-  clearColor: string = "#010101";
-  context: WebGLRenderingContext | WebGL2RenderingContext | null = null;
-  scene: THREE.Scene | null = null;
-  camera: THREE.PerspectiveCamera;
-  config: Config;
+  public instance!: THREE.WebGLRenderer;
+  private scene: THREE.Scene | null = null;
+  private config: Config;
+  private cameraManager: Camera;
+  private context: WebGLRenderingContext | WebGL2RenderingContext | null = null;
 
-  constructor(_options: IRendererPropsType) {
-    this.editManager = new EditManager();
-    this.scene = _options.scene;
-    this.camera = _options.camera;
-    this.config = _options.config;
+  constructor(options: IRendererPropsType) {
+    const { cameraManager, scene, config } = options;
+    this.cameraManager = cameraManager;
+    this.scene = scene;
+    this.config = config;
     this.setInstance();
   }
+  
   setInstance() {
-    // this.clearColor = "#010101";
     this.instance = new THREE.WebGLRenderer({
       alpha: true,
       antialias: true,
@@ -33,7 +31,6 @@ export default class Renderer {
     this.instance.domElement.style.left = "0";
     this.instance.domElement.style.width = "100%";
     this.instance.domElement.style.height = "100%";
-    // this.instance.setClearColor(this.clearColor);
     this.instance.setPixelRatio(this.config!.pixelRatio!);
     this.instance.setSize(this.config!.width!, this.config!.height!);
 
@@ -48,12 +45,15 @@ export default class Renderer {
   resize() {
     this.instance!.setSize(this.config!.width!, this.config!.height!);
     this.instance?.setPixelRatio(this.config!.pixelRatio!);
+    this.cameraManager.resize(); // 调整相机
   }
 
   update() {
-    if (this.scene && this.camera) {
-      this.instance?.render(this.scene, this.camera);
+    this.cameraManager.update();
+    if (this.scene) {
+      this.instance?.render(this.scene, this.cameraManager.instance);
     }
+    
   }
 
   destory() {
