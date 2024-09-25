@@ -1,21 +1,17 @@
 import * as THREE from "three";
 import Config from "./utils/config";
-import CameraManager from "./cameraManager";
 interface IRendererPropsType {
   scene: THREE.Scene;
-  cameraManager: CameraManager;
   config: Config;
 }
 export default class Renderer {
   public instance!: THREE.WebGLRenderer;
   private scene: THREE.Scene | null = null;
   private config: Config;
-  private cameraManager: CameraManager;
   private context: WebGLRenderingContext | WebGL2RenderingContext | null = null;
 
   constructor(options: IRendererPropsType) {
-    const { cameraManager, scene, config } = options;
-    this.cameraManager = cameraManager;
+    const { scene, config } = options;
     this.scene = scene;
     this.config = config;
     this.setInstance();
@@ -45,13 +41,11 @@ export default class Renderer {
   resize() {
     this.instance!.setSize(this.config!.width!, this.config!.height!);
     this.instance?.setPixelRatio(this.config!.pixelRatio!);
-    this.cameraManager.resize(); // 调整相机
   }
 
-  update() {
-    this.cameraManager.update();
+  update(camera: THREE.Camera) {
     if (this.scene) {
-      this.instance?.render(this.scene, this.cameraManager.instance);
+      this.instance?.render(this.scene, camera);
     }
     
   }

@@ -1,6 +1,5 @@
 import { ISceneConfig } from "@/sceneConfig/config";
-import * as THREE from "three";
-
+import { Scene, Object3D, Raycaster, Vector2, DirectionalLight, AmbientLight } from "three";
 import MaterialManager from "./materialManager";
 import { loadGLTF } from "./utils/loader";
 import { EventEmitter } from "eventemitter3";
@@ -17,13 +16,13 @@ interface IPropsType {
 
 export default class SceneManager extends EventEmitter {
   public materialManager: MaterialManager;
-  public scene: THREE.Scene = new THREE.Scene();
+  public scene: Scene = new Scene();
   public cameraManager!: CameraManager;
   public renderer!: Renderer;
   private sizes: Sizes;
   private config: Config;
   private wrap: HTMLElement;
-
+  private selectedObject: Object3D | null = null;
   constructor(options: IPropsType) {
     super();
     const { sizes, config, wrap } = options;
@@ -35,20 +34,24 @@ export default class SceneManager extends EventEmitter {
   }
 
   init() {
+    this.renderer = new Renderer({
+      scene: this.scene,
+      config: this.config,
+    }); 
+
     this.cameraManager = new CameraManager({
       scene: this.scene,
       config: this.config,
       wrap: this.wrap,
       sizes: this.sizes,
+      renderer: this.renderer.instance,
     });
+    this.cameraManager.setPosition(20, 20, 20);
 
     // 初始化渲染器
-    this.renderer = new Renderer({
-      scene: this.scene,
-      cameraManager: this.cameraManager,
-      config: this.config,
-    }); 
+
     this.wrap.appendChild(this.renderer.instance.domElement); // 添加渲染器DOM元素到包裹元素
+    this.wrap.addEventListener('click', this.onSelect);
   }
 
   setScene(sceneConfig: ISceneConfig) {
@@ -63,11 +66,11 @@ export default class SceneManager extends EventEmitter {
   }
 
   loadScene(sceneConfig: ISceneConfig) {
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    const directionalLight = new DirectionalLight(0xffffff, 1);
     directionalLight.position.set(1, 1, 0);
     this.scene.add(directionalLight);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new AmbientLight(0xffffff, 0.5);
     this.scene.add(ambientLight);
 
     this.emit(SceneManagerEvent.SCENELOAD, { sceneConfig });
@@ -104,12 +107,40 @@ export default class SceneManager extends EventEmitter {
     }
   }
 
+  onSelect = (event: MouseEvent) => {
+    const mouse = new Vector2();
+    mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
+    mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
+    const raycaster = new Raycaster();
+    raycaster.setFromCamera(mouse, this.cameraManager.instance);
+    const intersects = raycaster.intersectObjects(this.scene.children);
+
+    if (intersects.length > 0) { // 处理相交的物体
+      const intersectedObject = intersects[0].object;
+      if(this.selectedObject === intersectedObject) {
+        this.cameraManager.setOutline([])
+        this.selectedObject = null;
+      } else {
+        this.cameraManager.setOutline([intersectedObject])
+        this.selectedObject = intersectedObject;
+      }
+    } else {
+      this.selectedObject = null;
+      this.cameraManager.setOutline([])
+    }
+  }
+
   update() {
-    this.renderer.update();
+    if(this.cameraManager.outlinePassEnable) {
+      this.cameraManager.update();
+    } else {
+      this.renderer.update(this.cameraManager.instance);
+    }
   }
 
   resize() {
     this.renderer.resize();
+    this.cameraManager.resize();
   }
 
   destory() {
