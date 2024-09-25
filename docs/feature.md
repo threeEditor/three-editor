@@ -20,7 +20,7 @@
 - Gizmo 拖拽组件（translate、scale、rotate）
 - Grid 世界网格
 - Select 拾取系统（单选、多选、框选）
-- Outline 选中高亮
+- Outline 选中高亮                          yiqianyao
 - Camera 相机系统（透视、投影）
 
 3. 渲染系统
