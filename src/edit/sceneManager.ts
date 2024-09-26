@@ -1,5 +1,12 @@
 import { ISceneConfig } from "@/sceneConfig/config";
-import { Scene, Object3D, Raycaster, Vector2, DirectionalLight, AmbientLight } from "three";
+import {
+  Scene,
+  Object3D,
+  Raycaster,
+  Vector2,
+  DirectionalLight,
+  AmbientLight,
+} from "three";
 import MaterialManager from "./materialManager";
 import { loadGLTF } from "./utils/loader";
 import { EventEmitter } from "eventemitter3";
@@ -8,6 +15,7 @@ import Renderer from "./renderer";
 import CameraManager from "./cameraManager";
 import Config from "./utils/config";
 import Sizes from "./utils/sizes";
+import Grid from "./grid";
 interface IPropsType {
   wrap: HTMLElement;
   config: Config;
@@ -19,6 +27,7 @@ export default class SceneManager extends EventEmitter {
   public scene: Scene = new Scene();
   public cameraManager!: CameraManager;
   public renderer!: Renderer;
+  public grid: Grid | null = null;
   private sizes: Sizes;
   private config: Config;
   private wrap: HTMLElement;
@@ -30,6 +39,11 @@ export default class SceneManager extends EventEmitter {
     this.wrap = wrap;
     this.sizes = sizes;
     this.materialManager = new MaterialManager();
+    this.grid = new Grid({
+      size: 200,
+      divisions: 50,
+      scene: this.scene,
+    });
     this.init();
   }
 
@@ -37,7 +51,7 @@ export default class SceneManager extends EventEmitter {
     this.renderer = new Renderer({
       scene: this.scene,
       config: this.config,
-    }); 
+    });
 
     this.cameraManager = new CameraManager({
       scene: this.scene,
@@ -51,7 +65,7 @@ export default class SceneManager extends EventEmitter {
     // 初始化渲染器
 
     this.wrap.appendChild(this.renderer.instance.domElement); // 添加渲染器DOM元素到包裹元素
-    this.wrap.addEventListener('click', this.onSelect);
+    this.wrap.addEventListener("click", this.onSelect);
   }
 
   setScene(sceneConfig: ISceneConfig) {
@@ -74,7 +88,7 @@ export default class SceneManager extends EventEmitter {
     this.scene.add(ambientLight);
 
     this.emit(SceneManagerEvent.SCENELOAD, { sceneConfig });
-  };
+  }
 
   add(option: any) {
     switch (option.type) {
@@ -115,23 +129,24 @@ export default class SceneManager extends EventEmitter {
     raycaster.setFromCamera(mouse, this.cameraManager.instance);
     const intersects = raycaster.intersectObjects(this.scene.children);
 
-    if (intersects.length > 0) { // 处理相交的物体
+    if (intersects.length > 0) {
+      // 处理相交的物体
       const intersectedObject = intersects[0].object;
-      if(this.selectedObject === intersectedObject) {
-        this.cameraManager.setOutline([])
+      if (this.selectedObject === intersectedObject) {
+        this.cameraManager.setOutline([]);
         this.selectedObject = null;
       } else {
-        this.cameraManager.setOutline([intersectedObject])
+        this.cameraManager.setOutline([intersectedObject]);
         this.selectedObject = intersectedObject;
       }
     } else {
       this.selectedObject = null;
-      this.cameraManager.setOutline([])
+      this.cameraManager.setOutline([]);
     }
-  }
+  };
 
   update() {
-    if(this.cameraManager.outlinePassEnable) {
+    if (this.cameraManager.outlinePassEnable) {
       this.cameraManager.update();
     } else {
       this.renderer.update(this.cameraManager.instance);
@@ -146,5 +161,6 @@ export default class SceneManager extends EventEmitter {
   destory() {
     this.renderer.destory();
     this.clearScene();
+    this.grid?.destory();
   }
 }
