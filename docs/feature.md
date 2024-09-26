@@ -22,6 +22,8 @@
 - Select 拾取系统（单选、多选、框选）
 - Outline 选中高亮                          yiqianyao
 - Camera 相机系统（透视、投影）
+- World cursor世界游标
+- Stats 性能检测
 
 3. 渲染系统
 - 后处理系统
