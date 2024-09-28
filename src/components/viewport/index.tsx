@@ -25,7 +25,7 @@ const ViewPort = () => {
         }) as GLTF;
         scene.scale.set(5, 5, 5);
         SceneManager.add({
-          type: SceneObjectType.Scene,
+          type: SceneObjectType.GLTF,
           node: scene,
         })
 

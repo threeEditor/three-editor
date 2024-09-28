@@ -3,7 +3,6 @@ import { Object3D } from "three";
 
 export enum SceneObjectType {
     GLTF = 'gltf',
-    Scene = 'scene',
     MESH = 'mesh',
     SPRITE = 'sprite',
     LIGHT = 'light',
@@ -11,7 +10,6 @@ export enum SceneObjectType {
 
 export const AllowedValues: SceneObjectType[] = [
     SceneObjectType.GLTF, 
-    SceneObjectType.Scene,
     SceneObjectType.MESH, 
     SceneObjectType.SPRITE, 
     SceneObjectType.LIGHT,

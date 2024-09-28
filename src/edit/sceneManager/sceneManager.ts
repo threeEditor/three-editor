@@ -13,6 +13,7 @@ import Grid from "../grid";
 import { Selector } from "../selector";
 import { LoaderManager } from "../loader";
 import { AllowedValues, ISceneObject, SceneObjectType } from "./interface";
+import { SceneCache } from "./sceneCache";
 interface IPropsType {
   wrap: HTMLElement;
   config: Config;
@@ -26,7 +27,8 @@ export default class SceneManager {
   static config: Config;
   static wrap: HTMLElement;
   static loader = new LoaderManager();
-  private static cameraManager: CameraManager;
+  static cameraManager: CameraManager;
+  static cache = new SceneCache();
   private static materialManager: MaterialManager = new MaterialManager();
   private static grid: Grid | null = null;
   private static selector = new Selector();
@@ -87,7 +89,23 @@ export default class SceneManager {
       console.warn(`暂不支持添加该类型: ${type}`);
       return;
     }
-    node && SceneManager.scene.add(node);
+    if(!node) {
+      console.warn(`添加对象缺失，请检查：`, sceneObject);
+      return;
+    }
+    SceneManager.scene.add(node);
+    SceneManager.cache.add(node.uuid, node, type as SceneObjectType);
+  }
+
+  static remove(sceneObject: ISceneObject) {
+    const { node } = sceneObject;
+    if(!SceneManager.cache.include(node.uuid)) {
+      return false;
+    } else {
+      SceneManager.scene.remove(node);
+      SceneManager.cache.remove(node.uuid);
+      return true;
+    }
   }
 
   static update() {

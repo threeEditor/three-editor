@@ -3,5 +3,6 @@
 # 2024/09/24 10.27 @YILI ZHANG 基于React重构项目 
 
 # 2024/09/28 @石灰
-- 抽离 `Selector` 模块
-- 抽离 `Loader` 模块
+- refactor 抽离 `Selector` 模块
+- fix 修复 `Selector` 选中模型子物体
+- feat 抽离 `Loader` 模块

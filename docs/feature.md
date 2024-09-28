@@ -12,7 +12,7 @@
 
 1. 场景搭建
 - Data 数据结构设计（根据数据结构加载对应内容）
-- Cache 数据存储 寄存
+- Cache 场景内容存储 对象存储
 - Loader 加载器（model、sprite、material、mesh）
 - Exporter 导出器（json）
 - Skybox 天空盒

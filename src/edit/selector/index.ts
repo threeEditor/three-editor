@@ -14,25 +14,44 @@ export class Selector {
         )
     }
 
+    select(node: Object3D | null) {
+      const { cameraManager } = SceneManager;
+      if(!node) {
+        this.unSelect();
+        return;
+      }
+      if (this.selectedObject === node) {
+        cameraManager.setOutline([]);
+        this.selectedObject = null;
+      } else {
+        cameraManager.setOutline([node]);
+        this.selectedObject = node;
+      }
+    }
+
+    unSelect() {
+      const { cameraManager } = SceneManager;
+      this.selectedObject = null;
+      cameraManager.setOutline([]);
+    }
+
     onSelect = (event: MouseEvent) => {
-        const {cameraManager, scene } = SceneManager;
+        const {cameraManager, cache } = SceneManager;
         this.updateSelectPosition(event);
         this.selectRaycaster.setFromCamera(this.selectPosition, cameraManager.instance);
-        const intersects = this.selectRaycaster.intersectObjects(scene.children);
-    
-        if (intersects.length > 0) {
-          // 处理相交的物体
-          const intersectedObject = intersects[0].object;
-          if (this.selectedObject === intersectedObject) {
-            cameraManager.setOutline([]);
-            this.selectedObject = null;
+        const intersects = this.selectRaycaster.intersectObjects(SceneManager.cache.selectList);
+        const intersectedObject = intersects[0]?.object;
+        // 处理相交的物体
+        if (intersectedObject) {
+          if(cache.include(intersectedObject.uuid)) {
+            // 选中的是场景中的物体
+            this.select(intersectedObject);
           } else {
-            cameraManager.setOutline([intersectedObject]);
-            this.selectedObject = intersectedObject;
+            // 1. 选中的是模型的子物体
+            this.select(cache.getIncludeParent(intersectedObject));
           }
         } else {
-            this.selectedObject = null;
-            cameraManager.setOutline([]);
+            this.unSelect();
         }
       };
 }
