@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import Config from "./utils/config";
-import SceneManager from "./sceneManager";
+import SceneManager from "./sceneManager/sceneManager";
 export default class Renderer {
   public instance!: THREE.WebGLRenderer;
   private scene: THREE.Scene | null = null;

@@ -1,9 +1,9 @@
 export default class Config {
-  debug?: boolean;
-  public pixelRatio?: number;
   public width?: number;
   public height?: number;
-  wrap: HTMLElement;
+  private pixelRatio?: number;
+  private debug?: boolean;
+  private wrap: HTMLElement;
   constructor(wrap: HTMLElement) {
     //Debug
     this.debug = window.location.hash == "#debug";

@@ -1,5 +1,5 @@
-import { Object3D, Raycaster, Scene, Vector2 } from "three";
-import SceneManager from "../sceneManager";
+import { Object3D, Raycaster, Vector2 } from "three";
+import SceneManager from "../sceneManager/sceneManager";
 
 export class Selector {
     private selectPosition = new Vector2();

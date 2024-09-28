@@ -7,7 +7,7 @@ import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectio
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-import SceneManager from "./sceneManager";
+import SceneManager from "./sceneManager/sceneManager";
 
 export default class CameraManager {
   public instance!: PerspectiveCamera;

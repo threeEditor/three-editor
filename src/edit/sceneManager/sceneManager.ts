@@ -4,14 +4,15 @@ import {
   DirectionalLight,
   AmbientLight,
 } from "three";
-import MaterialManager from "./materialManager";
-import { loadGLTF } from "./utils/loader";
-import Renderer from "./renderer";
-import CameraManager from "./cameraManager";
-import Config from "./utils/config";
-import Sizes from "./utils/sizes";
-import Grid from "./grid";
-import { Selector } from "./selector";
+import MaterialManager from "../materialManager";
+import Renderer from "../renderer";
+import CameraManager from "../cameraManager";
+import Config from "../utils/config";
+import Sizes from "../utils/sizes";
+import Grid from "../grid";
+import { Selector } from "../selector";
+import { LoaderManager } from "../loader";
+import { AllowedValues, ISceneObject, SceneObjectType } from "./interface";
 interface IPropsType {
   wrap: HTMLElement;
   config: Config;
@@ -19,14 +20,15 @@ interface IPropsType {
 }
 
 export default class SceneManager {
-  static materialManager: MaterialManager = new MaterialManager();
   static scene: Scene = new Scene();
-  static cameraManager: CameraManager;
   static renderer: Renderer;
-  static grid: Grid | null = null;
   static sizes: Sizes;
   static config: Config;
   static wrap: HTMLElement;
+  static loader = new LoaderManager();
+  private static cameraManager: CameraManager;
+  private static materialManager: MaterialManager = new MaterialManager();
+  private static grid: Grid | null = null;
   private static selector = new Selector();
   private static inited = false;
 
@@ -79,35 +81,13 @@ export default class SceneManager {
     SceneManager.scene.add(ambientLight);
   }
 
-  static add(option: any) {
-    switch (option.type) {
-      case "model":
-        SceneManager.addModel(option.model, option.callback);
-        break;
-      case "mesh":
-        SceneManager.scene.add(option.object);
-        break;
-      default:
-        console.warn("暂不支持该类型");
+  static add(sceneObject: ISceneObject) {
+    const { type, node } = sceneObject;
+    if(!AllowedValues.includes(type as SceneObjectType)) {
+      console.warn(`暂不支持添加该类型: ${type}`);
+      return;
     }
-  }
-
-  static addModel(modelInfo: any, callback?: (result: any) => void) {
-    switch (modelInfo.type) {
-      case "gltf":
-        loadGLTF(modelInfo.url, (result) => {
-          const { success, gltf } = result;
-          if (success && gltf) {
-            const model = gltf.scene;
-            callback && callback(model);
-            SceneManager.scene.add(gltf.scene);
-          }
-        });
-        break;
-      default:
-        console.warn("暂不支持该模型类型");
-        break;
-    }
+    node && SceneManager.scene.add(node);
   }
 
   static update() {

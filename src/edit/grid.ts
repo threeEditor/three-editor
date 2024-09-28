@@ -1,5 +1,5 @@
 import { Color, GridHelper } from "three";
-import SceneManager from "./sceneManager";
+import SceneManager from "./sceneManager/sceneManager";
 interface IGridParams {
   size: number;
   divisions: number;
