@@ -1,13 +1,15 @@
+import { Texture, TextureLoader } from "three";
 import { IGLTFLoadResult, loadGLTF } from "./loaderGLTF";
 import { GLTF } from "three/examples/jsm/Addons.js";
+import { loadTexture } from "./loadTexture";
 
 export enum LoaderResourceType {
     GLTF = 'gltf',
-    SPRITE = 'sprite',
+    Texture2D = 'texture2D',
 };
 const allowedValues: LoaderResourceType[] = [
     LoaderResourceType.GLTF, 
-    LoaderResourceType.SPRITE, 
+    LoaderResourceType.Texture2D, 
 ];
 
 export interface ILoaderResource {
@@ -16,11 +18,13 @@ export interface ILoaderResource {
 }
 
 export class LoaderManager {
+    private textuerLoader: TextureLoader | null = null;
+
     isLoaderResourceType(value: string) {
         return allowedValues.includes(value as LoaderResourceType);
     }
 
-    async load(resource: ILoaderResource): Promise<GLTF | null> {
+    async load(resource: ILoaderResource): Promise<GLTF | Texture | null> {
         const { type, url } = resource;
         if(!this.isLoaderResourceType(type)) {
             console.warn(`暂不支持加载该类型: ${type}`);
@@ -34,8 +38,9 @@ export class LoaderManager {
             case LoaderResourceType.GLTF:
                 const { success, gltf = null } =  await loadGLTF(url) as IGLTFLoadResult;
                 return success ? gltf : null;
-            case LoaderResourceType.SPRITE:
-
+            case LoaderResourceType.Texture2D:
+                const texture =  await loadTexture(url);
+                return texture;
         }
         return null;
     }

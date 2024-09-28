@@ -6,6 +6,8 @@ import SceneManager from "@/edit/sceneManager/sceneManager";
 import { LoaderResourceType } from "@/edit/loader";
 import { GLTF } from "three/examples/jsm/Addons.js";
 import { SceneObjectType } from "@/edit/sceneManager/interface";
+import Sprite from "@/factory/sprite";
+import { Texture } from "three";
 
 
 const ViewPort = () => {
@@ -33,6 +35,20 @@ const ViewPort = () => {
         SceneManager.add({
           type: SceneObjectType.MESH,
           node: cube,
+        });
+
+        const texture = await SceneManager.loader.load({
+          type: LoaderResourceType.Texture2D,
+          url: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/unnamed.png',
+        }) as Texture;        
+        const sprite = new Sprite({
+          texture,
+        });
+        sprite.setPosition(6);
+        sprite.setScale(4);
+        SceneManager.add({
+          type: SceneObjectType.SPRITE,
+          node: sprite.node,
         });
       }
     }, 1000);

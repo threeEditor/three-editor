@@ -1,10 +1,38 @@
-import { Object3D, Raycaster, Vector2 } from "three";
+import { Object3D, Ray, Raycaster, Sphere, Sprite, Vector2 } from "three";
 import SceneManager from "../sceneManager/sceneManager";
 
 export class Selector {
     private selectPosition = new Vector2();
     private selectRaycaster = new Raycaster();
     private selectedObject: Object3D | null = null;
+    private selectedSprite: Sprite | null = null;
+
+    constructor() {
+      // 扩展 Raycaster 的相交测试方法
+      // @ts-ignore
+      Raycaster.prototype.intersectSprite = function (sprite: Sprite, recursive) {
+        const ray = new Ray();
+        ray.copy(this.ray).applyMatrix4(sprite.matrixWorld);
+        // const spriteMaterial = sprite.material as SpriteMaterial;
+        // const spriteGeometry = sprite.geometry;
+        // console.log('boundingBox', spriteGeometry.boundingBox)
+        // const radius = sprite.scale.x * spriteMaterial.map!.image.width / 2;
+        const { x, y, z } = sprite.scale;
+        // scale 设置大小 === width/height 然后再 x Scale TODO 后续待优化
+        const radius = Math.sqrt(x **2 + y ** 2 + z ** 2) * sprite.scale.x;
+        // 检查射线与精灵的包围球是否相交
+        const spriteBoundingSphere = new Sphere(sprite.position, radius);
+        if (!ray.intersectsSphere(spriteBoundingSphere)) {
+          return [];
+        }
+        // 这里可以根据具体需求进行更复杂的相交测试逻辑
+        return [{
+          distance: ray.origin.distanceTo(sprite.position),
+          point: sprite.position.clone(),
+          object: sprite,
+        }];
+      };
+    }
 
     private updateSelectPosition(event: MouseEvent) {
         const { sizes } = SceneManager;
@@ -20,16 +48,34 @@ export class Selector {
         this.unSelect();
         return;
       }
+      this.unSelectSprite();
       if (this.selectedObject === node) {
-        cameraManager.setOutline([]);
-        this.selectedObject = null;
+        this.unSelect();
       } else {
         cameraManager.setOutline([node]);
         this.selectedObject = node;
       }
     }
 
+    selectSprite(node: Sprite) {
+      this.unSelect();
+
+      if (this.selectedSprite === node) {
+        this.unSelectSprite();
+      } else {
+        console.log('selectSprite', node)
+        this.selectedSprite = node;
+      }
+    }
+
+    unSelectSprite() {
+      if(!this.selectedSprite) return;
+      console.log('unSelectSprite')
+      this.selectedSprite = null;
+    }
+
     unSelect() {
+      if(!this.selectedObject) return;
       const { cameraManager } = SceneManager;
       this.selectedObject = null;
       cameraManager.setOutline([]);
@@ -39,9 +85,20 @@ export class Selector {
         const {cameraManager, cache } = SceneManager;
         this.updateSelectPosition(event);
         this.selectRaycaster.setFromCamera(this.selectPosition, cameraManager.instance);
-        const intersects = this.selectRaycaster.intersectObjects(SceneManager.cache.selectList);
-        const intersectedObject = intersects[0]?.object;
-        // 处理相交的物体
+        const selectList: Object3D[] = [];
+        const spriteList: Sprite[] = [];
+        SceneManager.cache.selectList.forEach(node => {
+          if(node.type === 'Sprite') {
+            spriteList.push(node as Sprite);
+          } else {
+            selectList.push(node);
+          }
+        })
+
+        // Object3D
+        const intersects = this.selectRaycaster.intersectObjects(selectList);
+        const intersectedObject = intersects[0]?.object;        
+        // 选中 Object3D
         if (intersectedObject) {
           if(cache.include(intersectedObject.uuid)) {
             // 选中的是场景中的物体
@@ -50,8 +107,27 @@ export class Selector {
             // 1. 选中的是模型的子物体
             this.select(cache.getIncludeParent(intersectedObject));
           }
-        } else {
-            this.unSelect();
+          return;
         }
+
+        // Sprite
+        let intersectedSprite: Sprite | null = null;
+        for (const sprite of spriteList) {
+          // @ts-ignore
+          const spriteIntersects = this.selectRaycaster.intersectSprite(sprite);
+          if (spriteIntersects.length > 0) {
+            // 处理与 Sprite 的相交
+            intersectedSprite = spriteIntersects[0].object as Sprite;
+          }
+        }
+
+        // 选中 Sprite
+        if(intersectedSprite) {
+          this.selectSprite(intersectedSprite);
+          return;
+        }
+
+        this.unSelect();
+        this.unSelectSprite();
       };
 }

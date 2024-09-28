@@ -1,8 +1,18 @@
-import { EventEmitter } from 'eventemitter3';
+import { Material } from "three";
 
-export default class MaterialManager extends EventEmitter {
-    constructor() {
-        super();
+export enum MaterialType {
+    Phong = 'phong',
+    Blinn = 'Blinn,'
+}
+export default class MaterialManager {
+    private static map = new Map<string, Material>();
+
+    static getMaterial(uuid: string, clone = false) {
+      
+    }
+
+    private static initMaterial(type: MaterialType) {
+
     }
 
     destroy() {
