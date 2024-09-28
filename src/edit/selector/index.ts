@@ -63,14 +63,16 @@ export class Selector {
       if (this.selectedSprite === node) {
         this.unSelectSprite();
       } else {
-        console.log('selectSprite', node)
+        // console.log('selectSprite', node)
+        node.userData.outline.visible = true;
         this.selectedSprite = node;
       }
     }
 
     unSelectSprite() {
       if(!this.selectedSprite) return;
-      console.log('unSelectSprite')
+      // console.log('unSelectSprite')
+      this.selectedSprite.userData.outline.visible = false;
       this.selectedSprite = null;
     }
 

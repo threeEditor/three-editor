@@ -7,3 +7,4 @@
 - fix 修复 `Selector` 选中模型子物体
 - feat 抽离 `Loader` 模块
 - feat 增加 `Sprite` 的加载 & 拾取计算
+- feat 增加 `Sprite` 的 `outline` 实现（待优化）

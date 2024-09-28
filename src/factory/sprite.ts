@@ -15,9 +15,18 @@ export default class Sprite {
 
         const material = new SpriteMaterial(params);
         this.node = new ThreeSprite(material);
-        // const geo = this.node.geometry as BufferGeometry;
-        // geo.boundingSphere = new Sphere(new Vector3(), 10)
-        // console.log(())
+    
+        // TODO 后续待完善
+        const lineMaterial = new SpriteMaterial({
+            color: '#f00',
+        })
+        const lineSprite = new ThreeSprite(lineMaterial);
+        lineSprite.scale.set(1.04, 1.04, 1.04);
+        lineSprite.renderOrder = -1;
+        lineSprite.visible = false;
+        this.node.add(lineSprite);
+
+        this.node.userData.outline = lineSprite;
     }
 
     setPosition(x?: number, y?: number, z?: number) {
