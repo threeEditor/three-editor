@@ -9,8 +9,6 @@ import {
 } from "three";
 import MaterialManager from "./materialManager";
 import { loadGLTF } from "./utils/loader";
-import { EventEmitter } from "eventemitter3";
-import { SceneManagerEvent } from "./event";
 import Renderer from "./renderer";
 import CameraManager from "./cameraManager";
 import Config from "./utils/config";
@@ -22,88 +20,90 @@ interface IPropsType {
   sizes: Sizes;
 }
 
-export default class SceneManager extends EventEmitter {
-  public materialManager: MaterialManager;
-  public scene: Scene = new Scene();
-  public cameraManager!: CameraManager;
-  public renderer!: Renderer;
-  public grid: Grid | null = null;
-  private sizes: Sizes;
-  private config: Config;
-  private wrap: HTMLElement;
-  private selectedObject: Object3D | null = null;
-  constructor(options: IPropsType) {
-    super();
+export default class SceneManager {
+  static materialManager: MaterialManager;
+  static scene: Scene = new Scene();
+  static cameraManager: CameraManager;
+  static renderer: Renderer;
+  static grid: Grid | null = null;
+  static sizes: Sizes;
+  static config: Config;
+  static wrap: HTMLElement;
+  static selectedObject: Object3D | null = null;
+
+  private static inited = false;
+
+  static init(options: IPropsType) {
     const { sizes, config, wrap } = options;
-    this.config = config;
-    this.wrap = wrap;
-    this.sizes = sizes;
-    this.materialManager = new MaterialManager();
-    this.grid = new Grid({
+    SceneManager.config = config;
+    SceneManager.wrap = wrap;
+    SceneManager.sizes = sizes;
+    SceneManager.materialManager = new MaterialManager();
+    SceneManager.grid = new Grid({
       size: 200,
       divisions: 50,
-      scene: this.scene,
-    });
-    this.init();
-  }
-
-  init() {
-    this.renderer = new Renderer({
-      scene: this.scene,
-      config: this.config,
+      scene: SceneManager.scene,
     });
 
-    this.cameraManager = new CameraManager({
-      scene: this.scene,
-      config: this.config,
-      wrap: this.wrap,
-      sizes: this.sizes,
-      renderer: this.renderer.instance,
+    SceneManager.renderer = new Renderer({
+      scene: SceneManager.scene,
+      config: SceneManager.config,
     });
-    this.cameraManager.setPosition(20, 20, 20);
+
+    SceneManager.cameraManager = new CameraManager({
+      scene: SceneManager.scene,
+      config: SceneManager.config,
+      wrap: SceneManager.wrap,
+      sizes: SceneManager.sizes,
+      renderer: SceneManager.renderer.instance,
+    });
+    SceneManager.cameraManager.setPosition(20, 20, 20);
 
     // 初始化渲染器
 
-    this.wrap.appendChild(this.renderer.instance.domElement); // 添加渲染器DOM元素到包裹元素
-    this.wrap.addEventListener("click", this.onSelect);
+    SceneManager.wrap.appendChild(SceneManager.renderer.instance.domElement); // 添加渲染器DOM元素到包裹元素
+    SceneManager.wrap.addEventListener("click", SceneManager.onSelect);
+
+    SceneManager.inited = true;
   }
 
-  setScene(sceneConfig: ISceneConfig) {
+  static setScene(sceneConfig: ISceneConfig) {
     // 清空场景中的对象
-    this.clearScene();
-    this.loadScene(sceneConfig);
+    SceneManager.clearScene();
+    SceneManager.loadScene(sceneConfig);
+
+    // SceneManagerEvent.SCENELOAD
   }
 
   // 清空场景中的对象
-  clearScene() {
-    this.materialManager.destroy();
+  static clearScene() {
+    SceneManager.materialManager.destroy();
   }
 
-  loadScene(sceneConfig: ISceneConfig) {
+  static loadScene(sceneConfig: ISceneConfig) {
+    console.log('sceneConfig', sceneConfig)
     const directionalLight = new DirectionalLight(0xffffff, 1);
     directionalLight.position.set(1, 1, 0);
-    this.scene.add(directionalLight);
+    SceneManager.scene.add(directionalLight);
 
     const ambientLight = new AmbientLight(0xffffff, 0.5);
-    this.scene.add(ambientLight);
-
-    this.emit(SceneManagerEvent.SCENELOAD, { sceneConfig });
+    SceneManager.scene.add(ambientLight);
   }
 
-  add(option: any) {
+  static add(option: any) {
     switch (option.type) {
       case "model":
-        this.addModel(option.model, option.callback);
+        SceneManager.addModel(option.model, option.callback);
         break;
       case "mesh":
-        this.scene.add(option.object);
+        SceneManager.scene.add(option.object);
         break;
       default:
         console.warn("暂不支持该类型");
     }
   }
 
-  addModel(modelInfo: any, callback?: (result: any) => void) {
+  static addModel(modelInfo: any, callback?: (result: any) => void) {
     switch (modelInfo.type) {
       case "gltf":
         loadGLTF(modelInfo.url, (result) => {
@@ -111,7 +111,7 @@ export default class SceneManager extends EventEmitter {
           if (success && gltf) {
             const model = gltf.scene;
             callback && callback(model);
-            this.scene.add(gltf.scene);
+            SceneManager.scene.add(gltf.scene);
           }
         });
         break;
@@ -121,46 +121,49 @@ export default class SceneManager extends EventEmitter {
     }
   }
 
-  onSelect = (event: MouseEvent) => {
+  static onSelect = (event: MouseEvent) => {
     const mouse = new Vector2();
-    mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
-    mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
+    mouse.x = (event.clientX / SceneManager.sizes.width) * 2 - 1;
+    mouse.y = -(event.clientY / SceneManager.sizes.height) * 2 + 1;
     const raycaster = new Raycaster();
-    raycaster.setFromCamera(mouse, this.cameraManager.instance);
-    const intersects = raycaster.intersectObjects(this.scene.children);
+    raycaster.setFromCamera(mouse, SceneManager.cameraManager.instance);
+    const intersects = raycaster.intersectObjects(SceneManager.scene.children);
 
     if (intersects.length > 0) {
       // 处理相交的物体
       const intersectedObject = intersects[0].object;
-      if (this.selectedObject === intersectedObject) {
-        this.cameraManager.setOutline([]);
-        this.selectedObject = null;
+      if (SceneManager.selectedObject === intersectedObject) {
+        SceneManager.cameraManager.setOutline([]);
+        SceneManager.selectedObject = null;
       } else {
-        this.cameraManager.setOutline([intersectedObject]);
-        this.selectedObject = intersectedObject;
+        SceneManager.cameraManager.setOutline([intersectedObject]);
+        SceneManager.selectedObject = intersectedObject;
       }
     } else {
-      this.selectedObject = null;
-      this.cameraManager.setOutline([]);
+      SceneManager.selectedObject = null;
+      SceneManager.cameraManager.setOutline([]);
     }
   };
 
-  update() {
-    if (this.cameraManager.outlinePassEnable) {
-      this.cameraManager.update();
+  static update() {
+    if(!SceneManager.inited) return;
+    if (SceneManager.cameraManager.outlinePassEnable) {
+      SceneManager.cameraManager.update();
     } else {
-      this.renderer.update(this.cameraManager.instance);
+      SceneManager.renderer.update(SceneManager.cameraManager.instance);
     }
   }
 
-  resize() {
-    this.renderer.resize();
-    this.cameraManager.resize();
+  static resize() {
+    if(!SceneManager.inited) return;
+    SceneManager.renderer.resize();
+    SceneManager.cameraManager.resize();
   }
 
-  destory() {
-    this.renderer.destory();
-    this.clearScene();
-    this.grid?.destory();
+  static destory() {
+    if(!SceneManager.inited) return;
+    SceneManager.renderer.destory();
+    SceneManager.clearScene();
+    SceneManager.grid?.destory();
   }
 }

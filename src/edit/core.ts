@@ -5,7 +5,6 @@ import Sizes from "./utils/sizes"; // 导入尺寸管理器
 import { defaultSceneConfig, ISceneConfig } from "@/sceneConfig/config";
 
 export default class EditManager {
-  public sceneManager!: SceneManager; // 场景管理器
   private wrap: HTMLElement | null = null; // 包裹元素
   private time!: Time; // 时间管理器
   private config!: Config; // 配置管理器
@@ -22,11 +21,12 @@ export default class EditManager {
     this.sizes = new Sizes(); // 初始化尺寸管理器
     this.time = new Time(); // 初始化时间管理器
 
-    this.sceneManager = new SceneManager({
+    SceneManager.init({ // 初始化场景管理器
       wrap: this.wrap,
       config: this.config,
       sizes: this.sizes,
-    }); // 创建场景管理器
+    })
+    
 
     // 监听窗口尺寸变化
     this.sizes.on("resize", () => {
@@ -36,26 +36,22 @@ export default class EditManager {
   }
 
   setUp(sceneConfig: ISceneConfig = defaultSceneConfig) {
-    if (this.sceneManager) {
-      this.sceneManager.setScene(sceneConfig);
-    } else {
-      console.warn("Missing sceneManager"); // 警告缺少场景管理器
-    }
+    SceneManager.setScene(sceneConfig);
   }
 
   render() {
-    if (this.sceneManager) this.sceneManager.update(); // 更新渲染器
+    SceneManager.update(); // 更新渲染器
     this.renderStamp = requestAnimationFrame(() => this.render()); // 循环渲染
   }
 
   resize() {
     if (this.config) this.config.resize(); // 调整配置
-    if (this.sceneManager) this.sceneManager.resize(); // 调整渲染器
+    SceneManager.resize(); // 调整渲染器
     
   }
 
   destroy() {
-    if (this.sceneManager) this.sceneManager.destory(); // 销毁渲染器
+    SceneManager.destory(); // 销毁渲染器
     if (this.renderStamp) cancelAnimationFrame(this.renderStamp); // 取消动画帧
   }
 }
