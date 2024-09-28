@@ -1,19 +1,15 @@
 import * as THREE from "three";
 import Config from "./utils/config";
-interface IRendererPropsType {
-  scene: THREE.Scene;
-  config: Config;
-}
+import SceneManager from "./sceneManager";
 export default class Renderer {
   public instance!: THREE.WebGLRenderer;
   private scene: THREE.Scene | null = null;
   private config: Config;
   private context: WebGLRenderingContext | WebGL2RenderingContext | null = null;
 
-  constructor(options: IRendererPropsType) {
-    const { scene, config } = options;
-    this.scene = scene;
-    this.config = config;
+  constructor() {
+    this.scene = SceneManager.scene;
+    this.config = SceneManager.config;
     this.setInstance();
   }
   

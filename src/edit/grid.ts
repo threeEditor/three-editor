@@ -1,17 +1,17 @@
-import { Color, Scene, GridHelper } from "three";
+import { Color, GridHelper } from "three";
+import SceneManager from "./sceneManager";
 interface IGridParams {
   size: number;
   divisions: number;
   colorCenterLine?: Color;
   colorGrid?: Color;
-  scene: Scene;
 }
 export default class Grid {
   private gridHelper: GridHelper;
   constructor(_options: IGridParams) {
-    const { size, divisions, scene } = _options;
+    const { size, divisions } = _options;
     this.gridHelper = new GridHelper(size, divisions);
-    scene.add(this.gridHelper);
+    SceneManager.scene.add(this.gridHelper);
   }
 
   show() {

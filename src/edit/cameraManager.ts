@@ -7,14 +7,7 @@ import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectio
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-
-interface ICameraParams {
-  scene: Scene;
-  wrap: HTMLElement;
-  config: Config;
-  sizes: Sizes;
-  renderer: WebGLRenderer
-}
+import SceneManager from "./sceneManager";
 
 export default class CameraManager {
   public instance!: PerspectiveCamera;
@@ -27,13 +20,12 @@ export default class CameraManager {
   private renderer: WebGLRenderer;
   private composer!: EffectComposer;
   private outlinePass!: OutlinePass;
-  constructor(options: ICameraParams) {
-    const { config, sizes, scene, wrap, renderer } = options;
-    this.config = config;
-    this.wrap = wrap;
-    this.sizes = sizes;
-    this.scene = scene;
-    this.renderer = renderer;
+  constructor() {
+    this.config = SceneManager.config;
+    this.wrap = SceneManager.wrap;
+    this.sizes = SceneManager.sizes;
+    this.scene = SceneManager.scene;
+    this.renderer = SceneManager.renderer.instance;
     this.init();
   }
 
