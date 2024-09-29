@@ -11,3 +11,4 @@
 
 # 2024/09/29 @石灰
 - fix 修复 `Sprite` 透明时候的 `outline` 效果
+- feat 新增 `Layout` 布局组件

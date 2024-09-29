@@ -35,10 +35,11 @@ export class Selector {
     }
 
     private updateSelectPosition(event: MouseEvent) {
-        const { sizes } = SceneManager;
+        const { sizes, wrap } = SceneManager;
+        const { top, left } = wrap.getBoundingClientRect();
         this.selectPosition.set(
-            (event.clientX / sizes.width) * 2 - 1,
-            -(event.clientY / sizes.height) * 2 + 1
+            ((event.clientX - left) / sizes.width) * 2 - 1,
+            -((event.clientY - top) / sizes.height) * 2 + 1
         )
     }
 

@@ -18,7 +18,7 @@ export default class EditManager {
       return;
     }
     this.config = new Config(wrap!); // 初始化配置管理器
-    this.sizes = new Sizes(); // 初始化尺寸管理器
+    this.sizes = new Sizes(wrap as HTMLDivElement); // 初始化尺寸管理器
     this.time = new Time(); // 初始化时间管理器
 
     SceneManager.init({ // 初始化场景管理器

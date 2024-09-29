@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import "./index.css";
+import "./index.less";
 import EditManager from "../../edit/core";
 import { Cube } from "../../factory/";
 import SceneManager from "@/edit/sceneManager/sceneManager";
