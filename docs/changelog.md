@@ -8,3 +8,6 @@
 - feat 抽离 `Loader` 模块
 - feat 增加 `Sprite` 的加载 & 拾取计算
 - feat 增加 `Sprite` 的 `outline` 实现（待优化）
+
+# 2024/09/29 @石灰
+- fix 修复 `Sprite` 透明时候的 `outline` 效果

@@ -1,4 +1,4 @@
-import { Sprite as ThreeSprite, SpriteMaterial, Texture, Object3D } from 'three';
+import { Sprite as ThreeSprite, SpriteMaterial, Texture, Object3D, NoBlending, SubtractiveBlending, LessEqualDepth, GreaterEqualDepth, GreaterDepth, LessDepth } from 'three';
 export interface ISpriteConfig {
     color?: string;
     opacity?: number,
@@ -8,7 +8,12 @@ export interface ISpriteConfig {
 export default class Sprite {
     public node: Object3D;
     constructor(config: ISpriteConfig) {
-        const params: {[key: string]: any} = {};
+        const params: {[key: string]: any} = {
+            // transparent: true,
+            // blending: NoBlending,
+            // depthFunc: GreaterEqualDepth,
+            
+        };
         config.texture && (params.map = config.texture);
         config.color && (params.color = config.color);
         config.opacity && (params.opacity = config.opacity);
@@ -19,10 +24,12 @@ export default class Sprite {
         // TODO 后续待完善
         const lineMaterial = new SpriteMaterial({
             color: '#f00',
+            // 处理透明模式 不会覆盖
+            depthFunc: LessDepth,
         })
         const lineSprite = new ThreeSprite(lineMaterial);
         lineSprite.scale.set(1.04, 1.04, 1.04);
-        lineSprite.renderOrder = -1;
+        lineSprite.renderOrder = 2; // 后渲染
         lineSprite.visible = false;
         this.node.add(lineSprite);
 

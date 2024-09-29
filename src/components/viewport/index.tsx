@@ -43,6 +43,7 @@ const ViewPort = () => {
         }) as Texture;        
         const sprite = new Sprite({
           texture,
+          opacity: 0.8,
         });
         sprite.setPosition(6);
         sprite.setScale(4);
