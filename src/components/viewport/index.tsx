@@ -1,14 +1,12 @@
 import { useEffect, useRef } from "react";
 import "./index.less";
 import EditManager from "../../edit/core";
-import { Cube } from "../../factory/";
 import SceneManager from "@/edit/sceneManager/sceneManager";
 import { LoaderResourceType } from "@/edit/loader";
 import { GLTF } from "three/examples/jsm/Addons.js";
 import { SceneObjectType } from "@/edit/sceneManager/interface";
-import Sprite from "@/factory/sprite";
 import { Texture } from "three";
-
+import { PrimitiveMesh, PrimitiveMeshType, Sprite } from "@/edit/objects";
 
 const ViewPort = () => {
   const view = useRef<HTMLDivElement | null>(null);
@@ -31,10 +29,13 @@ const ViewPort = () => {
           node: scene,
         })
 
-        const cube = Cube({ size: 5, color: "#ff0" });
+        const box = new PrimitiveMesh({
+          type: PrimitiveMeshType.BOX,
+          size: 5,
+        })
         SceneManager.add({
           type: SceneObjectType.MESH,
-          node: cube,
+          node: box.node,
         });
 
         const texture = await SceneManager.loader.load({

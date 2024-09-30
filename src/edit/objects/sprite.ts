@@ -1,19 +1,14 @@
-import { Sprite as ThreeSprite, SpriteMaterial, Texture, Object3D, NoBlending, SubtractiveBlending, LessEqualDepth, GreaterEqualDepth, GreaterDepth, LessDepth } from 'three';
+import { Sprite as ThreeSprite, SpriteMaterial, Texture, Object3D, LessDepth } from 'three';
 export interface ISpriteConfig {
     color?: string;
     opacity?: number,
     texture?: Texture
 }
 
-export default class Sprite {
+export class Sprite {
     public node: Object3D;
     constructor(config: ISpriteConfig) {
-        const params: {[key: string]: any} = {
-            // transparent: true,
-            // blending: NoBlending,
-            // depthFunc: GreaterEqualDepth,
-            
-        };
+        const params: {[key: string]: any} = {};
         config.texture && (params.map = config.texture);
         config.color && (params.color = config.color);
         config.opacity && (params.opacity = config.opacity);
