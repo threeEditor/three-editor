@@ -14,6 +14,7 @@ import { Selector } from "../selector";
 import { LoaderManager } from "../loader";
 import { AllowedValues, ISceneObject, SceneObjectType } from "./interface";
 import { SceneCache } from "./sceneCache";
+import { removeAllChild } from "../utils/dispose";
 interface IPropsType {
   wrap: HTMLElement;
   config: Config;
@@ -62,15 +63,8 @@ export default class SceneManager {
 
   static setScene(sceneConfig: ISceneConfig) {
     // 清空场景中的对象
-    SceneManager.clearScene();
     SceneManager.loadScene(sceneConfig);
-
     // SceneManagerEvent.SCENELOAD
-  }
-
-  // 清空场景中的对象
-  static clearScene() {
-    SceneManager.materialManager.destroy();
   }
 
   static loadScene(sceneConfig: ISceneConfig) {
@@ -124,9 +118,15 @@ export default class SceneManager {
   }
 
   static destory() {
+    console.log('SceneManager not inited!')
     if(!SceneManager.inited) return;
+    const scene = SceneManager.scene;
+    if(!scene) return;
+    SceneManager.materialManager.destroy();
+    removeAllChild(scene);
+    
     SceneManager.renderer.destory();
-    SceneManager.clearScene();
     SceneManager.grid?.destory();
+    console.log('SceneManager destroy!')
   }
 }

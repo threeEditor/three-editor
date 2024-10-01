@@ -1,7 +1,7 @@
 export default class Config {
   public width?: number;
   public height?: number;
-  private pixelRatio?: number;
+  public pixelRatio?: number;
   private debug?: boolean;
   private wrap: HTMLElement;
   constructor(wrap: HTMLElement) {

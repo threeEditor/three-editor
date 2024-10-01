@@ -27,7 +27,6 @@ export default class EditManager {
       sizes: this.sizes,
     })
     
-
     // 监听窗口尺寸变化
     this.sizes.on("resize", () => {
       this.resize(); // 调整尺寸
@@ -47,10 +46,11 @@ export default class EditManager {
   resize() {
     if (this.config) this.config.resize(); // 调整配置
     SceneManager.resize(); // 调整渲染器
-    
   }
 
   destroy() {
+    this.time.stop();
+    this.sizes.destory();
     SceneManager.destory(); // 销毁渲染器
     if (this.renderStamp) cancelAnimationFrame(this.renderStamp); // 取消动画帧
   }

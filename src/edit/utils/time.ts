@@ -18,12 +18,15 @@ export default class Time {
     this.tick = this.tick.bind(this);
     this.tick();
   }
+  
   play() {
     this.playing = true;
   }
+
   pause() {
     this.playing = false;
   }
+
   tick() {
     this.ticker = window.requestAnimationFrame(this.tick);
     const current = Date.now();

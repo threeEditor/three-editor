@@ -15,3 +15,6 @@
 
 # 2024/09/30 @石灰
 - feat 新增 `Objects` 模块
+
+# 2024/10/01 @石灰
+- fix reload error

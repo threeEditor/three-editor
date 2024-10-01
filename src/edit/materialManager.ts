@@ -35,7 +35,7 @@ export default class MaterialManager {
 
     destroy() {
         const materials = [...MaterialManager.map.values()];
-        materials.forEach(m => m.dispose());
+        // materials.forEach(m => m.dispose());
         MaterialManager.map.clear();
     }
 }

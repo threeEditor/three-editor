@@ -55,6 +55,7 @@ const ViewPort = () => {
       }
     }, 1000);
     return () => {
+      console.log('editManager.destroy');
       editManager.destroy();
     }
   }, []);
