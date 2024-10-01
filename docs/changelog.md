@@ -18,3 +18,4 @@
 
 # 2024/10/01 @石灰
 - fix reload error
+- feat 新增 `Selector` 的事件通知

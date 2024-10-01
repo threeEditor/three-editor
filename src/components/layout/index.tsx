@@ -8,7 +8,7 @@ import SceneManager from '@/edit/sceneManager/sceneManager';
 import { LoaderResourceType } from '@/edit/loader';
 import { GLTF } from 'three/examples/jsm/Addons.js';
 import { SceneObjectType } from '@/edit/sceneManager/interface';
-import { PrimitiveMesh, PrimitiveMeshType, Sprite } from '@/edit/objects';
+import { GLTFObject, PrimitiveMesh, PrimitiveMeshType, Sprite } from '@/edit/objects';
 import { Texture } from 'three';
 const Layout = () => {
     const ref = useRef<EditManager>();
@@ -25,14 +25,17 @@ const Layout = () => {
     const onLoad = async () => {
         console.log('load')
         // mock: 模拟外侧添加
-        const { scene } = await SceneManager.loader.load({
+        const gltfResource = await SceneManager.loader.load({
             type: LoaderResourceType.GLTF,
             url: "https://gw.alipayobjects.com/os/bmw-prod/5e3c1e4e-496e-45f8-8e05-f89f2bd5e4a4.glb",
           }) as GLTF;
-          scene.scale.set(5, 5, 5);
+          const gltf = new GLTFObject({
+            gltf: gltfResource,
+          });
+          gltf.setScale(5);
           SceneManager.add({
             type: SceneObjectType.GLTF,
-            node: scene,
+            node: gltf.node,
           })
           const box = new PrimitiveMesh({
             type: PrimitiveMeshType.BOX,

@@ -1,5 +1,6 @@
 import { BoxGeometry, Material, Mesh, Object3D } from "three";
 import MaterialManager from "../materialManager";
+import { BaseObject } from "./baseObject";
 
 export enum PrimitiveMeshType {
     BOX = 'BOX',
@@ -14,11 +15,12 @@ export interface IPrimitiveMeshConfig {
     size?: number;
 }
 
-export class PrimitiveMesh {
+export class PrimitiveMesh extends BaseObject {
     private config: IPrimitiveMeshConfig;
     public node: Object3D;
     public size: number;
     constructor(config: IPrimitiveMeshConfig) {
+        super();
         this.config = config;
         this.size = config.size || 1;
         switch(config.type) {
@@ -28,6 +30,7 @@ export class PrimitiveMesh {
             default:
                 this.node = this.initBox();
         }
+        this.connectObject();
     }
 
     initBox() {        

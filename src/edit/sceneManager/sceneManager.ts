@@ -57,6 +57,12 @@ export default class SceneManager {
 
     // 绑定场景事件
     SceneManager.wrap.addEventListener("click", SceneManager.selector.onSelect);
+    SceneManager.selector.on('select', (object) => {
+      console.log('select', object);
+    })
+    SceneManager.selector.on('unselect', (object) => {
+      console.log('unselect', object);
+    })
 
     SceneManager.inited = true;
   }

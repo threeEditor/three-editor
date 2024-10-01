@@ -1,13 +1,15 @@
 import { Object3D, Ray, Raycaster, Sphere, Sprite, Vector2 } from "three";
 import SceneManager from "../sceneManager/sceneManager";
+import EventEmitter from "eventemitter3";
 
-export class Selector {
+export class Selector extends EventEmitter {
     private selectPosition = new Vector2();
     private selectRaycaster = new Raycaster();
     private selectedObject: Object3D | null = null;
     private selectedSprite: Sprite | null = null;
 
     constructor() {
+      super();
       // 扩展 Raycaster 的相交测试方法
       // @ts-ignore
       Raycaster.prototype.intersectSprite = function (sprite: Sprite, recursive) {
@@ -48,37 +50,58 @@ export class Selector {
         this.unSelect();
         return;
       }
-      this.unSelectSprite();
+      this.selectedSprite && this.unSelectSprite();
+      // select self
       if (this.selectedObject === node) {
-        this.unSelect();
-      } else {
-        cameraManager.setOutline([node]);
-        this.selectedObject = node;
+        return this.unSelect();
       }
+
+      // unselect other node
+      if(this.selectedObject) {
+        this.unSelect();
+      }
+
+      // select current
+      cameraManager.setOutline([node]);
+      this.selectedObject = node;
+      // console.log('select')
+      this.emit('select', node.userData.connectObject);
     }
 
     selectSprite(node: Sprite) {
-      this.unSelect();
+      this.selectedObject && this.unSelect();
 
+      // select self
       if (this.selectedSprite === node) {
-        this.unSelectSprite();
-      } else {
-        node.userData.outline.visible = true;
-        this.selectedSprite = node;
+        return this.unSelectSprite();
       }
+      // unselect other sprite
+      if(this.selectedSprite) {
+        this.unSelectSprite();
+      }
+      // select current sprite
+      node.userData.outline.visible = true;
+      this.selectedSprite = node;
+      // console.log('selectSprite')
+      this.emit('select', node.userData.connectObject);
     }
 
     unSelectSprite() {
       if(!this.selectedSprite) return;
+      this.emit('unselect', this.selectedSprite.userData.connectObject);
       this.selectedSprite.userData.outline.visible = false;
       this.selectedSprite = null;
+      // console.log('unSelectSprite')
+      
     }
 
     unSelect() {
       if(!this.selectedObject) return;
+      this.emit('unselect', this.selectedObject.userData.connectObject);
       const { cameraManager } = SceneManager;
       this.selectedObject = null;
       cameraManager.setOutline([]);
+      // console.log('unSelect')
     }
 
     onSelect = (event: MouseEvent) => {
