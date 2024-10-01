@@ -4,3 +4,7 @@
 ## Sprite
 
 ## PrimitiveMesh
+
+## model
+
+加载模型同时解析模型上绑定的对应动画

@@ -1,7 +1,6 @@
 import { Material, Mesh, Object3D } from "three";
 
 export function removeAllChild(node: Object3D) {
-    console.log(node)
     if(!node.children) {
       if(node.parent) {
         node.parent.remove(node);

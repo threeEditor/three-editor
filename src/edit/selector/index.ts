@@ -15,7 +15,6 @@ export class Selector {
         ray.copy(this.ray).applyMatrix4(sprite.matrixWorld);
         // const spriteMaterial = sprite.material as SpriteMaterial;
         // const spriteGeometry = sprite.geometry;
-        // console.log('boundingBox', spriteGeometry.boundingBox)
         // const radius = sprite.scale.x * spriteMaterial.map!.image.width / 2;
         const { x, y, z } = sprite.scale;
         // scale 设置大小 === width/height 然后再 x Scale TODO 后续待优化
@@ -64,7 +63,6 @@ export class Selector {
       if (this.selectedSprite === node) {
         this.unSelectSprite();
       } else {
-        // console.log('selectSprite', node)
         node.userData.outline.visible = true;
         this.selectedSprite = node;
       }
@@ -72,7 +70,6 @@ export class Selector {
 
     unSelectSprite() {
       if(!this.selectedSprite) return;
-      // console.log('unSelectSprite')
       this.selectedSprite.userData.outline.visible = false;
       this.selectedSprite = null;
     }

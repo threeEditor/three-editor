@@ -43,7 +43,6 @@ export default class Renderer {
     if (this.scene) {
       this.instance?.render(this.scene, camera);
     }
-    
   }
 
   destory() {
