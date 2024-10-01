@@ -68,7 +68,7 @@ export default class SceneManager {
   }
 
   static loadScene(sceneConfig: ISceneConfig) {
-    console.log('sceneConfig', sceneConfig)
+    console.log('sceneConfig12', sceneConfig)
     const directionalLight = new DirectionalLight(0xffffff, 1);
     directionalLight.position.set(1, 1, 0);
     SceneManager.scene.add(directionalLight);
