@@ -1,27 +1,18 @@
 
 import './index.less';
-import { useEffect, useRef } from 'react';
-import { preventTouchMove, preventWheel } from '@/utils/event/dom';
+import { useEffect, useState } from 'react';
 import ViewPort from '../viewport';
-import EditManager from '@/edit/core';
 import SceneManager from '@/edit/sceneManager/sceneManager';
 import { LoaderResourceType } from '@/edit/loader';
 import { GLTF } from 'three/examples/jsm/Addons.js';
 import { SceneObjectType } from '@/edit/sceneManager/interface';
 import { GLTFObject, PrimitiveMesh, PrimitiveMeshType, Sprite } from '@/edit/objects';
 import { Texture } from 'three';
+import PropertyPanel, { ViewType } from '../panel/property';
+import { BaseObject } from '@/edit/objects/baseObject';
 const Layout = () => {
-    const ref = useRef<EditManager>();
-    useEffect(() => {
-        // 关闭页面的上拉、下拉
-        console.log(ref)
-        window.addEventListener('wheel', preventWheel, { passive: false });
-        window.addEventListener('touchmove', preventTouchMove)
-        return () => {
-            window.removeEventListener('wheel', preventWheel);
-            window.removeEventListener('touchmove', preventTouchMove);
-        }
-    })
+    const [selectedNode, setSelectedNode] = useState<BaseObject|null>(null);
+
     const onLoad = async () => {
         console.log('load')
         // mock: 模拟外侧添加
@@ -61,6 +52,26 @@ const Layout = () => {
             node: sprite.node,
           });
     }
+
+    useEffect(() => {
+        SceneManager.selector.on('select', (node) => {
+            // console.log('select', node);
+            setSelectedNode(node);
+        })
+        SceneManager.selector.on('unselect', () => {
+            // console.log('unselect', object);
+            setSelectedNode(null);
+        })
+    }, [])
+
+
+
+    const propertyProps = {
+        viewType: selectedNode ? ViewType.Node : ViewType.None,
+        node: selectedNode ? selectedNode : undefined,
+    }
+
+
     return (
         <div className="layout">
             <div className='panel display'></div>
@@ -70,7 +81,7 @@ const Layout = () => {
                 </div>
                 <div className='panel assets'></div>
             </div>
-            <div className='panel properties'></div>
+            <PropertyPanel {...propertyProps} />
         </div>
     )
 }

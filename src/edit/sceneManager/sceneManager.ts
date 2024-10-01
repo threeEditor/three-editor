@@ -3,6 +3,7 @@ import {
   Scene,
   DirectionalLight,
   AmbientLight,
+  AnimationMixer,
 } from "three";
 import MaterialManager from "../materialManager";
 import Renderer from "../renderer";
@@ -30,9 +31,10 @@ export default class SceneManager {
   static loader = new LoaderManager();
   static cameraManager: CameraManager;
   static cache = new SceneCache();
+  static selector = new Selector();
+  static _modelAnimationMixer: AnimationMixer[] = [];
   private static materialManager: MaterialManager = new MaterialManager();
   private static grid: Grid | null = null;
-  private static selector = new Selector();
   private static inited = false;
 
   static init(options: IPropsType) {
@@ -57,13 +59,6 @@ export default class SceneManager {
 
     // 绑定场景事件
     SceneManager.wrap.addEventListener("click", SceneManager.selector.onSelect);
-    SceneManager.selector.on('select', (object) => {
-      console.log('select', object);
-    })
-    SceneManager.selector.on('unselect', (object) => {
-      console.log('unselect', object);
-    })
-
     SceneManager.inited = true;
   }
 
@@ -115,6 +110,10 @@ export default class SceneManager {
     } else {
       SceneManager.renderer.update(SceneManager.cameraManager.instance);
     }
+    SceneManager._modelAnimationMixer.forEach(mixer => {
+      mixer.update(0.01);
+    })
+    // console.log('6')
   }
 
   static resize() {

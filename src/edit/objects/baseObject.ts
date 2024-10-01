@@ -1,10 +1,25 @@
 import { Object3D } from "three";
-
+import { SceneObjectType } from "../sceneManager/interface";
 export class BaseObject {
     public node!: Object3D;
+    public type!: SceneObjectType;
+    public name!: string;
 
+    get position() {
+        return this.node.position;
+    }
+
+    get rotation() {
+        return this.node.rotation;
+    }
+
+    get scale() {
+        return this.node.scale;
+    }
+    
     connectObject() {
         this.node.userData.connectObject = this;
+        this.name = this.node.name || this.type;
     }
 
     setPosition(x?: number, y?: number, z?: number) {

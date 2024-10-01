@@ -1,5 +1,6 @@
 import { GLTFLoader, GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
+import { AnimationMixer } from "three";
 
 let gltfLoader: null | GLTFLoader = null;
 let dracoLoader: null | DRACOLoader = null;
@@ -21,11 +22,13 @@ export function loadGLTF(url: string) {
       gltfLoader.setDRACOLoader(dracoLoader);
     }
     try {
-      gltfLoader.load(url, (gltf) =>
+      gltfLoader.load(url, (gltf) => {
         resolve({
           success: true,
           gltf,
         })
+      }
+        
       );
     } catch (error) {
       reject({

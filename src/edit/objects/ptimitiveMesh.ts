@@ -1,6 +1,7 @@
 import { BoxGeometry, Material, Mesh, Object3D } from "three";
 import MaterialManager from "../materialManager";
 import { BaseObject } from "./baseObject";
+import { SceneObjectType } from "../sceneManager/interface";
 
 export enum PrimitiveMeshType {
     BOX = 'BOX',
@@ -22,6 +23,7 @@ export class PrimitiveMesh extends BaseObject {
     constructor(config: IPrimitiveMeshConfig) {
         super();
         this.config = config;
+        this.type = SceneObjectType.MESH;
         this.size = config.size || 1;
         switch(config.type) {
             case PrimitiveMeshType.BOX:

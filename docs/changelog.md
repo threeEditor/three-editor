@@ -19,3 +19,7 @@
 # 2024/10/01 @石灰
 - fix reload error
 - feat 新增 `Selector` 的事件通知
+
+# 2024/10/02 @石灰
+- feat 完善属性面板展示选中对象的信息
+- feat 增加 `gltf` 动画播放

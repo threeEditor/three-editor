@@ -1,5 +1,6 @@
 import { Sprite as ThreeSprite, SpriteMaterial, Texture, Object3D, LessDepth } from 'three';
 import { BaseObject } from './baseObject';
+import { SceneObjectType } from '../sceneManager/interface';
 export interface ISpriteConfig {
     color?: string;
     opacity?: number,
@@ -8,8 +9,12 @@ export interface ISpriteConfig {
 
 export class Sprite extends BaseObject {
     public node: Object3D;
+    public config: ISpriteConfig;
     constructor(config: ISpriteConfig) {
         super();
+        this.config = config;
+        this.type = SceneObjectType.SPRITE;
+        
         const params: {[key: string]: any} = {};
         config.texture && (params.map = config.texture);
         config.color && (params.color = config.color);
