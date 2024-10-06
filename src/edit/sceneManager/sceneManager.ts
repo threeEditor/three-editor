@@ -44,10 +44,7 @@ export default class SceneManager {
     SceneManager.sizes = sizes;
 
     // 初始化网格系统
-    SceneManager.grid = new Grid({
-      size: 200,
-      divisions: 50,
-    });
+    SceneManager.grid = new Grid();
 
     // 初始化渲染器
     SceneManager.renderer = new Renderer();

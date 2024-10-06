@@ -12,12 +12,13 @@ export default class Renderer {
     this.config = SceneManager.config;
     this.setInstance();
   }
-  
+
   setInstance() {
     this.instance = new THREE.WebGLRenderer({
-      alpha: true,
+      alpha: false,
       antialias: true,
     });
+    this.instance.setClearColor(new THREE.Color(0x333333));
     this.instance.domElement.style.position = "absolute";
     this.instance.domElement.style.top = "0";
     this.instance.domElement.style.left = "0";
@@ -46,7 +47,7 @@ export default class Renderer {
   }
 
   destory() {
-    if(!this.instance) return;
+    if (!this.instance) return;
     this.instance.renderLists.dispose();
     this.instance.dispose();
     this.instance.domElement.parentNode?.removeChild(this.instance.domElement);
