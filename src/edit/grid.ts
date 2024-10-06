@@ -93,6 +93,7 @@ export default class Grid {
       `,
       side: DoubleSide,
       transparent: true,
+      depthWrite: false,
     });
 
     this.plane = new Plane();
