@@ -128,7 +128,7 @@ export default class SceneManager {
     removeAllChild(scene);
     
     SceneManager.renderer.destory();
-    SceneManager.grid?.destory();
+    // SceneManager.grid?.destory();
     console.log('SceneManager destroy!')
   }
 }
