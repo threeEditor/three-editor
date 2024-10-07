@@ -1,8 +1,11 @@
 ## TODO LIST
 
 ### UI 部分
-- Layout 布局
-- ToolBar 工具条
+1. Layout 布局
+- Assets 资源面板
+- Properties 属性面板
+- Display 节点面板
+2. ToolBar 工具条
 
 ### Broswer Component
 - FileInput 文件导入（JSON）
