@@ -11,28 +11,6 @@ export class Selector extends EventEmitter {
     constructor() {
       super();
       // 扩展 Raycaster 的相交测试方法
-      // @ts-ignore
-      Raycaster.prototype.intersectSprite = function (sprite: Sprite, recursive) {
-        const ray = new Ray();
-        ray.copy(this.ray).applyMatrix4(sprite.matrixWorld);
-        // const spriteMaterial = sprite.material as SpriteMaterial;
-        // const spriteGeometry = sprite.geometry;
-        // const radius = sprite.scale.x * spriteMaterial.map!.image.width / 2;
-        const { x, y, z } = sprite.scale;
-        // scale 设置大小 === width/height 然后再 x Scale TODO 后续待优化
-        const radius = Math.sqrt(x **2 + y ** 2 + z ** 2) * sprite.scale.x;
-        // 检查射线与精灵的包围球是否相交
-        const spriteBoundingSphere = new Sphere(sprite.position, radius);
-        if (!ray.intersectsSphere(spriteBoundingSphere)) {
-          return [];
-        }
-        // 这里可以根据具体需求进行更复杂的相交测试逻辑
-        return [{
-          distance: ray.origin.distanceTo(sprite.position),
-          point: sprite.position.clone(),
-          object: sprite,
-        }];
-      };
     }
 
     private updateSelectPosition(event: MouseEvent) {
@@ -109,10 +87,9 @@ export class Selector extends EventEmitter {
         this.updateSelectPosition(event);
         this.selectRaycaster.setFromCamera(this.selectPosition, cameraManager.instance);
         const selectList: Object3D[] = [];
-        const spriteList: Sprite[] = [];
         SceneManager.cache.selectList.forEach(node => {
           if(node.type === 'Sprite') {
-            spriteList.push(node as Sprite);
+            selectList.push(node.userData.outline);
           } else {
             selectList.push(node);
           }
@@ -120,9 +97,16 @@ export class Selector extends EventEmitter {
 
         // Object3D
         const intersects = this.selectRaycaster.intersectObjects(selectList);
+
         const intersectedObject = intersects[0]?.object;        
         // 选中 Object3D
         if (intersectedObject) {
+
+          if(intersectedObject?.parent?.type === 'Sprite') {
+            this.selectSprite(intersectedObject.parent as Sprite);
+            return;
+          }
+
           if(cache.include(intersectedObject.uuid)) {
             // 选中的是场景中的物体
             this.select(intersectedObject);
@@ -130,23 +114,6 @@ export class Selector extends EventEmitter {
             // 1. 选中的是模型的子物体
             this.select(cache.getIncludeParent(intersectedObject));
           }
-          return;
-        }
-
-        // Sprite
-        let intersectedSprite: Sprite | null = null;
-        for (const sprite of spriteList) {
-          // @ts-ignore
-          const spriteIntersects = this.selectRaycaster.intersectSprite(sprite);
-          if (spriteIntersects.length > 0) {
-            // 处理与 Sprite 的相交
-            intersectedSprite = spriteIntersects[0].object as Sprite;
-          }
-        }
-
-        // 选中 Sprite
-        if(intersectedSprite) {
-          this.selectSprite(intersectedSprite);
           return;
         }
 

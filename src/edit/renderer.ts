@@ -41,9 +41,8 @@ export default class Renderer {
   }
 
   update(camera: THREE.Camera) {
-    if (this.scene) {
-      this.instance?.render(this.scene, camera);
-    }
+    if(!this.instance || !this.scene) return;    
+    this.instance.render(this.scene, camera);
   }
 
   destory() {
