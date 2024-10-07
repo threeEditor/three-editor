@@ -24,8 +24,8 @@ export class BaseObject {
 
     setPosition(x?: number, y?: number, z?: number) {
         x !== undefined && this.node.position.setX(x);
-        y !== undefined && this.node.position.setX(y);
-        z !== undefined && this.node.position.setX(z);
+        y !== undefined && this.node.position.setY(y);
+        z !== undefined && this.node.position.setZ(z);
     }
 
     setScale(scale: number): void;
