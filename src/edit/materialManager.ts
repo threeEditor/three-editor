@@ -3,7 +3,7 @@ import { Material, MeshPhongMaterial } from "three";
 export enum MaterialType {
     Default = 'DefaultPhong',
     Phong = 'Phong',
-    Blinn = 'Blinn,'
+    Blinn = 'Blinn',
 }
 export default class MaterialManager {
     private static map = new Map<string, Material>();
@@ -24,6 +24,10 @@ export default class MaterialManager {
 
     static getMaterial(uuid: string) {
       return MaterialManager.map.get(uuid);
+    }
+
+    static hasMaterial(uuid: string) {
+        return MaterialManager.map.has(uuid);
     }
 
     static disposeMaterial(key: string) {

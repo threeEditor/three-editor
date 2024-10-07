@@ -1,4 +1,4 @@
-import { Object3D, Ray, Raycaster, Sphere, Sprite, Vector2 } from "three";
+import { Object3D, Raycaster, Sprite, Vector2 } from "three";
 import SceneManager from "../sceneManager/sceneManager";
 import EventEmitter from "eventemitter3";
 
@@ -10,7 +10,6 @@ export class Selector extends EventEmitter {
 
     constructor() {
       super();
-      // 扩展 Raycaster 的相交测试方法
     }
 
     private updateSelectPosition(event: MouseEvent) {
@@ -41,8 +40,8 @@ export class Selector extends EventEmitter {
 
       // select current
       cameraManager.setOutline([node]);
+      // cameraManager.setOutline(SceneManager.scene.children)
       this.selectedObject = node;
-      // console.log('select')
       this.emit('select', node.userData.connectObject);
     }
 
@@ -58,19 +57,20 @@ export class Selector extends EventEmitter {
         this.unSelectSprite();
       }
       // select current sprite
-      node.userData.outline.visible = true;
+      const { cameraManager } = SceneManager;
+      cameraManager.setOutline([node.userData.outline]);
+
       this.selectedSprite = node;
-      // console.log('selectSprite')
       this.emit('select', node.userData.connectObject);
     }
 
     unSelectSprite() {
       if(!this.selectedSprite) return;
       this.emit('unselect', this.selectedSprite.userData.connectObject);
-      this.selectedSprite.userData.outline.visible = false;
+      // this.selectedSprite.userData.outline.visible = false;
+      const { cameraManager } = SceneManager;
+      cameraManager.setOutline([]);
       this.selectedSprite = null;
-      // console.log('unSelectSprite')
-      
     }
 
     unSelect() {
@@ -99,11 +99,9 @@ export class Selector extends EventEmitter {
         const intersects = this.selectRaycaster.intersectObjects(selectList);
 
         const intersectedObject = intersects[0]?.object;        
-        // 选中 Object3D
         if (intersectedObject) {
-
-          if(intersectedObject?.parent?.type === 'Sprite') {
-            this.selectSprite(intersectedObject.parent as Sprite);
+          if(intersectedObject.userData.type === 'outline') {
+            this.selectSprite(intersectedObject.userData.connectObject as Sprite);
             return;
           }
 

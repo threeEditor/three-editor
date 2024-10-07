@@ -4,6 +4,7 @@ export class BaseObject {
     public node!: Object3D;
     public type!: SceneObjectType;
     public name!: string;
+    protected outline!: Object3D;
 
     get position() {
         return this.node.position;
@@ -26,14 +27,32 @@ export class BaseObject {
         x !== undefined && this.node.position.setX(x);
         y !== undefined && this.node.position.setY(y);
         z !== undefined && this.node.position.setZ(z);
+        if(this.outline) { // for sprite outline renderpass
+            x !== undefined && this.outline.position.setX(x);
+            y !== undefined && this.outline.position.setY(y);
+            z !== undefined && this.outline.position.setZ(z);
+        }
+    }
+
+    setRotation(x?: number, y?: number, z?: number) {
+        if(x !== undefined) { this.node.rotation.x = x };
+        if(y !== undefined) { this.node.rotation.y = y };
+        if(z !== undefined) { this.node.rotation.z = z };
+        if(this.outline) { // for sprite outline renderpass
+            if(x !== undefined) { this.outline.rotation.x = x };
+            if(y !== undefined) { this.outline.rotation.y = y };
+            if(z !== undefined) { this.outline.rotation.z = z };
+        }
     }
 
     setScale(scale: number): void;
     setScale(x: number, y?: number, z?: number) {
         if(y !== undefined && z !== undefined) {
             this.node.scale.set(x, y, z);
+            this.outline?.scale.set(x, y, z);
         } else {
             this.node.scale.set(x, x, x);
+            this.outline?.scale.set(x, x, x);
         }
     }
 }

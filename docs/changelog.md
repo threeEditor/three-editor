@@ -25,4 +25,5 @@
 - feat 增加 `gltf` 动画播放
 
 # 2024/10/07 @石灰
-- refactor 修改 sprite 的选中效果，修复选中准确性（效果待优化）
+- refactor 修改 `sprite` 的选中效果，修复选中准确性
+- chore 优化 `sprite` 的选中效果（采用 outline renderpass）
