@@ -24,6 +24,10 @@
 - feat 完善属性面板展示选中对象的信息
 - feat 增加 `gltf` 动画播放
 
+# 2024/10/06 @YILI ZHANG
+- feat `Grid`新增x轴、z轴颜色
+- feat 增加`Grid`显示隐藏
+
 # 2024/10/07 @石灰
 - refactor 修改 `sprite` 的选中效果，修复选中准确性
 - chore 优化 `sprite` 的选中效果（采用 outline renderpass）

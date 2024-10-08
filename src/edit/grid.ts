@@ -15,7 +15,7 @@ export default class Grid {
   private plane: Plane;
   static upVector: Vector3 = new Vector3(0, 1, 0);
   static zeroVector: Vector3 = new Vector3(0, 0, 0);
-
+  static gridVisible: boolean = true;
   constructor() {
     const geometry = new PlaneGeometry(5, 5); // 平面几何体
     const uniforms = {
@@ -119,7 +119,11 @@ export default class Grid {
       .applyMatrix4(this.gridInstance.matrixWorld);
   }
 
-  destroy() {
-    this.gridInstance.clear();
+  toggleVisible() {
+    if (Grid.gridVisible === true) {
+      this.gridInstance.visible = false;
+    } else if (Grid.gridVisible === false) {
+      this.gridInstance.visible = true;
+    }
   }
 }
