@@ -10,6 +10,7 @@ import { GLTFObject, PrimitiveMesh, PrimitiveMeshType, Sprite } from '@/edit/obj
 import { Texture } from 'three';
 import PropertyPanel, { ViewType } from '../panel/property';
 import { BaseObject } from '@/edit/objects/baseObject';
+import Display from '../panel/display';
 const Layout = () => {
     const [selectedNode, setSelectedNode] = useState<BaseObject|null>(null);
 
@@ -74,7 +75,9 @@ const Layout = () => {
 
     return (
         <div className="layout">
-            <div className='panel display'></div>
+            <div className='panel display'>
+              <Display />
+            </div>
             <div className='center'>
                 <div className='panel viewport'>
                     <ViewPort onLoad={onLoad} />
