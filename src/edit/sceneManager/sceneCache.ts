@@ -1,6 +1,8 @@
 import { Object3D } from "three";
 import { SceneObjectType } from "./interface";
+import { TreeDataNode } from "antd";
 
+export const cacheTreeNodes: TreeDataNode[] = [];
 export class SceneCache {
     private map = new Map<string, Object3D>();
     private selectMap = new Map<string, Object3D>();

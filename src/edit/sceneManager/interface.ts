@@ -1,4 +1,4 @@
-import { Object3D } from "three";
+import { BaseObject } from "../objects/baseObject";
 
 
 export enum SceneObjectType {
@@ -16,6 +16,7 @@ export const AllowedValues: SceneObjectType[] = [
 ];
 
 export interface ISceneObject {
+    name?: string;
     type: string;
-    node: Object3D;
+    object: BaseObject;
 }
