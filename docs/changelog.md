@@ -32,3 +32,6 @@
 - refactor 修改 `sprite` 的选中效果，修复选中准确性
 - chore 优化 `sprite` 的选中效果（采用 outline renderpass）
 - doc 展示面板的树形控件
+
+# 2024/10/08 @石灰
+- feat add tree component

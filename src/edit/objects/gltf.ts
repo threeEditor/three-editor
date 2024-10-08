@@ -30,8 +30,6 @@ export class GLTFObject extends BaseObject {
             this.mixer = new AnimationMixer(scene);
             SceneManager._modelAnimationMixer.push(this.mixer);
         }
-       
-
         this.play();
     }
 

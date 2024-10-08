@@ -1,47 +1,36 @@
+import { Icon } from '@/components/icon';
 import './index.less';
-import { Tree } from 'antd';
+import { ConfigProvider, Tree } from 'antd';
 import type { TreeDataNode, TreeProps } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Key } from 'antd/es/table/interface';
+import { EventSystem } from '@/utils/event/EventSystem';
+export interface IDisplayProps {
+    treeData: TreeDataNode[];
+    onTreeDrapUpdate: (treeData: TreeDataNode[]) => void;
+}
 
-const x = 3;
-const y = 2;
-const z = 1;
-const defaultData: TreeDataNode[] = [];
-const generateData = (_level: number, _preKey?: React.Key, _tns?: TreeDataNode[]) => {
-    const preKey = _preKey || '0';
-    const tns = _tns || defaultData;
-  
-    const children: React.Key[] = [];
-    for (let i = 0; i < x; i++) {
-      const key = `${preKey}-${i}`;
-      tns.push({ title: key, key });
-      if (i < y) {
-        children.push(key);
-      }
-    }
-    if (_level < 0) {
-      return tns;
-    }
-    const level = _level - 1;
-    children.forEach((key, index) => {
-      tns[index].children = [];
-      return generateData(level, key, tns[index].children);
-    });
-  };
-  generateData(z);
+const Display = (props: IDisplayProps) => {
+    const [selectedKeys, setSelectedKeys] = useState<Key[]>([]);
+    const [gData, setGData] = useState(props.treeData);
 
-const Display = () => {
-    const [gData, setGData] = useState(defaultData);
-    const [expandedKeys] = useState(['0-0', '0-0-0', '0-0-0-0']);
+    const expandedKeys: string[] = [];
 
-    const onDragEnter: TreeProps['onDragEnter'] = (info) => {
-        console.log('onDragEnter', info);
-        // expandedKeys, set it when controlled is needed
-        // setExpandedKeys(info.expandedKeys)
-    };
+    useEffect(() => {
+        EventSystem.subscribe('SetTreeNodes', (treeNodes: TreeDataNode[]) => {
+            console.log('SetTreeNodes', treeNodes)
+            setGData(treeNodes);
+        })
+        EventSystem.subscribe('SelectNode', (keys: string[]) => {
+            setSelectedKeys(keys);
+        })       
+        return () => {
+            EventSystem.unsubscribe('SelectNode');
+        }
+    }, [])
+    
 
     const onDrop: TreeProps['onDrop'] = (info) => {
-        console.log('onDrop', info);
         const dropKey = info.node.key;
         const dragKey = info.dragNode.key;
         const dropPos = info.node.pos.split('-');
@@ -93,19 +82,41 @@ const Display = () => {
           }
         }
         setGData(data);
-      };
-
+        props.onTreeDrapUpdate(data);
+    };
     return <div className="display_content">
         <div className='title'>Display</div>
-        <Tree
-        className="draggable-tree"
-        defaultExpandedKeys={expandedKeys}
-        draggable
-        blockNode
-        onDragEnter={onDragEnter}
-        onDrop={onDrop}
-        treeData={gData}
+        <ConfigProvider
+            theme={{
+                components: {
+                    Tree: {
+                        directoryNodeSelectedBg: '#f00',
+                        nodeHoverBg: 'rgba(65, 65, 65, 0.5)',
+                        nodeSelectedBg: 'rgba(100, 100, 100, 0.5)',
+                        colorBgContainer: 'rgba(100, 100, 100, 0.2)',
+                    },
+                },
+            }}
+        >
+         <Tree
+            className="draggable-tree"
+            draggable
+            blockNode
+            selectedKeys={selectedKeys}
+            expandedKeys={expandedKeys}
+            showIcon={true}
+            icon={<Icon/>}
+            onDrop={onDrop}
+            onSelect={(e: Key[]) => {
+                setSelectedKeys(e);
+            }}
+            onRightClick={(e) => {
+                console.log('onRightClick', e.node)
+            }}
+            treeData={gData}
         />
+        </ConfigProvider>
+       
     </div>
 }
 export default Display;

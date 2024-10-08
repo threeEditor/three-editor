@@ -14,8 +14,9 @@ import Grid from "../grid";
 import { Selector } from "../selector";
 import { LoaderManager } from "../loader";
 import { AllowedValues, ISceneObject, SceneObjectType } from "./interface";
-import { SceneCache } from "./sceneCache";
+import { cacheTreeNodes, SceneCache } from "./sceneCache";
 import { removeAllChild } from "../utils/dispose";
+import { EventSystem } from "@/utils/event/EventSystem";
 interface IPropsType {
   wrap: HTMLElement;
   config: Config;
@@ -76,26 +77,32 @@ export default class SceneManager {
   }
 
   static add(sceneObject: ISceneObject) {
-    const { type, node } = sceneObject;
+    const { type, object } = sceneObject;
     if(!AllowedValues.includes(type as SceneObjectType)) {
       console.warn(`暂不支持添加该类型: ${type}`);
       return;
     }
-    if(!node) {
+    if(!object) {
       console.warn(`添加对象缺失，请检查：`, sceneObject);
       return;
     }
+    const { node } = object;
     SceneManager.scene.add(node);
     SceneManager.cache.add(node.uuid, node, type as SceneObjectType);
+    cacheTreeNodes.push({      
+      key: node.uuid, 
+      title: sceneObject.name || object.name,
+    })
+    EventSystem.broadcast('SetTreeNodes', cacheTreeNodes)
   }
 
   static remove(sceneObject: ISceneObject) {
-    const { node } = sceneObject;
-    if(!SceneManager.cache.include(node.uuid)) {
+    const { object } = sceneObject;
+    if(!SceneManager.cache.include(object.node.uuid)) {
       return false;
     } else {
-      SceneManager.scene.remove(node);
-      SceneManager.cache.remove(node.uuid);
+      SceneManager.scene.remove(object.node);
+      SceneManager.cache.remove(object.node.uuid);
       return true;
     }
   }
