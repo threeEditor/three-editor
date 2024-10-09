@@ -109,6 +109,8 @@ const Display = (props: IDisplayProps) => {
             onDrop={onDrop}
             onSelect={(e: Key[]) => {
                 setSelectedKeys(e);
+                console.log('setSelectedKeys', e)
+                EventSystem.broadcast('TreeSelectNode', e);
             }}
             onRightClick={(e) => {
                 console.log('onRightClick', e.node)

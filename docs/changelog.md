@@ -38,3 +38,5 @@
 
 # 2024/10/09 @YILI ZHANG
 - fix hot reload error 
+# 2024/10/09 @石灰
+-feat display plane tree component add select
