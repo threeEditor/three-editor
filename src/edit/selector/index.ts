@@ -12,13 +12,35 @@ export class Selector extends EventEmitter {
       super();
     }
 
-    private updateSelectPosition(event: MouseEvent) {
-        const { sizes, wrap } = SceneManager;
-        const { top, left } = wrap.getBoundingClientRect();
-        this.selectPosition.set(
-            ((event.clientX - left) / sizes.width) * 2 - 1,
-            -((event.clientY - top) / sizes.height) * 2 + 1
-        )
+    emitTreeSelect(uuid?: string) {
+      if(!uuid) {
+        if(this.selectedObject) {
+          this.unSelect();
+        } else if(this.selectedSprite) {
+          this.unSelectSprite();
+        }
+        return;
+      }
+      const { cameraManager, cache } = SceneManager;
+      if(uuid === this.selectedObject?.uuid) {
+        this.selectedObject = null;
+        cameraManager.setOutline([]);
+      } else if(uuid === this.selectedSprite?.uuid) {
+        this.selectedSprite = null;
+        cameraManager.setOutline([]);
+      } else {
+        cache.selectList.forEach(node => {
+          if(node.uuid !== uuid) return;
+          if(node.type === 'Sprite') {
+            this.selectedSprite = node as Sprite;
+            cameraManager.setOutline([node.userData.outline]);
+          } else {
+            this.selectedObject = node;
+            cameraManager.setOutline([node]);
+          }
+          this.emit('select', node.userData.connectObject);
+        })
+      }
     }
 
     select(node: Object3D | null) {
@@ -40,7 +62,6 @@ export class Selector extends EventEmitter {
 
       // select current
       cameraManager.setOutline([node]);
-      // cameraManager.setOutline(SceneManager.scene.children)
       this.selectedObject = node;
       this.emit('select', node.userData.connectObject);
     }
@@ -118,4 +139,13 @@ export class Selector extends EventEmitter {
         this.unSelect();
         this.unSelectSprite();
       };
+
+      private updateSelectPosition(event: MouseEvent) {
+        const { sizes, wrap } = SceneManager;
+        const { top, left } = wrap.getBoundingClientRect();
+        this.selectPosition.set(
+            ((event.clientX - left) / sizes.width) * 2 - 1,
+            -((event.clientY - top) / sizes.height) * 2 + 1
+        )
+    }
 }

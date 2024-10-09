@@ -57,6 +57,10 @@ export default class SceneManager {
 
     // 绑定场景事件
     SceneManager.wrap.addEventListener("click", SceneManager.selector.onSelect);
+    EventSystem.subscribe('TreeSelectNode', (keys: string[]) => {
+      const uuid = keys[0];
+      SceneManager.selector.emitTreeSelect(uuid);
+    })
     SceneManager.inited = true;
   }
 
