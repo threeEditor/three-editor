@@ -65,6 +65,12 @@ export default class CameraManager {
   setOutline(objects: Object3D[]) {
     this.outlinePass.selectedObjects = objects;
   }
+  // 设置是否开启OrbitControls
+  setControlEnable(enable: boolean) {
+    if (this.control) {
+      this.control.enabled = enable;
+    }
+  }
 
   resize() {
     if (this.instance && this.config) {

@@ -31,12 +31,13 @@
 # 2024/10/07 @石灰
 - refactor 修改 `sprite` 的选中效果，修复选中准确性
 - chore 优化 `sprite` 的选中效果（采用 outline renderpass）
-- doc 展示面板的树形控件
+- doc 展示面板的树形控件  
 
 # 2024/10/08 @石灰
 - feat add tree component
 
 # 2024/10/09 @YILI ZHANG
 - fix hot reload error 
+- feat add simple Gizmo (Bug： transform物体之后，会失去选中项导致Gizmo 解绑物体。)
 # 2024/10/09 @石灰
--feat display plane tree component add select
+-feat display plane tree component add select 
