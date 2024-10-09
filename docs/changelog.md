@@ -35,3 +35,6 @@
 
 # 2024/10/08 @石灰
 - feat add tree component
+
+# 2024/10/09 @YILI ZHANG
+- fix hot reload error 
