@@ -1,22 +1,25 @@
-import { ISceneConfig } from "@/sceneConfig/config";
+import { ISceneConfig } from '@/sceneConfig/config';
 import {
   Scene,
   DirectionalLight,
   AmbientLight,
   AnimationMixer,
-} from "three";
-import MaterialManager from "../materialManager";
-import Renderer from "../renderer";
-import CameraManager from "../cameraManager";
-import Config from "../utils/config";
-import Sizes from "../utils/sizes";
-import Grid from "../grid";
-import { Selector } from "../selector";
-import { LoaderManager } from "../loader";
-import { AllowedValues, ISceneObject, SceneObjectType } from "./interface";
-import { cacheTreeNodes, SceneCache } from "./sceneCache";
-import { removeAllChild } from "../utils/dispose";
-import { EventSystem } from "@/utils/event/EventSystem";
+  Object3D,
+} from 'three';
+import MaterialManager from '../materialManager';
+import Renderer from '../renderer';
+import CameraManager from '../cameraManager';
+import Config from '../utils/config';
+import Sizes from '../utils/sizes';
+import Grid from '../grid';
+import { Selector } from '../selector';
+import { LoaderManager } from '../loader';
+import { AllowedValues, ISceneObject, SceneObjectType } from './interface';
+import { cacheTreeNodes, SceneCache } from './sceneCache';
+import { removeAllChild } from '../utils/dispose';
+import { EventSystem } from '@/utils/event/EventSystem';
+import GizmoManager from '../gizmo';
+import { BaseObject } from '../objects/baseObject';
 interface IPropsType {
   wrap: HTMLElement;
   config: Config;
@@ -34,6 +37,7 @@ export default class SceneManager {
   static cache = new SceneCache();
   static selector = new Selector();
   static _modelAnimationMixer: AnimationMixer[] = [];
+  static gizmoManager: GizmoManager;
   private static materialManager: MaterialManager = new MaterialManager();
   private static grid: Grid | null = null;
   private static inited = false;
@@ -55,23 +59,33 @@ export default class SceneManager {
     SceneManager.cameraManager = new CameraManager();
     SceneManager.cameraManager.setPosition(20, 20, 20);
 
+    // 初始化gizmo
+    SceneManager.gizmoManager = new GizmoManager();
+
     // 绑定场景事件
-    SceneManager.wrap.addEventListener("click", SceneManager.selector.onSelect);
+    SceneManager.wrap.addEventListener('click', SceneManager.selector.onSelect);
     EventSystem.subscribe('TreeSelectNode', (keys: string[]) => {
       const uuid = keys[0];
       SceneManager.selector.emitTreeSelect(uuid);
-    })
+    });
+
+    SceneManager.selector.on('select', (object: BaseObject) =>
+      SceneManager.gizmoManager.attachObject(object)
+    );
+    SceneManager.selector.on('unselect', () =>
+      SceneManager.gizmoManager.detachObject()
+    );
     SceneManager.inited = true;
   }
 
   static setScene(sceneConfig: ISceneConfig) {
-    // 清空场景中的对象
+    // 清空场景中的对象  
     SceneManager.loadScene(sceneConfig);
     // SceneManagerEvent.SCENELOAD
   }
 
   static loadScene(sceneConfig: ISceneConfig) {
-    console.log('sceneConfig12', sceneConfig)
+    console.log('sceneConfig12', sceneConfig);
     const directionalLight = new DirectionalLight(0xffffff, 1);
     directionalLight.position.set(1, 1, 0);
     SceneManager.scene.add(directionalLight);
@@ -82,27 +96,27 @@ export default class SceneManager {
 
   static add(sceneObject: ISceneObject) {
     const { type, object } = sceneObject;
-    if(!AllowedValues.includes(type as SceneObjectType)) {
+    if (!AllowedValues.includes(type as SceneObjectType)) {
       console.warn(`暂不支持添加该类型: ${type}`);
       return;
     }
-    if(!object) {
+    if (!object) {
       console.warn(`添加对象缺失，请检查：`, sceneObject);
       return;
     }
     const { node } = object;
     SceneManager.scene.add(node);
     SceneManager.cache.add(node.uuid, node, type as SceneObjectType);
-    cacheTreeNodes.push({      
-      key: node.uuid, 
+    cacheTreeNodes.push({
+      key: node.uuid,
       title: sceneObject.name || object.name,
-    })
-    EventSystem.broadcast('SetTreeNodes', cacheTreeNodes)
+    });
+    EventSystem.broadcast('SetTreeNodes', cacheTreeNodes);
   }
 
   static remove(sceneObject: ISceneObject) {
     const { object } = sceneObject;
-    if(!SceneManager.cache.include(object.node.uuid)) {
+    if (!SceneManager.cache.include(object.node.uuid)) {
       return false;
     } else {
       SceneManager.scene.remove(object.node);
@@ -112,34 +126,35 @@ export default class SceneManager {
   }
 
   static update() {
-    if(!SceneManager.inited) return;
+    if (!SceneManager.inited) return;
     if (SceneManager.cameraManager.outlinePassEnable) {
       SceneManager.cameraManager.update();
     } else {
       SceneManager.renderer.update(SceneManager.cameraManager.instance);
     }
-    SceneManager._modelAnimationMixer.forEach(mixer => {
+    SceneManager._modelAnimationMixer.forEach((mixer) => {
       mixer.update(0.01);
-    })
+    });
     // console.log('6')
   }
 
   static resize() {
-    if(!SceneManager.inited) return;
+    if (!SceneManager.inited) return;
     SceneManager.renderer.resize();
     SceneManager.cameraManager.resize();
   }
 
   static destory() {
-    console.log('SceneManager not inited!')
-    if(!SceneManager.inited) return;
+    console.log('SceneManager not inited!');
+    if (!SceneManager.inited) return;
     const scene = SceneManager.scene;
-    if(!scene) return;
+    if (!scene) return;
     SceneManager.materialManager.destroy();
     removeAllChild(scene);
-    
+
     SceneManager.renderer.destory();
     // SceneManager.grid?.destory();
-    console.log('SceneManager destroy!')
+    SceneManager.gizmoManager.destory();
+    console.log('SceneManager destroy!');
   }
 }
