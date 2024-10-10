@@ -104,6 +104,9 @@ export class Selector extends EventEmitter {
     }
 
     onSelect = (event: MouseEvent) => {
+        if(SceneManager.GizmoManager.draggedDelay){
+          return;
+        }
         const {cameraManager, cache } = SceneManager;
         this.updateSelectPosition(event);
         this.selectRaycaster.setFromCamera(this.selectPosition, cameraManager.instance);

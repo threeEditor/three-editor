@@ -37,7 +37,7 @@ export default class SceneManager {
   static cache = new SceneCache();
   static selector = new Selector();
   static _modelAnimationMixer: AnimationMixer[] = [];
-  static gizmoManager: GizmoManager;
+  static GizmoManager: GizmoManager;
   private static materialManager: MaterialManager = new MaterialManager();
   private static grid: Grid | null = null;
   private static inited = false;
@@ -60,7 +60,7 @@ export default class SceneManager {
     SceneManager.cameraManager.setPosition(20, 20, 20);
 
     // 初始化gizmo
-    SceneManager.gizmoManager = new GizmoManager();
+    SceneManager.GizmoManager = new GizmoManager();
 
     // 绑定场景事件
     SceneManager.wrap.addEventListener('click', SceneManager.selector.onSelect);
@@ -70,16 +70,16 @@ export default class SceneManager {
     });
 
     SceneManager.selector.on('select', (object: BaseObject) =>
-      SceneManager.gizmoManager.attachObject(object)
+      SceneManager.GizmoManager.attachObject(object)
     );
     SceneManager.selector.on('unselect', () =>
-      SceneManager.gizmoManager.detachObject()
+      SceneManager.GizmoManager.detachObject()
     );
     SceneManager.inited = true;
   }
 
   static setScene(sceneConfig: ISceneConfig) {
-    // 清空场景中的对象  
+    // 清空场景中的对象
     SceneManager.loadScene(sceneConfig);
     // SceneManagerEvent.SCENELOAD
   }
@@ -154,7 +154,7 @@ export default class SceneManager {
 
     SceneManager.renderer.destory();
     // SceneManager.grid?.destory();
-    SceneManager.gizmoManager.destory();
+    SceneManager.GizmoManager.destory();
     console.log('SceneManager destroy!');
   }
 }
