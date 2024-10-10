@@ -4,11 +4,11 @@ import SceneManager from '../sceneManager/sceneManager';
 import { BaseObject } from '../objects/baseObject';
 class GizmoManager {
   private controls: TransformControls;
+  public draggedDelay: boolean = false;
   private scene: Scene;
   private camera: Camera;
   private renderer: Renderer;
   private selectedObject: BaseObject | null = null;
-
   constructor() {
     this.scene = SceneManager.scene;
     this.camera = SceneManager.cameraManager.instance;
@@ -22,10 +22,7 @@ class GizmoManager {
     this.scene.add(this.controls);
 
     // 设置事件监听器
-    this.controls.addEventListener(
-      'dragging-changed',
-      this.onDraggingChanged.bind(this)
-    );
+    this.initOnDraggingChanged();
 
     // 设置键盘监听器
     this.initKeyboardControls();
@@ -44,16 +41,24 @@ class GizmoManager {
     SceneManager.cameraManager.setControlEnable(true);
   }
 
-  // 当开始/停止拖拽时，控制相机
-  private onDraggingChanged(event: any) {
-    SceneManager.cameraManager.setControlEnable(!event.value);
+  // // 当开始/停止拖拽时，控制相机
+  private initOnDraggingChanged() {
+    this.controls.addEventListener('dragging-changed', (event) => {
+      SceneManager.cameraManager.setControlEnable(!event.value);
+      //拖拽结束时
+      if (!event.value) {
+        setTimeout(() => {
+          this.draggedDelay = false;
+        }, 1);
+      } else {
+        this.draggedDelay = true;
+      }
+    });
   }
-
   // 键盘切换操作模式 (平移、旋转、缩放)
   private initKeyboardControls() {
     document.addEventListener('keydown', (event) => {
       if (!this.selectedObject) return;
-
       switch (event.key) {
         case 'g': // Translate mode
           this.controls.setMode('translate');
@@ -71,8 +76,11 @@ class GizmoManager {
   // 销毁 gizmo 控件
   public destory() {
     document.removeEventListener('keydown', this.initKeyboardControls);
-    SceneManager.scene.remove(this.controls);
-    this.controls.dispose();
+    this.controls.removeEventListener(
+      'dragging-changed',
+      this.initOnDraggingChanged
+    );
+    SceneManager.scene.remove(this.controls); 
   }
 }
 
