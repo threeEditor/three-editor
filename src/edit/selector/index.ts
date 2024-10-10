@@ -1,6 +1,7 @@
 import { Object3D, Raycaster, Sprite, Vector2 } from "three";
 import SceneManager from "../sceneManager/sceneManager";
 import EventEmitter from "eventemitter3";
+import { SceneSelectorEvents } from "@/common/constant";
 
 export class Selector extends EventEmitter {
     private selectPosition = new Vector2();
@@ -38,7 +39,7 @@ export class Selector extends EventEmitter {
             this.selectedObject = node;
             cameraManager.setOutline([node]);
           }
-          this.emit('select', node.userData.connectObject);
+          this.emit(SceneSelectorEvents.Select, node.userData.connectObject);
         })
       }
     }
@@ -63,7 +64,7 @@ export class Selector extends EventEmitter {
       // select current
       cameraManager.setOutline([node]);
       this.selectedObject = node;
-      this.emit('select', node.userData.connectObject);
+      this.emit(SceneSelectorEvents.Select, node.userData.connectObject);
     }
 
     selectSprite(node: Sprite) {
@@ -82,25 +83,21 @@ export class Selector extends EventEmitter {
       cameraManager.setOutline([node.userData.outline]);
 
       this.selectedSprite = node;
-      this.emit('select', node.userData.connectObject);
+      this.emit(SceneSelectorEvents.Select, node.userData.connectObject);
     }
 
     unSelectSprite() {
       if(!this.selectedSprite) return;
-      this.emit('unselect', this.selectedSprite.userData.connectObject);
-      // this.selectedSprite.userData.outline.visible = false;
-      const { cameraManager } = SceneManager;
-      cameraManager.setOutline([]);
+      this.emit(SceneSelectorEvents.UnSelect, this.selectedSprite.userData.connectObject);      
+      SceneManager.cameraManager.setOutline([]);
       this.selectedSprite = null;
     }
 
     unSelect() {
       if(!this.selectedObject) return;
-      this.emit('unselect', this.selectedObject.userData.connectObject);
-      const { cameraManager } = SceneManager;
+      this.emit(SceneSelectorEvents.UnSelect, this.selectedObject.userData.connectObject);
       this.selectedObject = null;
-      cameraManager.setOutline([]);
-      // console.log('unSelect')
+      SceneManager.cameraManager.setOutline([]);
     }
 
     onSelect = (event: MouseEvent) => {

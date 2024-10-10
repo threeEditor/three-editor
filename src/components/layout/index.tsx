@@ -12,6 +12,7 @@ import PropertyPanel, { ViewType } from '../panel/property';
 import { BaseObject } from '@/edit/objects/baseObject';
 import Display from '../panel/display';
 import { TreeDataNode } from 'antd';
+import { SceneSelectorEvents } from '@/common/constant';
 
 const Layout = () => {
     const [selectedNode, setSelectedNode] = useState<BaseObject|null>(null);
@@ -67,10 +68,10 @@ const Layout = () => {
     }
 
     useEffect(() => {
-        SceneManager.selector.on('select', (node) => {
+        SceneManager.selector.on(SceneSelectorEvents.Select, (node) => {
           setSelectedNode(node);
         })
-        SceneManager.selector.on('unselect', () => {
+        SceneManager.selector.on(SceneSelectorEvents.UnSelect, () => {
           setSelectedNode(null);
         })
     }, [])
