@@ -1,11 +1,13 @@
 import { Icon } from '@/components/icon';
 import './index.less';
-import { ConfigProvider, Tree } from 'antd';
+import { Button, Card, Checkbox, ConfigProvider, Tree } from 'antd';
 import type { TreeDataNode, TreeProps } from 'antd';
 import { useEffect, useState } from 'react';
 import { Key } from 'antd/es/table/interface';
 import { EventSystem } from '@/utils/event/EventSystem';
 import { DisplayEvents } from '@/common/constant';
+import Title from 'antd/es/typography/Title';
+import { SkyCard } from './skyCard';
 export interface IDisplayProps {
     treeData: TreeDataNode[];
     onTreeDrapUpdate: (treeData: TreeDataNode[]) => void;
@@ -89,6 +91,7 @@ const Display = (props: IDisplayProps) => {
     };
     return <div className="display_content">
         <div className='title'>Display</div>
+        <SkyCard />
         <ConfigProvider
             theme={{
                 components: {

@@ -5,8 +5,12 @@ export enum DisplayEvents {
     SetTreeNodes = 'SetTreeNodes', // 触发 tree 节点的选中
 }
 
-// Scene SelectorEvents 
+// Scene Events
+// SelectorEvents 
 export enum SceneSelectorEvents {
     Select = 'Select',
     UnSelect = 'UnSelect'
 }
+
+// SkyModeUpdate
+export const SceneSkyModeUpdate = 'SceneSkyModeUpdate';

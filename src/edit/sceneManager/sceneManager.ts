@@ -20,6 +20,7 @@ import { EventSystem } from '@/utils/event/EventSystem';
 import GizmoManager from '../gizmo';
 import { BaseObject } from '../objects/baseObject';
 import { DisplayEvents, SceneSelectorEvents } from '@/common/constant';
+import { Sky } from '../sky';
 interface IPropsType {
   wrap: HTMLElement;
   config: Config;
@@ -41,6 +42,7 @@ export default class SceneManager {
   private static materialManager: MaterialManager = new MaterialManager();
   private static grid: Grid | null = null;
   private static inited = false;
+  private static sky = new Sky();
 
   static init(options: IPropsType) {
     const { sizes, config, wrap } = options;
