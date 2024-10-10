@@ -4,7 +4,6 @@ import {
   DirectionalLight,
   AmbientLight,
   AnimationMixer,
-  Object3D,
 } from 'three';
 import MaterialManager from '../materialManager';
 import Renderer from '../renderer';
@@ -20,6 +19,7 @@ import { removeAllChild } from '../utils/dispose';
 import { EventSystem } from '@/utils/event/EventSystem';
 import GizmoManager from '../gizmo';
 import { BaseObject } from '../objects/baseObject';
+import { DisplayEvents, SceneSelectorEvents } from '@/common/constant';
 interface IPropsType {
   wrap: HTMLElement;
   config: Config;
@@ -64,17 +64,22 @@ export default class SceneManager {
 
     // 绑定场景事件
     SceneManager.wrap.addEventListener('click', SceneManager.selector.onSelect);
-    EventSystem.subscribe('TreeSelectNode', (keys: string[]) => {
+    // 在 display 面板的 tree 组件中选中对象
+    EventSystem.subscribe(DisplayEvents.TreeSelectNode, (keys: string[]) => {
       const uuid = keys[0];
       SceneManager.selector.emitTreeSelect(uuid);
     });
 
-    SceneManager.selector.on('select', (object: BaseObject) =>
-      SceneManager.GizmoManager.attachObject(object)
-    );
-    SceneManager.selector.on('unselect', () =>
-      SceneManager.GizmoManager.detachObject()
-    );
+    // 在场景中选中对象
+    SceneManager.selector.on(SceneSelectorEvents.Select, (object: BaseObject) => {
+      SceneManager.GizmoManager.attachObject(object);
+      EventSystem.broadcast(DisplayEvents.SelectTreeNode, [object.uuid]);
+    });
+    // 在场景中取消选中对象
+    SceneManager.selector.on(SceneSelectorEvents.UnSelect, () => {
+      SceneManager.GizmoManager.detachObject();
+      EventSystem.broadcast(DisplayEvents.SelectTreeNode, []);
+    });
     SceneManager.inited = true;
   }
 
@@ -116,11 +121,11 @@ export default class SceneManager {
 
   static remove(sceneObject: ISceneObject) {
     const { object } = sceneObject;
-    if (!SceneManager.cache.include(object.node.uuid)) {
+    if (!SceneManager.cache.include(object.uuid)) {
       return false;
     } else {
       SceneManager.scene.remove(object.node);
-      SceneManager.cache.remove(object.node.uuid);
+      SceneManager.cache.remove(object.uuid);
       return true;
     }
   }

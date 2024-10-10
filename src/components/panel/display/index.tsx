@@ -5,6 +5,7 @@ import type { TreeDataNode, TreeProps } from 'antd';
 import { useEffect, useState } from 'react';
 import { Key } from 'antd/es/table/interface';
 import { EventSystem } from '@/utils/event/EventSystem';
+import { DisplayEvents } from '@/common/constant';
 export interface IDisplayProps {
     treeData: TreeDataNode[];
     onTreeDrapUpdate: (treeData: TreeDataNode[]) => void;
@@ -17,15 +18,17 @@ const Display = (props: IDisplayProps) => {
     const expandedKeys: string[] = [];
 
     useEffect(() => {
-        EventSystem.subscribe('SetTreeNodes', (treeNodes: TreeDataNode[]) => {
-            console.log('SetTreeNodes', treeNodes)
+        // 添加场景对象的时候 触发 tree 节点更新
+        EventSystem.subscribe(DisplayEvents.SetTreeNodes, (treeNodes: TreeDataNode[]) => {
             setGData(treeNodes);
         })
-        EventSystem.subscribe('SelectNode', (keys: string[]) => {
-            setSelectedKeys(keys);
+        // 触发 tree 节点的选中 keys => uuid[]
+        EventSystem.subscribe(DisplayEvents.SelectTreeNode, (keys: string[]) => {
+          setSelectedKeys(keys);
         })       
         return () => {
-            EventSystem.unsubscribe('SelectNode');
+          EventSystem.unsubscribe(DisplayEvents.SetTreeNodes);
+          EventSystem.unsubscribe(DisplayEvents.SelectTreeNode);
         }
     }, [])
     
@@ -109,8 +112,7 @@ const Display = (props: IDisplayProps) => {
             onDrop={onDrop}
             onSelect={(e: Key[]) => {
                 setSelectedKeys(e);
-                console.log('setSelectedKeys', e)
-                EventSystem.broadcast('TreeSelectNode', e);
+                EventSystem.broadcast(DisplayEvents.TreeSelectNode, e);
             }}
             onRightClick={(e) => {
                 console.log('onRightClick', e.node)

@@ -39,9 +39,13 @@
 # 2024/10/09 @YILI ZHANG
 - fix hot reload error 
 - feat add simple Gizmo (Bug： transform物体之后，会失去选中项导致Gizmo 解绑物体。) 已解决
+
 # 2024/10/09 @石灰
 -feat display plane tree component add select 
 
 # 2024/10/10 @YILI ZHANG
 - feat update `GizmoManager` 物体拖拽移动后的逻辑进行补充，修复物体移动后，gizmo 解绑物体的问题
 - Bug：Gizmo热更后，只触发dragged状态变成true，mouseup时，不会变成false的问题
+
+# 2024/10/10 @石灰
+- feat 增加场景对象选中关联 Display 面板的 tree 组件

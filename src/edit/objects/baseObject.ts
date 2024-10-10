@@ -1,6 +1,9 @@
 import { Object3D } from "three";
 import { SceneObjectType } from "../sceneManager/interface";
 export class BaseObject {
+    get uuid() {
+        return this.node.uuid;
+    };
     public node!: Object3D;
     public type!: SceneObjectType;
     public name!: string;
