@@ -1,8 +1,6 @@
 import { ISceneConfig } from '@/sceneConfig/config';
 import {
   Scene,
-  DirectionalLight,
-  AmbientLight,
   AnimationMixer,
 } from 'three';
 import MaterialManager from '../materialManager';
@@ -21,6 +19,7 @@ import GizmoManager from '../gizmo';
 import { BaseObject } from '../objects/baseObject';
 import { DisplayEvents, SceneSelectorEvents } from '@/common/constant';
 import { Sky } from '../sky';
+import { PrimitiveLight, PrimitiveLightType } from '../objects/primitiveLight';
 interface IPropsType {
   wrap: HTMLElement;
   config: Config;
@@ -74,6 +73,7 @@ export default class SceneManager {
 
     // 在场景中选中对象
     SceneManager.selector.on(SceneSelectorEvents.Select, (object: BaseObject) => {
+      // TODO GizmoManager 选中对象需要判断场景的编辑状态
       SceneManager.GizmoManager.attachObject(object);
       EventSystem.broadcast(DisplayEvents.SelectTreeNode, [object.uuid]);
     });
@@ -92,13 +92,23 @@ export default class SceneManager {
   }
 
   static loadScene(sceneConfig: ISceneConfig) {
+    // TODO 后续需要走解析 sceneConfig， 目前没有默认设置
     console.log('sceneConfig12', sceneConfig);
-    const directionalLight = new DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(1, 1, 0);
-    SceneManager.scene.add(directionalLight);
 
-    const ambientLight = new AmbientLight(0xffffff, 0.5);
-    SceneManager.scene.add(ambientLight);
+    const directLight = new PrimitiveLight({ color: '#fff', intensity: 1, type: PrimitiveLightType.DirectLight});
+    directLight.setPosition(1, 1, 0);
+
+    const ambientLight = new PrimitiveLight({ color: '#fff', intensity: 0.5, type: PrimitiveLightType.AmbientLight });
+
+    SceneManager.add({
+      type: SceneObjectType.LIGHT,
+      object: directLight,
+    });
+    SceneManager.add({
+      type: SceneObjectType.LIGHT,
+      object: ambientLight,
+    });
+    EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
   }
 
   static add(sceneObject: ISceneObject) {
@@ -118,7 +128,8 @@ export default class SceneManager {
       key: node.uuid,
       title: sceneObject.name || object.name,
     });
-    EventSystem.broadcast('SetTreeNodes', cacheTreeNodes);
+    
+    EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
   }
 
   static remove(sceneObject: ISceneObject) {

@@ -18,7 +18,6 @@ export interface IPrimitiveMeshConfig {
 
 export class PrimitiveMesh extends BaseObject {
     private config: IPrimitiveMeshConfig;
-    public node: Object3D;
     public size: number;
     constructor(config: IPrimitiveMeshConfig) {
         super();

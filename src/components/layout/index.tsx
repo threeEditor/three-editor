@@ -69,6 +69,7 @@ const Layout = () => {
 
     useEffect(() => {
         SceneManager.selector.on(SceneSelectorEvents.Select, (node) => {
+          console.log('SceneSelectorEvents', node)
           setSelectedNode(node);
         })
         SceneManager.selector.on(SceneSelectorEvents.UnSelect, () => {
@@ -84,8 +85,8 @@ const Layout = () => {
     return (
         <div className="layout">
             <div className='panel display'>
-              <Display treeData={treeData} onTreeDrapUpdate={(data) => {
-                console.log('onTreeDrapUpdate', data)
+              <Display treeData={treeData} onTreeDropUpdate={(data) => {
+                console.log('onTreeDropUpdate', data)
               }} />
             </div>
             <div className='center'>

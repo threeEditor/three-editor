@@ -13,6 +13,7 @@ export class Selector extends EventEmitter {
       super();
     }
 
+    // 触发一个 tree component 的选中节点事件
     emitTreeSelect(uuid?: string) {
       if(!uuid) {
         if(this.selectedObject) {
@@ -23,6 +24,7 @@ export class Selector extends EventEmitter {
         return;
       }
       const { cameraManager, cache } = SceneManager;
+      console.log(uuid, cache.selectList)
       if(uuid === this.selectedObject?.uuid) {
         this.selectedObject = null;
         cameraManager.setOutline([]);

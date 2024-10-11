@@ -45,8 +45,12 @@
 
 # 2024/10/10 @YILI ZHANG
 - feat update `GizmoManager` 物体拖拽移动后的逻辑进行补充，修复物体移动后，gizmo 解绑物体的问题
-- Bug：Gizmo热更后，只触发dragged状态变成true，mouseup时，不会变成false的问题
+- Bug：Gizmo热更后，只触发dragged状态变成true，mouseup 时，不会变成false的问题
 
 # 2024/10/10 @石灰
 - feat 增加场景对象选中关联 Display 面板的 tree 组件
 - feat 增加场景 sky 背景的设置
+
+# 2024/10/11 @石灰
+- feat 增加场景中的 PrimitiveLight 类型对象，支持选中
+- fix 修复 Display Panel Tree Component 的更新错误处理
