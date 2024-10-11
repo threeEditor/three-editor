@@ -1,28 +1,29 @@
 import { Icon } from '@/components/icon';
 import './index.less';
-import { Button, Card, Checkbox, ConfigProvider, Tree } from 'antd';
+import { ConfigProvider, Tree } from 'antd';
 import type { TreeDataNode, TreeProps } from 'antd';
 import { useEffect, useState } from 'react';
 import { Key } from 'antd/es/table/interface';
 import { EventSystem } from '@/utils/event/EventSystem';
 import { DisplayEvents } from '@/common/constant';
-import Title from 'antd/es/typography/Title';
 import { SkyCard } from './skyCard';
 export interface IDisplayProps {
     treeData: TreeDataNode[];
-    onTreeDrapUpdate: (treeData: TreeDataNode[]) => void;
+    onTreeDropUpdate: (treeData: TreeDataNode[]) => void;
 }
 
 const Display = (props: IDisplayProps) => {
     const [selectedKeys, setSelectedKeys] = useState<Key[]>([]);
     const [gData, setGData] = useState(props.treeData);
-
     const expandedKeys: string[] = [];
 
     useEffect(() => {
         // 添加场景对象的时候 触发 tree 节点更新
+      
         EventSystem.subscribe(DisplayEvents.SetTreeNodes, (treeNodes: TreeDataNode[]) => {
+          setTimeout(() => {
             setGData(treeNodes);
+          }, 100 )
         })
         // 触发 tree 节点的选中 keys => uuid[]
         EventSystem.subscribe(DisplayEvents.SelectTreeNode, (keys: string[]) => {
@@ -87,7 +88,7 @@ const Display = (props: IDisplayProps) => {
           }
         }
         setGData(data);
-        props.onTreeDrapUpdate(data);
+        props.onTreeDropUpdate(data);
     };
     return <div className="display_content">
         <div className='title'>Display</div>

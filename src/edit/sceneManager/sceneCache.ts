@@ -26,13 +26,17 @@ export class SceneCache {
     add(uuid: string, node: Object3D, type: SceneObjectType) {
         switch(type) {
             case SceneObjectType.MESH:
-                this.selectMap.set(node.uuid, node)
+                this.selectMap.set(node.uuid, node);
                 break;
             case SceneObjectType.SPRITE:
-                this.selectMap.set(node.uuid, node)
+                this.selectMap.set(node.uuid, node);
                 break;
             case SceneObjectType.GLTF:
-                this.selectMap.set(node.uuid, node)
+                this.selectMap.set(node.uuid, node);
+                break;
+            case SceneObjectType.LIGHT:
+                // Tip: light 也可以背选中，通过 Display Panel Tree Component 列表项
+                this.selectMap.set(node.uuid, node);
                 break;
         }
         this.map.set(uuid, node);
