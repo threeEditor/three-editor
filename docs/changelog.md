@@ -54,3 +54,7 @@
 # 2024/10/11 @石灰
 - feat 增加场景中的 PrimitiveLight 类型对象，支持选中
 - fix 修复 Display Panel Tree Component 的更新错误处理
+
+# 2024/10/12 @YILI ZHANG
+- feat update `GizmoManager` 添加切换`Controls.space`的逻辑,移动、缩放操作可以在世界坐标和局部坐标中进行切换
+- todo `Gizmo`热区优化
