@@ -2,7 +2,9 @@ import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { Camera, Scene, Renderer } from 'three';
 import SceneManager from '../sceneManager/sceneManager';
 import { BaseObject } from '../objects/baseObject';
-class GizmoManager {
+import EventEmitter from 'eventemitter3';
+
+class GizmoManager extends EventEmitter {
   private controls: TransformControls;
   public draggedDelay: boolean = false;
   private scene: Scene;
@@ -10,6 +12,7 @@ class GizmoManager {
   private renderer: Renderer;
   private selectedObject: BaseObject | null = null;
   constructor() {
+    super();
     this.scene = SceneManager.scene;
     this.camera = SceneManager.cameraManager.instance;
     this.renderer = SceneManager.renderer.instance;
@@ -19,6 +22,8 @@ class GizmoManager {
       this.camera,
       this.renderer.domElement
     );
+
+    this.controls.setSize(0.5);
     this.scene.add(this.controls);
 
     // 设置事件监听器
@@ -54,25 +59,47 @@ class GizmoManager {
         this.draggedDelay = true;
       }
     });
+    this.controls.addEventListener('objectChange', () => {
+      this.emit('Transform',this.selectedObject);
+    });
   }
   // 键盘切换操作模式 (平移、旋转、缩放)
   private initKeyboardControls() {
     document.addEventListener('keydown', (event) => {
       if (!this.selectedObject) return;
+      const currentMode = this.controls.getMode();
       switch (event.key) {
         case 'g': // Translate mode
-          this.controls.setMode('translate');
+          if (currentMode != 'translate') {
+            this.controls.setMode('translate');
+          } else {
+            this.toggleSpace();
+          }
           break;
         case 'r': // Rotate mode
-          this.controls.setMode('rotate');
+          if (currentMode != 'rotate') {
+            this.controls.setMode('rotate');
+          } else {
+            this.toggleSpace();
+          }
           break;
         case 's': // Scale mode
-          this.controls.setMode('scale');
+          if (currentMode != 'scale') {
+            this.controls.setMode('scale');
+          } else {
+            this.toggleSpace();
+          }
           break;
       }
     });
   }
-
+  private toggleSpace() {
+    if (this.controls.space === 'local') {
+      this.controls.setSpace('world');
+    } else {
+      this.controls.setSpace('local');
+    }
+  }
   // 销毁 gizmo 控件
   public destory() {
     document.removeEventListener('keydown', this.initKeyboardControls);
@@ -80,7 +107,7 @@ class GizmoManager {
       'dragging-changed',
       this.initOnDraggingChanged
     );
-    SceneManager.scene.remove(this.controls); 
+    SceneManager.scene.remove(this.controls);
   }
 }
 

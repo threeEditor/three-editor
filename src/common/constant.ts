@@ -9,7 +9,11 @@ export enum DisplayEvents {
 // SelectorEvents 
 export enum SceneSelectorEvents {
     Select = 'Select',
-    UnSelect = 'UnSelect'
+    UnSelect = 'UnSelect',
+}
+
+export enum SceneEvents {
+    Transform = 'Transform'
 }
 
 // SkyModeUpdate

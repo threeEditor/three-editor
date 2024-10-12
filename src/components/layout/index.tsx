@@ -12,7 +12,7 @@ import PropertyPanel, { ViewType } from '../panel/property';
 import { BaseObject } from '@/edit/objects/baseObject';
 import Display from '../panel/display';
 import { TreeDataNode } from 'antd';
-import { SceneSelectorEvents } from '@/common/constant';
+import { SceneEvents, SceneSelectorEvents } from '@/common/constant';
 
 const Layout = () => {
     const [selectedNode, setSelectedNode] = useState<BaseObject|null>(null);
@@ -75,13 +75,21 @@ const Layout = () => {
         SceneManager.selector.on(SceneSelectorEvents.UnSelect, () => {
           setSelectedNode(null);
         })
+        SceneManager.GizmoManager.on(SceneEvents.Transform, (node) => {
+          //创建新的引用对象
+          const updatedNode = {
+              ...node, 
+              position: { ...node.position }, 
+              rotation: { ...node.rotation }, 
+              scale: { ...node.scale }
+          };
+          setSelectedNode(updatedNode);
+      });
     }, [])
-
     const propertyProps = {
         viewType: selectedNode ? ViewType.Node : ViewType.None,
         node: selectedNode ? selectedNode : undefined,
     }
-
     return (
         <div className="layout">
             <div className='panel display'>
