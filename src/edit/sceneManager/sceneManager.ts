@@ -153,7 +153,6 @@ export default class SceneManager {
     SceneManager._modelAnimationMixer.forEach((mixer) => {
       mixer.update(0.01);
     });
-    // console.log('6')
   }
 
   static resize() {

@@ -13,6 +13,13 @@ export interface IGLTFConfig {
 }
 
 export class GLTFObject extends BaseObject {
+    get info() {
+        return {
+            ...this._info,
+            isModel: true,
+        };
+    }
+
     private config: IGLTFConfig;
     public node: Object3D;
     public animations: AnimationClip[];

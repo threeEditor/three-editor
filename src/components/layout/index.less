@@ -1,4 +1,5 @@
-@panelWidth: 200px;
+@propertyPanelWidth: 300px;
+@displayPanelWidth: 200px;
 @panelAeestHeight: 200px;
 @panelPadding: 8px;
 @panelBorderRadius: 6px;
@@ -18,14 +19,14 @@
 
     .display {
         height: 100%;   
-        width: @panelWidth;
+        width: @displayPanelWidth;
         background-color: @panelColor;
     }
     .center {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        width: calc(100vw - @panelWidth * 2 - @panelPadding * 2);
+        width: calc(100vw - @displayPanelWidth - @propertyPanelWidth - @panelPadding * 2);
 
         .viewport {
             position: relative;
@@ -33,14 +34,13 @@
         }
 
         .assets {
-
             height: @panelAeestHeight;
             background-color: @panelColor;
         }
     }
     .properties {
         height: 100%;
-        width: @panelWidth;
+        width: @propertyPanelWidth;
         background-color: @panelColor;
     }
 }
