@@ -20,6 +20,33 @@ export class BaseObject {
     get scale() {
         return this.node.scale;
     }
+
+    get _info() {
+        const { position, rotation, scale } = this;
+        return {
+            name: this.node.name,
+            type: this.node.type,
+            position: { 
+                x: position.x,
+                y: position.y, 
+                z: position.z,
+            },
+            rotation: {
+                x: rotation.x,
+                y: rotation.y, 
+                z: rotation.z,
+            },
+            scale: {
+                x: scale.x,
+                y: scale.y, 
+                z: scale.z,
+            }
+        }
+    }
+
+    get info() {
+        return this._info;
+    }
     
     connectObject() {
         this.node.userData.connectObject = this;

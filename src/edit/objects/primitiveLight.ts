@@ -16,6 +16,13 @@ export interface IPrimitiveLightConfig {
 }
 
 export class PrimitiveLight extends BaseObject {
+    get info() {
+        return {
+            ...this._info,
+            isLight: true,
+        };
+    }
+
     private config: IPrimitiveLightConfig;
     private color: string;
     private intensity: number;

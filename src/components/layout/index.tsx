@@ -15,12 +15,11 @@ import { TreeDataNode } from 'antd';
 import { SceneEvents, SceneSelectorEvents } from '@/common/constant';
 
 const Layout = () => {
-    const [selectedNode, setSelectedNode] = useState<BaseObject|null>(null);
     const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
+    const [nodeInfo, setNodeInfo] = useState({ viewType: ViewType.None });
   
     const onLoad = async () => {
         console.log('load')
-        // console.log(SceneManager.scene)
         // cacheTreeNodes
         // EventSystem.broadcast('SetTreeNodes', [
         //   {
@@ -68,28 +67,26 @@ const Layout = () => {
     }
 
     useEffect(() => {
-        SceneManager.selector.on(SceneSelectorEvents.Select, (node) => {
-          console.log('SceneSelectorEvents', node)
-          setSelectedNode(node);
+        SceneManager.selector.on(SceneSelectorEvents.Select, (node: BaseObject) => {
+          setNodeInfo({
+            viewType: ViewType.Node,
+            ...node.info
+          });
         })
         SceneManager.selector.on(SceneSelectorEvents.UnSelect, () => {
+          setNodeInfo({
+            viewType: ViewType.None,
+          });
           setSelectedNode(null);
         })
-        SceneManager.GizmoManager.on(SceneEvents.Transform, (node) => {
+        SceneManager.GizmoManager.on(SceneEvents.Transform, (node: BaseObject) => {
           //创建新的引用对象
-          const updatedNode = {
-              ...node, 
-              position: { ...node.position }, 
-              rotation: { ...node.rotation }, 
-              scale: { ...node.scale }
-          };
-          setSelectedNode(updatedNode);
+          setNodeInfo({
+            viewType: ViewType.Node,
+            ...node.info
+          });
       });
     }, [])
-    const propertyProps = {
-        viewType: selectedNode ? ViewType.Node : ViewType.None,
-        node: selectedNode ? selectedNode : undefined,
-    }
     return (
         <div className="layout">
             <div className='panel display'>
@@ -103,7 +100,7 @@ const Layout = () => {
                 </div>
                 <div className='panel assets'></div>
             </div>
-            <PropertyPanel {...propertyProps} />
+            <PropertyPanel {...nodeInfo} />
         </div>
     )
 }

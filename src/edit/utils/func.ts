@@ -40,3 +40,7 @@ export function throttle<T extends ReturnVoidFn = ReturnVoidFn>(
     }
   };
 }
+
+export function toFix(number: number, n = 2) {
+  return number.toFixed(n);
+}

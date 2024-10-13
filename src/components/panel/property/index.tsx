@@ -1,6 +1,7 @@
-import { BaseObject } from "@/edit/objects/baseObject";
 import './index.less';
 import Card from "@/components/card";
+import { toFix } from "@/edit/utils/func";
+import { Input } from 'antd';
 
 export enum ViewType {
     None = 'None',
@@ -10,7 +11,16 @@ export enum ViewType {
 
 interface IPanelProps {
     viewType: ViewType;
-    node?: BaseObject
+    [key: string]: any;
+}
+
+const Vec3 = ({ vec3, title }: {vec3?: any, title: string}) =>{
+    return (vec3 ?  <div>
+    <span className='propertyTitle'>{title}</span>
+    <Input className='input' type="text" value={toFix(vec3.x || 0)} />
+    <Input className='input' type="text" value={toFix(vec3.y || 0)} />
+    <Input className='input' type="text" value={toFix(vec3.z || 0)} />
+    </div> : null)
 }
 
 const PropertyPanel = (props: IPanelProps) => {
@@ -20,26 +30,25 @@ const PropertyPanel = (props: IPanelProps) => {
             {
                 props.viewType === ViewType.Node && 
                 <>
-                    <div>type: {props.node?.type}</div>
-                    <div>name: {props.node?.name}</div>
+                    <div>type: {props.type}</div>
+                    <div>name: {props.name}</div>
                     <Card>
-                        <div>position</div>
-                        <div>x: {props.node?.position.x}</div>
-                        <div>y: {props.node?.position.y}</div>
-                        <div>z: {props.node?.position.z}</div>
+                        <div className={'title'}>Transform</div>
+                        <Vec3 vec3={props.position} title={'position'}/>
+                        <Vec3 vec3={props.rotation} title={'rotation'}/>
+                        <Vec3 vec3={props.scale} title={'scale'}/>
                     </Card>
-                    <Card>
-                        <div>rotation</div>
-                        <div>x: {props.node?.rotation.x}</div>
-                        <div>y: {props.node?.rotation.y}</div>
-                        <div>z: {props.node?.rotation.z}</div>
-                    </Card>
-                    <Card>
-                        <div>scale</div>
-                        <div>x: {props.node?.scale.x}</div>
-                        <div>y: {props.node?.scale.y}</div>
-                        <div>z: {props.node?.scale.z}</div>
-                    </Card>
+                    {
+                        props.isModel &&  <Card>
+                            <div className={'title'}>Animation</div>
+                        </Card>
+                    }
+                     {
+                        props.isLight &&  <Card>
+                            <div className={'title'}>Light</div>
+                        </Card>
+                    }
+                   
                 </>
             }
         </div>

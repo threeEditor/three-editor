@@ -59,3 +59,7 @@
 - feat update `GizmoManager` 添加切换`Controls.space`的逻辑,移动、缩放操作可以在世界坐标和局部坐标中进行切换
 - feat updae `GiazmoManager` `layout.tsx` 添加更新属性面板的逻辑
 - todo `Gizmo`热区优化
+
+# 2024/10/13 @石灰
+- fix 修复 `Gizmo` 更新 `Property` 面板数据
+- feat 优化 `Property` 面板并新增不同对象的展示内容
