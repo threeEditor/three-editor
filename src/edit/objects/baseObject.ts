@@ -25,6 +25,7 @@ export class BaseObject {
         const { position, rotation, scale } = this;
         return {
             name: this.node.name,
+            uuid: this.uuid,
             type: this.node.type,
             position: { 
                 x: position.x,
