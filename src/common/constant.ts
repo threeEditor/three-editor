@@ -16,5 +16,10 @@ export enum SceneEvents {
     Transform = 'Transform'
 }
 
+export enum ModelAniUpdate {
+    UpdateAni = 'UpdateAni',
+    UpdateAniSpeed = 'UpdateAniSpeed',
+}
+
 // SkyModeUpdate
 export const SceneSkyModeUpdate = 'SceneSkyModeUpdate';
