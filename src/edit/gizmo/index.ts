@@ -1,9 +1,9 @@
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { Camera, Scene, Renderer } from 'three';
 import SceneManager from '../sceneManager/sceneManager';
+import { SceneObjectType } from '../sceneManager/interface';
 import { BaseObject } from '../objects/baseObject';
 import EventEmitter from 'eventemitter3';
-
 class GizmoManager extends EventEmitter {
   private controls: TransformControls;
   public draggedDelay: boolean = false;
@@ -60,7 +60,15 @@ class GizmoManager extends EventEmitter {
       }
     });
     this.controls.addEventListener('objectChange', () => {
-      this.emit('Transform',this.selectedObject);
+      if (!this.selectedObject) return;
+      
+      switch (this.selectedObject!.type) {
+        case SceneObjectType.SPRITE: {
+          this.selectedObject.updateOutline();
+          break;
+        }
+      }
+      this.emit('Transform', this.selectedObject);
     });
   }
   // 键盘切换操作模式 (平移、旋转、缩放)
