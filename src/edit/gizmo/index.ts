@@ -1,9 +1,13 @@
-import { TransformControls } from 'three/addons/controls/TransformControls.js';
+import {
+  TransformControls,
+  TransformControlsMode,
+} from 'three/addons/controls/TransformControls.js';
 import { Camera, Scene, Renderer } from 'three';
 import SceneManager from '../sceneManager/sceneManager';
+import { SceneObjectType } from '../sceneManager/interface';
 import { BaseObject } from '../objects/baseObject';
 import EventEmitter from 'eventemitter3';
-
+import { SceneEvents } from '@/common/constant';
 class GizmoManager extends EventEmitter {
   private controls: TransformControls;
   public draggedDelay: boolean = false;
@@ -11,6 +15,9 @@ class GizmoManager extends EventEmitter {
   private camera: Camera;
   private renderer: Renderer;
   private selectedObject: BaseObject | null = null;
+  get mode() {
+    return this.controls.mode;
+  }
   constructor() {
     super();
     this.scene = SceneManager.scene;
@@ -60,7 +67,15 @@ class GizmoManager extends EventEmitter {
       }
     });
     this.controls.addEventListener('objectChange', () => {
-      this.emit('Transform',this.selectedObject);
+      if (!this.selectedObject) return;
+
+      switch (this.selectedObject!.type) {
+        case SceneObjectType.SPRITE: {
+          this.selectedObject.updateOutline();
+          break;
+        }
+      }
+      this.emit(SceneEvents.GizmoTransform, this.selectedObject);
     });
   }
   // 键盘切换操作模式 (平移、旋转、缩放)
@@ -68,30 +83,36 @@ class GizmoManager extends EventEmitter {
     document.addEventListener('keydown', (event) => {
       if (!this.selectedObject) return;
       const currentMode = this.controls.getMode();
+      
       switch (event.key) {
         case 'g': // Translate mode
           if (currentMode != 'translate') {
-            this.controls.setMode('translate');
+            this.setControlsMode('translate');
           } else {
             this.toggleSpace();
           }
           break;
         case 'r': // Rotate mode
           if (currentMode != 'rotate') {
-            this.controls.setMode('rotate');
+            this.setControlsMode('rotate');
           } else {
             this.toggleSpace();
           }
           break;
         case 's': // Scale mode
           if (currentMode != 'scale') {
-            this.controls.setMode('scale');
+            this.setControlsMode('scale');
           } else {
             this.toggleSpace();
           }
           break;
       }
     });
+  }
+  public setControlsMode(mode: TransformControlsMode) {
+    if(!this.selectedObject) return;
+    this.controls.setMode(mode);
+    this.emit(SceneEvents.GizmoModeChange, mode);
   }
   private toggleSpace() {
     if (this.controls.space === 'local') {
