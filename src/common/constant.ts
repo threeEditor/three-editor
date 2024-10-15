@@ -13,7 +13,8 @@ export enum SceneSelectorEvents {
 }
 
 export enum SceneEvents {
-    Transform = 'Transform'
+    GizmoTransform = 'GizmoTransform', // Gizmo 触发 Transform 更新
+    PropertyTransform = 'PropertyTransform', // Property 控制面板触发 Transform 更新
 }
 
 export enum ModelAniUpdate {
