@@ -77,7 +77,6 @@ const Layout = () => {
           setNodeInfo({
             viewType: ViewType.None,
           });
-          setSelectedNode(null);
         })
         SceneManager.GizmoManager.on(SceneEvents.Transform, (node: BaseObject) => {
           //创建新的引用对象
