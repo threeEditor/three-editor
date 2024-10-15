@@ -13,7 +13,7 @@ import { BaseObject } from '@/edit/objects/baseObject';
 import Display from '../panel/display';
 import { TreeDataNode } from 'antd';
 import { SceneEvents, SceneSelectorEvents } from '@/common/constant';
-
+import Toolbar from '../toolbar';
 const Layout = () => {
     const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
     const [nodeInfo, setNodeInfo] = useState({ viewType: ViewType.None });
@@ -96,6 +96,7 @@ const Layout = () => {
             <div className='center'>
                 <div className='panel viewport'>
                     <ViewPort onLoad={onLoad} />
+                    <Toolbar {...nodeInfo}/>
                 </div>
                 <div className='panel assets'></div>
             </div>

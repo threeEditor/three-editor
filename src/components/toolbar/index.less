@@ -1,0 +1,28 @@
+.toolbar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+
+  width: 32px;
+  height: auto;
+
+  border: 1px solid #333333;
+  .toolbar-button {
+    width: 32px;
+    height: 32px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    background: #111111;
+    transition: background 0.2s;
+  }
+  .toolbar-button.active {
+    background: #999999;
+  }
+  .toolbar-button:hover {
+    background: #333333;
+    cursor: pointer;
+  }
+}
