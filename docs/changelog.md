@@ -77,3 +77,7 @@
 
 # 2024/10/16 @石灰
 - feat 初步添加 ace edit 用来显示 json，后续用来作为导出数据的预览
+
+# 2024/10/16 @阿肋
+- fix 修复`Toolbar` key 报错
+- feat 优化`Gizmo`更新`outline`的逻辑

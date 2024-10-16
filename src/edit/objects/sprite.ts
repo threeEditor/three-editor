@@ -51,6 +51,11 @@ export class Sprite extends BaseObject {
         }
         outline.userData.type = 'outline';
         outline.userData.connectObject = this.node;
+        outline.userData.update = ()=>{
+            outline.position.copy(this.node.position);
+            outline.rotation.copy(this.node.rotation);
+            outline.scale.copy(this.node.scale);
+        }
         // Tip: add to scene to keep outline renderpass work
         SceneManager.scene.add(outline);
         this.node.userData.outline = outline;

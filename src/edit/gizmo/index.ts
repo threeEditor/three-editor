@@ -68,12 +68,8 @@ class GizmoManager extends EventEmitter {
     });
     this.controls.addEventListener('objectChange', () => {
       if (!this.selectedObject) return;
-
-      switch (this.selectedObject!.type) {
-        case SceneObjectType.SPRITE: {
-          this.selectedObject.updateOutline();
-          break;
-        }
+      if (this.selectedObject.type == SceneObjectType.SPRITE) {
+        this.selectedObject?.outline?.userData?.update();
       }
       this.emit(SceneEvents.GizmoTransform, this.selectedObject);
     });
@@ -83,7 +79,7 @@ class GizmoManager extends EventEmitter {
     document.addEventListener('keydown', (event) => {
       if (!this.selectedObject) return;
       const currentMode = this.controls.getMode();
-      
+
       switch (event.key) {
         case 'g': // Translate mode
           if (currentMode != 'translate') {
@@ -110,7 +106,7 @@ class GizmoManager extends EventEmitter {
     });
   }
   public setControlsMode(mode: TransformControlsMode) {
-    if(!this.selectedObject) return;
+    if (!this.selectedObject) return;
     this.controls.setMode(mode);
     this.emit(SceneEvents.GizmoModeChange, mode);
   }

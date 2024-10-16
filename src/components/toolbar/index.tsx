@@ -54,6 +54,7 @@ const Toolbar = (props: any) => {
                   ? 'active'
                   : ''
               }`}
+              key={button.mode}
               {...button}
             >
               <button.icon />

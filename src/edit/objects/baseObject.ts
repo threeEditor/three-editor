@@ -112,30 +112,4 @@ export class BaseObject {
             this.outline?.scale.set(x, x, x);
         }
     }
-
-    updateOutline(){
-        if(this.outline){
-            this.updateOutlinePosition();
-            this.updateOutlineRotation();
-            this.updateOutlineScale();
-        }
-    }
-
-    updateOutlinePosition(){
-        if(this.outline){
-            this.outline.position.copy(this.node.position);
-        }
-    }
-
-    updateOutlineRotation(){
-        if(this.outline){
-            this.outline.rotation.copy(this.node.rotation);
-        }
-    }
-
-    updateOutlineScale(){
-        if(this.outline){
-            this.outline.scale.copy(this.node.scale);
-        }
-    }
 }
