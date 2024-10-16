@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import "./App.css";
 import Layout from "./components/layout";
 import { preventTouchMove, preventWheel } from "./utils/event/dom";
+import { JsonViewer } from "./components/jsonViewer";
 
 function App() {
   useEffect(() => {
@@ -16,6 +17,7 @@ function App() {
   return (
     <div className="editor-manager">
       <Layout />
+      <JsonViewer />
     </div>
   );
 }

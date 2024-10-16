@@ -13,9 +13,11 @@
     "@ant-design/icons": "^5.5.1",
     "@types/node": "^22.6.1",
     "@types/three": "^0.168.0",
+    "ace-builds": "^1.36.2",
     "antd": "^5.21.2",
     "eventemitter3": "^5.0.1",
     "react": "^18.3.1",
+    "react-ace": "^12.0.0",
     "react-dom": "^18.3.1",
     "three": "^0.168.0"
   },

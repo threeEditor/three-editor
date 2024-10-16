@@ -70,7 +70,10 @@
 # 2024/10/15 @石灰
 - feat `Property` 面板支持展示 `Transform` 属性更新
 
-# 2024/10/15
+# 2024/10/15 @YILI ZHANG
 - fix 修复 `Gizmo`中emit时未使用 `SceneEvents`，导致`Property`属性未更新的问题  
 - feat update `GiamoManger` 同步变换`Sprite` 的outline元素
 - feat 新增`Toolbar`工具栏，添加了`Transform``Rotate``Scale`切换按钮
+
+# 2024/10/16 @石灰
+- feat 初步添加 ace edit 用来显示 json，后续用来作为导出数据的预览
