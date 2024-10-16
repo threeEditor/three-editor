@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
-    "@types/node": "^22.6.1",
+    "@types/node": "^22.7.5",
     "@types/three": "^0.168.0",
     "ace-builds": "^1.36.2",
-    "antd": "^5.21.2",
+    "antd": "^5.21.4",
     "eventemitter3": "^5.0.1",
     "react": "^18.3.1",
     "react-ace": "^12.0.0",
@@ -22,18 +22,18 @@
     "three": "^0.168.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.0",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "eslint": "^9.9.0",
-    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
-    "eslint-plugin-react-refresh": "^0.4.9",
-    "globals": "^15.9.0",
+    "@eslint/js": "^9.12.0",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.2",
+    "eslint": "^9.12.0",
+    "eslint-plugin-react-hooks": "5.1.0-rc-fb9a90fa48-20240614",
+    "eslint-plugin-react-refresh": "^0.4.12",
+    "globals": "^15.11.0",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
-    "typescript": "^5.5.3",
-    "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.9.0",
+    "vite": "^5.4.9"
   }
 }
