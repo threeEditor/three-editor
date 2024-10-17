@@ -1,0 +1,30 @@
+.ace_edit_container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 400px;
+    border: 1px solid;
+    background: #fff;
+    padding: 4px;
+    border-radius: 4px;
+    .ace_nav_bar {
+        position: relative;
+        height: 32px;
+        font-size: 18px;
+        text-align: center;
+        .ace_nav_bar_close {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            transition: all 0.2s;
+        }
+        .ace_nav_bar_close:hover {
+            transform: scale(1.2);
+        }
+    }
+    .ace_code_container {
+        border-radius: 2px;
+    }
+}

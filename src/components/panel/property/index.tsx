@@ -134,15 +134,25 @@ const PropertyPanel = (props: IPanelProps) => {
                                     })
                                 })} />
                             </div>
-                            
                         </Card>
                     }
                      {
                         props.isLight &&  <Card>
                             <div className={'title'}>Light</div>
+                            <div className='cardItem'>
+                                <span className='propertyTitle'>Color:</span>
+                                <Input className='input' style={{width: '100px'}} type="text" value={props.color} onChange={((e) => {                                    
+                                    console.log(e);
+                                })} />
+                            </div>
+                            <div className='cardItem'>
+                                <span className='propertyTitle'>Intensity:</span>
+                                <Input className='input' style={{width: '100px'}} type="text" value={props.intensity} onChange={((e) => {                                    
+                                    console.log(e);
+                                })} />
+                            </div>
                         </Card>
                     }
-                   
                 </>
             }
         </div>

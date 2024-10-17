@@ -1,11 +1,11 @@
 import { Icon } from '@/components/icon';
 import './index.less';
-import { ConfigProvider, Tree } from 'antd';
+import { Button, ConfigProvider, Tree } from 'antd';
 import type { TreeDataNode, TreeProps } from 'antd';
 import { useEffect, useState } from 'react';
 import { Key } from 'antd/es/table/interface';
 import { EventSystem } from '@/utils/event/EventSystem';
-import { DisplayEvents } from '@/common/constant';
+import { DisplayEvents, SystemEvents } from '@/common/constant';
 import { SkyCard } from './skyCard';
 export interface IDisplayProps {
     treeData: TreeDataNode[];
@@ -19,7 +19,6 @@ const Display = (props: IDisplayProps) => {
 
     useEffect(() => {
         // 添加场景对象的时候 触发 tree 节点更新
-      
         EventSystem.subscribe(DisplayEvents.SetTreeNodes, (treeNodes: TreeDataNode[]) => {
           setTimeout(() => {
             setGData(treeNodes);
@@ -35,7 +34,6 @@ const Display = (props: IDisplayProps) => {
         }
     }, [])
     
-
     const onDrop: TreeProps['onDrop'] = (info) => {
         const dropKey = info.node.key;
         const dragKey = info.dragNode.key;
@@ -124,7 +122,10 @@ const Display = (props: IDisplayProps) => {
             treeData={gData}
         />
         </ConfigProvider>
-       
+        <Button onClick={() => {
+          EventSystem.broadcast(SystemEvents.ViewAceEdit);
+          console.log('onClick')
+        }}>View Scene Config</Button>
     </div>
 }
 export default Display;

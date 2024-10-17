@@ -11,6 +11,7 @@ export enum PrimitiveMeshType {
 }
 
 export interface IGLTFConfig {
+    name?: string;
     gltf: GLTF;
 }
 
@@ -50,6 +51,9 @@ export class GLTFObject extends BaseObject {
         this.type = SceneObjectType.GLTF;
         const { scene, animations } = config.gltf;
         this.node = scene;
+        if(this.name) {
+            this.name = this.name;
+        }
         this._animations = animations;
         this.connectObject();
 

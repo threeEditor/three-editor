@@ -19,6 +19,8 @@ export class PrimitiveLight extends BaseObject {
     get info() {
         return {
             ...this._info,
+            color: this.color,
+            intensity: this.intensity,
             isLight: true,
         };
     }

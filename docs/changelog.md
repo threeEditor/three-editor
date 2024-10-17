@@ -75,6 +75,12 @@
 - feat update `GiamoManger` 同步变换`Sprite` 的outline元素
 - feat 新增`Toolbar`工具栏，添加了`Transform``Rotate``Scale`切换按钮
 
+# 2024/10/16 @石灰
+- feat 初步添加 ace edit 用来显示 json，后续用来作为导出数据的预览
+
 # 2024/10/16 @阿肋
 - fix 修复`Toolbar` key 报错
 - feat 优化`Gizmo`更新`outline`的逻辑
+
+# 2024/10/17 @石灰
+- feat 补充 `light` 的 `info`

@@ -5,7 +5,6 @@ import ViewPort from '../viewport';
 import SceneManager from '@/edit/sceneManager/sceneManager';
 import { LoaderResourceType } from '@/edit/loader';
 import { GLTF } from 'three/examples/jsm/Addons.js';
-import { SceneObjectType } from '@/edit/sceneManager/interface';
 import { GLTFObject, PrimitiveMesh, PrimitiveMeshType, Sprite } from '@/edit/objects';
 import { Texture } from 'three';
 import PropertyPanel, { ViewType } from '../panel/property';
@@ -51,19 +50,10 @@ const Layout = () => {
         });
         sprite.setPosition(6);
         sprite.setScale(4);
-        SceneManager.add({
-          name: 'man',
-          type: SceneObjectType.GLTF,
-          object: gltf,
-        })
-        SceneManager.add({
-          type: SceneObjectType.MESH,
-          object: box,
-        });
-        SceneManager.add({
-          type: SceneObjectType.SPRITE,
-          object: sprite,
-        });
+        // name: 'man',
+        SceneManager.add(gltf)
+        SceneManager.add(box);
+        SceneManager.add(sprite);
     }
 
     useEffect(() => {

@@ -25,3 +25,8 @@ export enum ModelAniUpdate {
 
 // SkyModeUpdate
 export const SceneSkyModeUpdate = 'SceneSkyModeUpdate';
+
+export enum SystemEvents {
+    ViewAceEdit = 'ViewAceEdit',
+    HideAceEdit =  'HideAceEdit',
+}
