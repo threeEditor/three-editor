@@ -6,10 +6,12 @@ export class BaseObject {
     get uuid() {
         return this.node.uuid;
     };
+    public parent: BaseObject | null = null;
+    public children: BaseObject[] = [];
     public node!: Object3D;
     public type!: SceneObjectType;
     public name!: string;
-    protected outline!: Object3D;
+    public outline!: Object3D;
 
     get position() {
         return this.node.position;
@@ -73,6 +75,12 @@ export class BaseObject {
                     break;
             }
         })
+    }
+
+    add(child: BaseObject) {
+        child.parent = this;
+        this.children.push(child);
+        this.node.add(child.node);
     }
     
     connectObject() {

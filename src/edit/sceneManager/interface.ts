@@ -14,9 +14,3 @@ export const AllowedValues: SceneObjectType[] = [
     SceneObjectType.SPRITE, 
     SceneObjectType.LIGHT,
 ];
-
-export interface ISceneObject {
-    name?: string;
-    type: string;
-    object: BaseObject;
-}

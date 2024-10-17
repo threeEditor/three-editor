@@ -81,3 +81,6 @@
 # 2024/10/16 @阿肋
 - fix 修复`Toolbar` key 报错
 - feat 优化`Gizmo`更新`outline`的逻辑
+
+# 2024/10/17 @石灰
+- feat 补充 `light` 的 `info`

@@ -11,7 +11,7 @@ import Sizes from '../utils/sizes';
 import Grid from '../grid';
 import { Selector } from '../selector';
 import { LoaderManager } from '../loader';
-import { AllowedValues, ISceneObject, SceneObjectType } from './interface';
+import { AllowedValues, SceneObjectType } from './interface';
 import { cacheTreeNodes, SceneCache } from './sceneCache';
 import { removeAllChild } from '../utils/dispose';
 import { EventSystem } from '@/utils/event/EventSystem';
@@ -100,40 +100,33 @@ export default class SceneManager {
 
     const ambientLight = new PrimitiveLight({ color: '#fff', intensity: 0.5, type: PrimitiveLightType.AmbientLight });
 
-    SceneManager.add({
-      type: SceneObjectType.LIGHT,
-      object: directLight,
-    });
-    SceneManager.add({
-      type: SceneObjectType.LIGHT,
-      object: ambientLight,
-    });
+    SceneManager.add(directLight);
+    SceneManager.add(ambientLight);
     EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
   }
 
-  static add(sceneObject: ISceneObject) {
-    const { type, object } = sceneObject;
-    if (!AllowedValues.includes(type as SceneObjectType)) {
-      console.warn(`暂不支持添加该类型: ${type}`);
+  // 在场景的根节点上添加
+  static add(object: BaseObject) {
+    if (!AllowedValues.includes(object.type as SceneObjectType)) {
+      console.warn(`暂不支持添加该类型: ${object.type}`);
       return;
     }
     if (!object) {
-      console.warn(`添加对象缺失，请检查：`, sceneObject);
+      console.warn(`添加对象缺失，请检查：`, object);
       return;
     }
     const { node } = object;
     SceneManager.scene.add(node);
-    SceneManager.cache.add(node.uuid, node, type as SceneObjectType);
+    SceneManager.cache.add(object.uuid, node, object.type as SceneObjectType);
     cacheTreeNodes.push({
-      key: node.uuid,
-      title: sceneObject.name || object.name,
+      key: object.uuid,
+      title: object.name,
     });
     
     EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
   }
 
-  static remove(sceneObject: ISceneObject) {
-    const { object } = sceneObject;
+  static remove(object: BaseObject) {
     if (!SceneManager.cache.include(object.uuid)) {
       return false;
     } else {

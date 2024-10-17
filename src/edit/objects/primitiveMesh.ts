@@ -1,4 +1,4 @@
-import { BoxGeometry, Material, Mesh, Object3D } from "three";
+import { BoxGeometry, Material, Mesh } from "three";
 import MaterialManager from "../materialManager";
 import { BaseObject } from "./baseObject";
 import { SceneObjectType } from "../sceneManager/interface";
