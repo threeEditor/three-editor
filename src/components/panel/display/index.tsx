@@ -2,18 +2,26 @@ import { Icon } from '@/components/icon';
 import './index.less';
 import { Button, ConfigProvider, Tree } from 'antd';
 import type { TreeDataNode, TreeProps } from 'antd';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Key } from 'antd/es/table/interface';
 import { EventSystem } from '@/utils/event/EventSystem';
-import { DisplayEvents, SystemEvents } from '@/common/constant';
+import { DisplayEvents, SceneEvents, SystemEvents } from '@/common/constant';
 import { SkyCard } from './skyCard';
+import { titleRender, TreeMenuEvent } from './treeMenu';
+import { InputTextModal } from '@/components/modal';
+import { filterNode, updateNodeName } from './utils';
 export interface IDisplayProps {
     treeData: TreeDataNode[];
     onTreeDropUpdate: (treeData: TreeDataNode[]) => void;
 }
 
+let editNode: any = null;
+
 const Display = (props: IDisplayProps) => {
+    const [jsonEditVis, setJsonEditVis] = useState(false);
     const [selectedKeys, setSelectedKeys] = useState<Key[]>([]);
+    const [inputVis, setInputVis] = useState(false);
+    const [inputV, setInputV] = useState('');
     const [gData, setGData] = useState(props.treeData);
     const expandedKeys: string[] = [];
 
@@ -88,6 +96,47 @@ const Display = (props: IDisplayProps) => {
         setGData(data);
         props.onTreeDropUpdate(data);
     };
+
+    const addNode = () => {
+
+    }
+
+    const deleteNode = () => {
+
+    }
+
+    const rename = () => {
+
+    }
+
+    const handleTreeMenuClick = (e: TreeMenuEvent) => {
+      // console.log('handleTreeMenuClick', e)
+      setSelectedKeys([]);
+      switch(e.type) {
+        case 'rename':
+          const node = filterNode(gData, e.nodeKey) as TreeDataNode;
+          editNode = node;
+          setInputV(node.title as string);
+          setInputVis(true);
+          break;
+      }
+      console.log('handleClick', e, gData)
+    }
+
+    const InputTextModalCancel = useCallback(() => {
+      setInputVis(false);
+      setInputV('');
+    }, [])
+
+    const InputTextModalOK = useCallback((newName: string) => {
+      const nextData = updateNodeName(gData, editNode.key, newName);
+      EventSystem.broadcast(SceneEvents.ObjectRename, newName);
+      editNode = null;
+      setGData(nextData);
+      setInputV('');
+      setInputVis(false);
+    }, [gData, editNode])
+
     return <div className="display_content">
         <div className='title'>Display</div>
         <SkyCard />
@@ -116,16 +165,21 @@ const Display = (props: IDisplayProps) => {
                 setSelectedKeys(e);
                 EventSystem.broadcast(DisplayEvents.TreeSelectNode, e);
             }}
-            onRightClick={(e) => {
-                console.log('onRightClick', e.node)
-            }}
+            titleRender={(e) => titleRender(e, handleTreeMenuClick)}
             treeData={gData}
         />
         </ConfigProvider>
+        {/* InputTextModal for rename */}
+        <InputTextModal
+          value={inputV}
+          isModalOpen={inputVis} 
+          handleCancel={InputTextModalCancel}
+          handleOk={InputTextModalOK}
+          />
         <Button onClick={() => {
-          EventSystem.broadcast(SystemEvents.ViewAceEdit);
-          console.log('onClick')
-        }}>View Scene Config</Button>
+          setJsonEditVis(!jsonEditVis)
+          EventSystem.broadcast(jsonEditVis ? SystemEvents.HideAceEdit:SystemEvents.ViewAceEdit);
+        }}>{jsonEditVis ? 'Hide Scene Config' : 'View Scene Config'}</Button>
     </div>
 }
 export default Display;

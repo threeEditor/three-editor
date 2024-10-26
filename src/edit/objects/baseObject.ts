@@ -4,16 +4,17 @@ import { EventSystem } from "@/utils/event/EventSystem";
 import { SceneEvents } from "@/common/constant";
 import SceneManager from "../sceneManager/sceneManager";
 export class BaseObject {
-    get uuid() {
-        return this.node.uuid;
-    };
     public parent: BaseObject | null = null;
     public children: BaseObject[] = [];
     public node!: Object3D;
     public type!: SceneObjectType;
-    public name!: string;
     public outline!: Object3D;
-
+    get name() {
+        return this.node.name;
+    }
+    get uuid() {
+        return this.node.uuid;
+    };
     get position() {
         return this.node.position;
     }
@@ -59,8 +60,11 @@ export class BaseObject {
     }
 
     bindEvents() {
+        EventSystem.subscribe(SceneEvents.ObjectRename, (newName: string) => {
+            this.node.name = newName;
+            SceneManager.updateConfig();
+        })
         EventSystem.subscribe(SceneEvents.PropertyTransform, ({ uuid, type, value }: any) => {
-            
             if(uuid !== this.uuid) return;
             switch(type) {
                 case 'position':
@@ -87,7 +91,6 @@ export class BaseObject {
     
     connectObject() {
         this.node.userData.connectObject = this;
-        this.name = this.node.name || this.type;
     }
 
     setPosition(x?: number, y?: number, z?: number) {
