@@ -25,6 +25,7 @@ export class SceneCache {
     }
 
     add(uuid: string, node: Object3D, type: SceneObjectType) {
+        // cache selectable Objects
         switch(type) {
             case SceneObjectType.MESH:
                 this.selectMap.set(node.uuid, node);
@@ -40,7 +41,12 @@ export class SceneCache {
                 this.selectMap.set(node.uuid, node);
                 break;
         }
+        // cache all Objects
         this.map.set(uuid, node);
+    }
+
+    get(uuid: string) {
+        return this.map.get(uuid);
     }
 
     remove(uuid: string) {

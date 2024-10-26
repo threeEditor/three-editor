@@ -105,13 +105,9 @@ const Display = (props: IDisplayProps) => {
 
     }
 
-    const rename = () => {
-
-    }
-
     const handleTreeMenuClick = (e: TreeMenuEvent) => {
       // console.log('handleTreeMenuClick', e)
-      setSelectedKeys([]);
+      // setSelectedKeys([]);
       switch(e.type) {
         case 'rename':
           const node = filterNode(gData, e.nodeKey) as TreeDataNode;
@@ -120,7 +116,7 @@ const Display = (props: IDisplayProps) => {
           setInputVis(true);
           break;
       }
-      console.log('handleClick', e, gData)
+      // console.log('handleClick', e, gData)
     }
 
     const InputTextModalCancel = useCallback(() => {

@@ -24,7 +24,7 @@ export class Selector extends EventEmitter {
         return;
       }
       const { cameraManager, cache } = SceneManager;
-      console.log(uuid, cache.selectList)
+      // console.log(uuid, cache.selectList)
       if(uuid === this.selectedObject?.uuid) {
         this.selectedObject = null;
         cameraManager.setOutline([]);
