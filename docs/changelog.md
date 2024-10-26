@@ -84,3 +84,4 @@
 
 # 2024/10/17 @石灰
 - feat 补充 `light` 的 `info`
+- feat 设置 `SceneManager` 导出 `info`

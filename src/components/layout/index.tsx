@@ -51,7 +51,7 @@ const Layout = () => {
         sprite.setPosition(6);
         sprite.setScale(4);
         // name: 'man',
-        SceneManager.add(gltf)
+        SceneManager.add(gltf);
         SceneManager.add(box);
         SceneManager.add(sprite);
     }
