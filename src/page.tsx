@@ -20,8 +20,10 @@ function Page() {
   const [aceEdit, setAceEdit] = useState(false);
   useEffect(() => {
     EventSystem.subscribe(SystemEvents.ViewAceEdit, () => setAceEdit(true));
+    EventSystem.subscribe(SystemEvents.HideAceEdit, () => setAceEdit(false));
     return () => {
       EventSystem.unsubscribe(SystemEvents.ViewAceEdit);
+      EventSystem.unsubscribe(SystemEvents.HideAceEdit);
     }
   }, [])
 

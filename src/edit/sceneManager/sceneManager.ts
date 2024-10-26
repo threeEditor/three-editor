@@ -149,7 +149,7 @@ export default class SceneManager {
       sceneInfo: SceneManager.info,
       childInfos,
     }
-    console.log(SceneManager.config)
+    // console.log(SceneManager.config)
   }
 
   static remove(object: BaseObject) {

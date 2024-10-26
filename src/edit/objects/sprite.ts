@@ -7,6 +7,7 @@ export interface ISpriteConfig {
     color?: string;
     opacity?: number,
     texture?: Texture
+    name?: string;
 }
 
 const SpriteOutlineMaterial = 'SpriteOutlineMaterial';
@@ -14,7 +15,6 @@ const SpriteOutlineMaterial = 'SpriteOutlineMaterial';
 export class Sprite extends BaseObject {
     public node: Object3D;
     public config: ISpriteConfig;
-    
     constructor(config: ISpriteConfig) {
         super();
         this.config = config;
@@ -29,7 +29,7 @@ export class Sprite extends BaseObject {
             ...params,
         });
         this.node = new ThreeSprite(material);        
-
+        this.node.name = config.name ?? 'Sprite';
         this.initOutlineMesh();
         this.connectObject();
     }

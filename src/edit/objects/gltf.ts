@@ -51,9 +51,10 @@ export class GLTFObject extends BaseObject {
         this.type = SceneObjectType.GLTF;
         const { scene, animations } = config.gltf;
         this.node = scene;
-        if(this.name) {
-            this.name = this.name;
+        if(config.name) {
+            this.node.name = config.name;
         }
+        
         this._animations = animations;
         this.connectObject();
 
