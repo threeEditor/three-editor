@@ -30,7 +30,7 @@ export default class SceneManager {
   static scene: Scene = new Scene();
   static renderer: Renderer;
   static sizes: Sizes;
-  static config: Config;
+  static config: any;
   static wrap: HTMLElement;
   static loader = new LoaderManager();
   static cameraManager: CameraManager;
@@ -42,6 +42,13 @@ export default class SceneManager {
   private static grid: Grid | null = null;
   private static inited = false;
   private static sky = new Sky();
+  private static _children: BaseObject[] = []; 
+  
+  static get info() {
+    return {
+      color: SceneManager.scene.background,
+    }
+  }
 
   static init(options: IPropsType) {
     const { sizes, config, wrap } = options;
@@ -115,8 +122,10 @@ export default class SceneManager {
       console.warn(`添加对象缺失，请检查：`, object);
       return;
     }
+    SceneManager._children.push(object);
     const { node } = object;
     SceneManager.scene.add(node);
+    SceneManager.updateConfig();
     SceneManager.cache.add(object.uuid, node, object.type as SceneObjectType);
     cacheTreeNodes.push({
       key: object.uuid,
@@ -126,7 +135,25 @@ export default class SceneManager {
     EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
   }
 
+  static updateConfig() {
+    // TODO 待完善
+    // const config = [];
+    const childInfos: any[] = []
+    SceneManager._children.forEach(child => {
+      // const { children } = child;
+      // config.push(child.info);
+      childInfos.push(child.info);
+      // console.log('child.info', child.info)
+    })
+    SceneManager.config = {
+      sceneInfo: SceneManager.info,
+      childInfos,
+    }
+    console.log(SceneManager.config)
+  }
+
   static remove(object: BaseObject) {
+    SceneManager._children = SceneManager._children.filter(child => child.uuid !== object.uuid);
     if (!SceneManager.cache.include(object.uuid)) {
       return false;
     } else {

@@ -2,6 +2,7 @@ import { Object3D } from "three";
 import { SceneObjectType } from "../sceneManager/interface";
 import { EventSystem } from "@/utils/event/EventSystem";
 import { SceneEvents } from "@/common/constant";
+import SceneManager from "../sceneManager/sceneManager";
 export class BaseObject {
     get uuid() {
         return this.node.uuid;
@@ -25,7 +26,7 @@ export class BaseObject {
         return this.node.scale;
     }
 
-    get _info() {
+    protected get _info() {
         const { position, rotation, scale } = this;
         return {
             name: this.node.name,
@@ -78,6 +79,7 @@ export class BaseObject {
     }
 
     add(child: BaseObject) {
+        SceneManager.cache.add(child.uuid, child.node, child.type);
         child.parent = this;
         this.children.push(child);
         this.node.add(child.node);

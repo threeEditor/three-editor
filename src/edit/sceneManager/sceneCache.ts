@@ -3,6 +3,7 @@ import { SceneObjectType } from "./interface";
 import { TreeDataNode } from "antd";
 
 export const cacheTreeNodes: TreeDataNode[] = [];
+// SceneCache 暂时用做 select 使用
 export class SceneCache {
     private map = new Map<string, Object3D>();
     private selectMap = new Map<string, Object3D>();

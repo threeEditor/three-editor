@@ -5,6 +5,7 @@ import 'ace-builds/src-noconflict/theme-monokai';
 import './index.less';
 import { useEffect, useState } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
+import SceneManager from '@/edit/sceneManager/sceneManager';
 
 interface IJsonViewerProps {
     onClose: () => void;
@@ -23,20 +24,20 @@ const formatJsonStr = (json: object) => {
 export const JsonViewer = (props: IJsonViewerProps) => {
     const [code, setCode] = useState('');
     useEffect(() => {
-        const mockJSON = {
-            name: 'scene1',
-            defaultScene: 0,
-            scenes: [ 
-                {
-                    name: 'scene1',
-                    cameras: [],
-                    lights: [],
-                    helpers: [],
-                    objects: [],
-                }
-            ]
-        };
-        const json = formatJsonStr(mockJSON);
+        // const mockJSON = {
+        //     name: 'scene1',
+        //     defaultScene: 0,
+        //     scenes: [ 
+        //         {
+        //             name: 'scene1',
+        //             cameras: [],
+        //             lights: [],
+        //             helpers: [],
+        //             objects: [],
+        //         }
+        //     ]
+        // };
+        const json = formatJsonStr(SceneManager.config);
         // mock
         setCode(json);
     }, [])
