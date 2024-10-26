@@ -13,9 +13,17 @@ import Display from '../panel/display';
 import { TreeDataNode } from 'antd';
 import { SceneEvents, SceneSelectorEvents } from '@/common/constant';
 import Toolbar from '../toolbar';
+import { EventSystem } from '@/utils/event/EventSystem';
+
+interface INodeInfo{
+  viewType: ViewType;
+  uuid?: string;
+  name?: string;
+}
+
 const Layout = () => {
     const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
-    const [nodeInfo, setNodeInfo] = useState({ viewType: ViewType.None });
+    const [nodeInfo, setNodeInfo] = useState<INodeInfo>({ viewType: ViewType.None });
   
     const onLoad = async () => {
         console.log('load')
@@ -76,6 +84,20 @@ const Layout = () => {
           });
       });
     }, [])
+
+    useEffect(() => {
+      const { viewType } = nodeInfo;
+      if(viewType === 'None') return;
+      const handleRename = () => {
+        const object = SceneManager.get(nodeInfo.uuid!);
+        setNodeInfo({
+          ...nodeInfo,
+          name: object?.name!,
+        })
+      }
+      EventSystem.unsubscribe(SceneEvents.ObjectRename, handleRename);
+      EventSystem.subscribe(SceneEvents.ObjectRename, handleRename);
+    }, [nodeInfo])
     return (
         <div className="layout">
             <div className='panel display'>

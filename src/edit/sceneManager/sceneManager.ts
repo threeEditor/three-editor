@@ -135,6 +135,10 @@ export default class SceneManager {
     EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
   }
 
+  static get(uuid: string) {
+    return SceneManager.cache.get(uuid);
+  }
+
   static updateConfig() {
     // TODO 待完善
     // const config = [];

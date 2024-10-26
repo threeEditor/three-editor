@@ -87,4 +87,4 @@
 - feat 设置 `SceneManager` 导出 `info`
 
 # 2024/10/27 @石灰
-- feat 支持 `Tree Component` 动态修改名字
+- feat 支持 `Tree Component` 动态修改名字 & 属性面板同步
