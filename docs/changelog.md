@@ -89,3 +89,5 @@
 # 2024/10/27 @石灰
 - feat 支持 `Tree Component` 动态修改名字 & 属性面板同步
 
+# 2024/11/3 @阿肋
+- feat 增加resources类，后续用于存储资源以及处理progress相关逻辑
