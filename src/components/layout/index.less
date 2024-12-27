@@ -44,3 +44,25 @@
         background-color: @panelColor;
     }
 }
+
+// input number 去除上下箭头
+input {
+    text-align: center;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+// 覆盖 antd 的部分样式
+.ant-select-selector, .ant-select-dropdown {
+    background-color: #ccc !important;
+}
+.ant-select-item-option-selected {
+    background-color: #d9d9d9 !important;
+}

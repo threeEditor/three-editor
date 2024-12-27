@@ -29,7 +29,7 @@ const Vec3 = ({ vec3, title, onChange }: IV3) =>{
     const v1 = Number(toFix(vec3[0] || 0));
     const v2 = Number(toFix(vec3[1] || 0));
     const v3 = Number(toFix(vec3[2] || 0));
-    return (vec3 ?  <div>
+    return (vec3 ?  <div className='cardItem'>
     <span className='propertyTitle'>{title}</span>
     <Input className='input' type="number" onChange={(v) => {
         onChange(Number(v.target.value), v2, v3);
@@ -108,8 +108,8 @@ const PropertyPanel = (props: IPanelProps) => {
                         props.isModel &&  <Card>
                             <div className='title'>Animation</div>
                             <div className='cardItem'>
-                                <span className='propertyTitle'>Cur Ani:</span>
-                                <Select style={{width: '164px'}} value={animation} onChange={(v) => {
+                                <span className='propertyTitle'>Current</span>
+                                <Select className='customSelect' style={{ width: '164px' }} value={animation} onChange={(v) => {
                                     setAnimation(v);
                                     EventSystem.broadcast(ModelAniUpdate.UpdateAni, {
                                         ...props,
@@ -124,7 +124,7 @@ const PropertyPanel = (props: IPanelProps) => {
                                 </Select>
                             </div>
                             <div className='cardItem'>
-                                <span className='propertyTitle'>Ani Speed:</span>
+                                <span className='propertyTitle'>Speed</span>
                                 <Input className='input' style={{width: '100px'}} type="number" value={animationSpeed} onChange={((e) => {                                    
                                     const speed = Number(e.target.value);
                                     setAnimationSeed(speed);
