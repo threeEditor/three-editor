@@ -32,7 +32,8 @@ export class Sky {
     }
 
     setPure() {
-        SceneManager.scene.background = new Color('#CCC');
+        // SceneManager.scene.background = new Color('#CCC');
+        SceneManager.scene.background = new Color().setHSL( 0.51, 0.4, 0.01 );
     }
     
     setCubeMap() {
