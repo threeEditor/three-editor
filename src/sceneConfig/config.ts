@@ -2,6 +2,25 @@
 export const defaultSceneConfig = {
     name: 'scene1',
     defaultScene: 0,
+    cameras: [
+        {
+            position: {
+                x: 10,
+                y: 10,
+                z: 10,
+            },
+            target: {
+                x: 0,
+                y: 0,
+                z: 0,
+            },
+            up: {
+                x: 0,
+                y: 1,
+                z: 0,
+            }
+        }
+    ],
     scenes: [ // 一个
         {
             name: 'scene1',

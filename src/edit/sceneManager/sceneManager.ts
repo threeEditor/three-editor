@@ -2,6 +2,8 @@ import { ISceneConfig } from '@/sceneConfig/config';
 import {
   Scene,
   AnimationMixer,
+  PerspectiveCamera,
+  CameraHelper,
 } from 'three';
 import MaterialManager from '../materialManager';
 import Renderer from '../renderer';
@@ -109,6 +111,15 @@ export default class SceneManager {
 
     SceneManager.add(directLight);
     SceneManager.add(ambientLight);
+
+
+    const camera = new PerspectiveCamera(45, SceneManager.sizes.width / SceneManager.sizes.height, 0.1, 500);
+    camera.position.set(10, 10, 10);
+    SceneManager.scene.add(camera);
+    // camera.up.set(0, 1, 0);
+    const cameraHelper = new CameraHelper(camera);
+    SceneManager.scene.add(cameraHelper);
+
     EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
   }
 
