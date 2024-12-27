@@ -76,17 +76,24 @@ export default class Grid {
           // 初始化默认的颜色为普通网格线颜色
           vec3 color = cellColor;
 
+          float gridLineAlpha = (g1 + g2) * 0.75;
+
           // 精确判断 X 轴和 Z 轴的线，并设定颜色
           // 当 localPosition.z 非常接近 0 时，认为是 X 轴的线
-          if (abs(localPosition.z) < 0.01) {
+
+          float coordLineWidth = 0.02;
+          float xStep = abs(localPosition.z);
+          float zStep = abs(localPosition.x);
+          if (xStep < coordLineWidth) {
+            gridLineAlpha = 1.0;
             color = vec3(1.0, 0.0, 0.0);  // 红色代表 X 轴
-          }else if (abs(localPosition.x) < 0.01) {
+          } else if (zStep < coordLineWidth) {
+            gridLineAlpha = 1.0;
             color = vec3(0.0,0.0,1.0);  // 蓝色代表 Z 轴
           }
 
           // 根据网格线的强度来决定透明度
-          gl_FragColor = vec4(color, (g1 + g2) * 0.75);
-
+          gl_FragColor = vec4(color, gridLineAlpha);
           // 丢弃透明部分
           if (gl_FragColor.a <= 0.0) discard;
         }
