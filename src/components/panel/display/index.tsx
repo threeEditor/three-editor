@@ -10,6 +10,7 @@ import { SkyCard } from './skyCard';
 import { titleRender, TreeMenuEvent } from './treeMenu';
 import { InputTextModal } from '@/components/modal';
 import { filterNode, updateNodeName } from './utils';
+import { SceneSwitch } from '@/components/sceneSwitch';
 export interface IDisplayProps {
     treeData: TreeDataNode[];
     onTreeDropUpdate: (treeData: TreeDataNode[]) => void;
@@ -134,7 +135,7 @@ const Display = (props: IDisplayProps) => {
     }, [gData, editNode])
 
     return <div className="display_content">
-        <div className='title'>Display</div>
+        <SceneSwitch />
         <SkyCard />
         <ConfigProvider
             theme={{

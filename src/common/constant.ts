@@ -31,3 +31,13 @@ export enum SystemEvents {
     ViewAceEdit = 'ViewAceEdit',
     HideAceEdit =  'HideAceEdit',
 }
+
+export enum SceneType {
+    Edit = 'Edit',
+    Display = 'Display',
+}
+
+export const SceneTypeDesc = {
+    [SceneType.Edit]: '编辑场景',
+    [SceneType.Display]: '运行场景',
+}

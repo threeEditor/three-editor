@@ -21,10 +21,10 @@ export function debounce<T extends ReturnVoidFn = ReturnVoidFn>(
   };
 }
 
-export const THROTTLE_THRESHOLD = 500;
+export const THROTTLE_THRESHOLD = 100;
 export function throttle<T extends ReturnVoidFn = ReturnVoidFn>(
   fn: T,
-  wait: number
+  wait = THROTTLE_THRESHOLD,
 ): (...args: ArgumentsType<T>) => void {
   let timer: NodeJS.Timeout | null = null;
   let startTime = Date.now();
