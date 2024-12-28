@@ -1,7 +1,6 @@
 // https://www.yuque.com/yiqianyao/vcv10s/uahoo3iq1trz4zyn
 export const defaultSceneConfig = {
     name: 'scene1',
-    defaultScene: 0,
     cameras: [
         {
             position: {
@@ -21,21 +20,17 @@ export const defaultSceneConfig = {
             }
         }
     ],
-    scenes: [ // 一个
-        {
-            name: 'scene1',
-            cameras: [],
-            lights: [],
-            helpers: [],
-            objects: [],
-        }
-    ]
+    lights: [],
+    helpers: [],
+    objects: [],
 }
 
 export interface ISceneConfig {
-    name: string;
-    defaultScene: number;
-    scenes: IScene[];
+    name?: string;
+    lights?: ILight[];
+    helpers?: IHelper[];
+    objects?: IObject[];
+    cameras?: ICamera[];
 }
 
 export interface IScene {
@@ -47,15 +42,30 @@ export interface IScene {
 }
 
 export interface ICamera {
-    name: string;
+    name?: string;
+    position?: {
+        x: number;
+        y: number;
+        z: number;
+    };
+    target?: {
+        x: number;
+        y: number;
+        z: number;
+    };
+    up?: {
+        x: number;
+        y: number;
+        z: number;
+    };
 }
 
 export interface ILight {
-    name: string;
+    name?: string;
 }
 export interface IHelper {
-    name: string;
+    name?: string;
 }
 export interface IObject {
-    name: string;
+    name?: string;
 }
