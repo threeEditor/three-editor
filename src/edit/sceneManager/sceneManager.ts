@@ -1,10 +1,5 @@
 import { ISceneConfig } from '@/sceneConfig/config';
-import {
-  Scene,
-  AnimationMixer,
-  PerspectiveCamera,
-  CameraHelper,
-} from 'three';
+import { Scene, AnimationMixer, PerspectiveCamera, CameraHelper } from 'three';
 import MaterialManager from '../materialManager';
 import Renderer from '../renderer';
 import CameraManager from '../cameraManager';
@@ -22,6 +17,8 @@ import { BaseObject } from '../objects/baseObject';
 import { DisplayEvents, SceneSelectorEvents } from '@/common/constant';
 import { Sky } from '../sky';
 import { PrimitiveLight, PrimitiveLightType } from '../objects/primitiveLight';
+import assets from '@/assets/assets';
+import Resources from '../resources';
 interface IPropsType {
   wrap: HTMLElement;
   config: Config;
@@ -40,16 +37,17 @@ export default class SceneManager {
   static selector = new Selector();
   static _modelAnimationMixer: AnimationMixer[] = [];
   static GizmoManager: GizmoManager;
+  static resources: Resources;
   private static materialManager: MaterialManager = new MaterialManager();
   private static grid: Grid | null = null;
   private static inited = false;
   private static sky = new Sky();
-  private static _children: BaseObject[] = []; 
-  
+  private static _children: BaseObject[] = [];
+
   static get info() {
     return {
       color: SceneManager.scene.background,
-    }
+    };
   }
 
   static init(options: IPropsType) {
@@ -69,6 +67,9 @@ export default class SceneManager {
     SceneManager.cameraManager = new CameraManager();
     SceneManager.cameraManager.setPosition(20, 20, 20);
 
+    // 初始化资源
+    SceneManager.resources = new Resources(assets);
+
     // 初始化gizmo
     SceneManager.GizmoManager = new GizmoManager();
 
@@ -81,11 +82,14 @@ export default class SceneManager {
     });
 
     // 在场景中选中对象
-    SceneManager.selector.on(SceneSelectorEvents.Select, (object: BaseObject) => {
-      // TODO GizmoManager 选中对象需要判断场景的编辑状态
-      SceneManager.GizmoManager.attachObject(object);
-      EventSystem.broadcast(DisplayEvents.SelectTreeNode, [object.uuid]);
-    });
+    SceneManager.selector.on(
+      SceneSelectorEvents.Select,
+      (object: BaseObject) => {
+        // TODO GizmoManager 选中对象需要判断场景的编辑状态
+        SceneManager.GizmoManager.attachObject(object);
+        EventSystem.broadcast(DisplayEvents.SelectTreeNode, [object.uuid]);
+      }
+    );
     // 在场景中取消选中对象
     SceneManager.selector.on(SceneSelectorEvents.UnSelect, () => {
       SceneManager.GizmoManager.detachObject();
@@ -104,16 +108,28 @@ export default class SceneManager {
     // TODO 后续需要走解析 sceneConfig， 目前没有默认设置
     console.log('sceneConfig12', sceneConfig);
 
-    const directLight = new PrimitiveLight({ color: '#fff', intensity: 1, type: PrimitiveLightType.DirectLight});
+    const directLight = new PrimitiveLight({
+      color: '#fff',
+      intensity: 1,
+      type: PrimitiveLightType.DirectLight,
+    });
     directLight.setPosition(1, 1, 0);
 
-    const ambientLight = new PrimitiveLight({ color: '#fff', intensity: 0.5, type: PrimitiveLightType.AmbientLight });
+    const ambientLight = new PrimitiveLight({
+      color: '#fff',
+      intensity: 0.5,
+      type: PrimitiveLightType.AmbientLight,
+    });
 
     SceneManager.add(directLight);
     SceneManager.add(ambientLight);
 
-
-    const camera = new PerspectiveCamera(45, SceneManager.sizes.width / SceneManager.sizes.height, 0.1, 500);
+    const camera = new PerspectiveCamera(
+      45,
+      SceneManager.sizes.width / SceneManager.sizes.height,
+      0.1,
+      500
+    );
     camera.position.set(10, 10, 10);
     SceneManager.scene.add(camera);
     // camera.up.set(0, 1, 0);
@@ -142,7 +158,7 @@ export default class SceneManager {
       key: object.uuid,
       title: object.name,
     });
-    
+
     EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
   }
 
@@ -153,22 +169,24 @@ export default class SceneManager {
   static updateConfig() {
     // TODO 待完善
     // const config = [];
-    const childInfos: any[] = []
-    SceneManager._children.forEach(child => {
+    const childInfos: any[] = [];
+    SceneManager._children.forEach((child) => {
       // const { children } = child;
       // config.push(child.info);
       childInfos.push(child.info);
       // console.log('child.info', child.info)
-    })
+    });
     SceneManager.config = {
       sceneInfo: SceneManager.info,
       childInfos,
-    }
+    };
     // console.log(SceneManager.config)
   }
 
   static remove(object: BaseObject) {
-    SceneManager._children = SceneManager._children.filter(child => child.uuid !== object.uuid);
+    SceneManager._children = SceneManager._children.filter(
+      (child) => child.uuid !== object.uuid
+    );
     if (!SceneManager.cache.include(object.uuid)) {
       return false;
     } else {
