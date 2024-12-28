@@ -1,19 +1,17 @@
-import { ISceneConfig } from '@/sceneConfig/config';
+import { ICamera, ISceneConfig } from '@/sceneConfig/config';
 import {
   Scene,
   AnimationMixer,
-  PerspectiveCamera,
-  CameraHelper,
+  Vector3,
 } from 'three';
 import MaterialManager from '../materialManager';
 import Renderer from '../renderer';
 import CameraManager from '../cameraManager';
-import Config from '../utils/config';
 import Sizes from '../utils/sizes';
 import Grid from '../grid';
 import { Selector } from '../selector';
 import { LoaderManager } from '../loader';
-import { AllowedValues, SceneObjectType } from './interface';
+import { AllowedValues, ISceneManagerProps, SceneObjectType } from './interface';
 import { cacheTreeNodes, SceneCache } from './sceneCache';
 import { removeAllChild } from '../utils/dispose';
 import { EventSystem } from '@/utils/event/EventSystem';
@@ -22,11 +20,7 @@ import { BaseObject } from '../objects/baseObject';
 import { DisplayEvents, SceneSelectorEvents } from '@/common/constant';
 import { Sky } from '../sky';
 import { PrimitiveLight, PrimitiveLightType } from '../objects/primitiveLight';
-interface IPropsType {
-  wrap: HTMLElement;
-  config: Config;
-  sizes: Sizes;
-}
+import { PrimitiveCamera, PrimitiveCameraType } from '../objects/primitiveCamera';
 
 export default class SceneManager {
   static scene: Scene = new Scene();
@@ -41,8 +35,8 @@ export default class SceneManager {
   static _modelAnimationMixer: AnimationMixer[] = [];
   static GizmoManager: GizmoManager;
   private static materialManager: MaterialManager = new MaterialManager();
-  private static grid: Grid | null = null;
   private static inited = false;
+  private static grid: Grid | null = null;
   private static sky = new Sky();
   private static _children: BaseObject[] = []; 
   
@@ -52,7 +46,7 @@ export default class SceneManager {
     }
   }
 
-  static init(options: IPropsType) {
+  static init(options: ISceneManagerProps) {
     const { sizes, config, wrap } = options;
     SceneManager.config = config;
     SceneManager.wrap = wrap;
@@ -67,7 +61,7 @@ export default class SceneManager {
 
     // 初始化场景相机
     SceneManager.cameraManager = new CameraManager();
-    SceneManager.cameraManager.setPosition(20, 20, 20);
+    SceneManager.cameraManager.setPosition(0, 10, 30);
 
     // 初始化gizmo
     SceneManager.GizmoManager = new GizmoManager();
@@ -113,15 +107,34 @@ export default class SceneManager {
     SceneManager.add(ambientLight);
 
 
-    const camera = new PerspectiveCamera(45, SceneManager.sizes.width / SceneManager.sizes.height, 0.1, 500);
-    camera.position.set(10, 10, 10);
-    SceneManager.scene.add(camera);
-    // camera.up.set(0, 1, 0);
-    const cameraHelper = new CameraHelper(camera);
-    SceneManager.scene.add(cameraHelper);
-
+    // 加载相机
+    sceneConfig.cameras && SceneManager.loadCameras(sceneConfig.cameras);
+ 
     EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
   }
+
+  /**
+   * Loads cameras into the scene based on the provided camera configurations.
+   * @param cameras - An array of camera configurations to be loaded.
+   */
+  static loadCameras(cameras: ICamera[]) {
+    // Iterate over each camera configuration in the array
+    cameras?.forEach(cameraConfig => {
+      // Destructure the camera configuration object to get default values if not provided
+      const { position = { x: 10, y: 10, z: 10 }, target = { x: 0, y: 0, z: 0 }, up = { x: 0, y: 1, z: 0 } } = cameraConfig;
+      // Create a new primitive camera with the specified type and orientation
+      const primitiveCamera = new PrimitiveCamera({
+        type: PrimitiveCameraType.PerspectiveCamera,
+        up: new Vector3(up.x, up.y, up.z),
+        target: new Vector3(target.x, target.y, target.z),
+      })
+      // Set the position of the primitive camera
+      primitiveCamera.setPosition(position.x, position.y, position.z);
+      // Add the primitive camera to the scene
+      SceneManager.add(primitiveCamera);
+    })
+  }
+
 
   // 在场景的根节点上添加
   static add(object: BaseObject) {
