@@ -26,7 +26,7 @@ const Layout = () => {
     const [nodeInfo, setNodeInfo] = useState<INodeInfo>({ viewType: ViewType.None });
   
     const onLoad = async () => {
-        console.log('load')
+        // console.log('load')
         // cacheTreeNodes
         // EventSystem.broadcast('SetTreeNodes', [
         //   {

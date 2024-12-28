@@ -8,6 +8,7 @@ import { SceneObjectType } from '../sceneManager/interface';
 import { BaseObject } from '../objects/baseObject';
 import EventEmitter from 'eventemitter3';
 import { SceneEvents } from '@/common/constant';
+import { throttle } from '../utils/func';
 class GizmoManager extends EventEmitter {
   private controls: TransformControls;
   public draggedDelay: boolean = false;
@@ -53,7 +54,7 @@ class GizmoManager extends EventEmitter {
     SceneManager.cameraManager.setControlEnable(true);
   }
 
-  // // 当开始/停止拖拽时，控制相机
+  // 当开始/停止拖拽时，控制相机
   private initOnDraggingChanged() {
     this.controls.addEventListener('dragging-changed', (event) => {
       SceneManager.cameraManager.setControlEnable(!event.value);
@@ -66,12 +67,18 @@ class GizmoManager extends EventEmitter {
         this.draggedDelay = true;
       }
     });
+
+    const throttleEmit = throttle(() => {
+      this.emit(SceneEvents.GizmoTransform, this.selectedObject);
+    })
+    
     this.controls.addEventListener('objectChange', () => {
       if (!this.selectedObject) return;
       if (this.selectedObject.type == SceneObjectType.SPRITE) {
         this.selectedObject?.outline?.userData?.update();
       }
-      this.emit(SceneEvents.GizmoTransform, this.selectedObject);
+      console.log('objectChange')
+      throttleEmit();
     });
   }
   // 键盘切换操作模式 (平移、旋转、缩放)
