@@ -1,7 +1,10 @@
-# 2024/12/29 @@石灰
+# 2024/12/31 @石灰
+- feat 增加 `Camera` 的可视化 `Sprite` 精灵
+
+# 2024/12/29 @石灰
 - feat 完善 `Camera` 类型的加载和 `CameraHelper` 的设置
 
-# 2024/12/28 @@石灰
+# 2024/12/28 @石灰
 - feat 增加场景切换组件 `SceneSwitch` & 部分样式更新
 - feat 调整 `Grid` 中 x 轴 和 z 轴的宽度 调整网格效果
 - feat 增加 `CameraHelper`

@@ -13,7 +13,7 @@ const allowedValues: LoaderResourceType[] = [
 ];
 
 export interface ILoaderResource {
-  name: string;
+  name?: string;
   type: LoaderResourceType;
   url: string;
 }

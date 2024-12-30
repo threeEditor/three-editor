@@ -36,8 +36,9 @@ export class SceneCache {
             case SceneObjectType.GLTF:
                 this.selectMap.set(node.uuid, node);
                 break;
+            // Tip: light 也可以被选中，通过 Display Panel Tree Component 列表项 or Sprite Icon
+            case SceneObjectType.Camera:
             case SceneObjectType.LIGHT:
-                // Tip: light 也可以背选中，通过 Display Panel Tree Component 列表项
                 this.selectMap.set(node.uuid, node);
                 break;
         }

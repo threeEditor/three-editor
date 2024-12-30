@@ -3,6 +3,7 @@ export const defaultSceneConfig = {
     name: 'scene1',
     cameras: [
         {
+            name: 'MainCamera',
             position: {
                 x: 10,
                 y: 10,
