@@ -34,14 +34,8 @@ const Layout = () => {
   const onLoad = async () => {
     // console.log('load')
     // cacheTreeNodes
-    // EventSystem.broadcast('SetTreeNodes', [
-    //   {
-    //     key: '1',
-    //     title: 'title',
-    //   }
-    // ])
     // mock: 模拟外侧添加
-    const gltfResource = SceneManager.resources.items['defaultModel'];
+    const gltfResource = SceneManager.resources.items['https://gw.alipayobjects.com/os/bmw-prod/5e3c1e4e-496e-45f8-8e05-f89f2bd5e4a4.glb'];
     const gltf = new GLTFObject({
       gltf: gltfResource,
     });
@@ -51,7 +45,7 @@ const Layout = () => {
       type: PrimitiveMeshType.BOX,
       size: 5,
     });
-    const texture = SceneManager.resources.items['spriteTexture'];
+    const texture = SceneManager.resources.items['https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/unnamed.png'];
     const sprite = new Sprite({
       texture,
       opacity: 0.8,

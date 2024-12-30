@@ -138,9 +138,10 @@ export default class SceneManager {
     // Iterate over each camera configuration in the array
     cameras?.forEach(cameraConfig => {
       // Destructure the camera configuration object to get default values if not provided
-      const { position = { x: 10, y: 10, z: 10 }, target = { x: 0, y: 0, z: 0 }, up = { x: 0, y: 1, z: 0 } } = cameraConfig;
+      const { position = { x: 10, y: 10, z: 10 }, target = { x: 0, y: 0, z: 0 }, up = { x: 0, y: 1, z: 0 }, name } = cameraConfig;
       // Create a new primitive camera with the specified type and orientation
       const primitiveCamera = new PrimitiveCamera({
+        name,
         type: PrimitiveCameraType.PerspectiveCamera,
         up: new Vector3(up.x, up.y, up.z),
         target: new Vector3(target.x, target.y, target.z),

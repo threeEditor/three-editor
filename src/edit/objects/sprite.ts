@@ -19,7 +19,7 @@ export class Sprite extends BaseObject {
         super();
         this.config = config;
         this.type = SceneObjectType.SPRITE;
-        
+        const { name = 'Sprite' } = config;
         const params: {[key: string]: any} = {};
         config.texture && (params.map = config.texture);
         config.color && (params.color = config.color);
@@ -29,7 +29,7 @@ export class Sprite extends BaseObject {
             ...params,
         });
         this.node = new ThreeSprite(material);        
-        this.node.name = config.name ?? 'Sprite';
+        this.node.name = name;
         this.initOutlineMesh();
         this.connectObject();
     }

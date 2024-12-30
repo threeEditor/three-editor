@@ -21,4 +21,5 @@ export const AllowedValues: SceneObjectType[] = [
     SceneObjectType.MESH, 
     SceneObjectType.SPRITE, 
     SceneObjectType.LIGHT,
+    SceneObjectType.Camera,
 ];

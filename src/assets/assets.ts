@@ -1,6 +1,6 @@
 import { LoaderResourceType } from '@/edit/loader';
-import { assetType } from '@/edit/resources';
-const assets: assetType[] = [
+import { Asset } from '@/edit/resources';
+const assets: Asset[] = [
   {
     name: 'spriteTexture',
     url: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/unnamed.png',
