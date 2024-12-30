@@ -7,6 +7,9 @@
 - feat 增加 `CameraHelper`
 - fix 修复 `Gizmo` 频繁更新导致的错误
 
+# 2024/11/3 @阿肋
+- feat 增加resources类，后续用于存储资源以及处理progress相关逻辑
+
 # 2024/10/27 @石灰
 - feat 支持 `Tree Component` 动态修改名字 & 属性面板同步
 
