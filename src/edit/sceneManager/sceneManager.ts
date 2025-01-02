@@ -275,6 +275,7 @@ export default class SceneManager {
     if (!SceneManager.inited) return;
     SceneManager.renderer.resize();
     SceneManager.cameraManager.resize();
+    SceneManager._displayCamera?.resize();
   }
 
   static destory() {

@@ -39,12 +39,12 @@ export class Sky {
     setCubeMap() {
         const cubeTextureLoader = new CubeTextureLoader()
         cubeTextureLoader.load([
-            'https://threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/pos-x.jpg',
-            'https://threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/neg-x.jpg',
-            'https://threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/pos-y.jpg',
-            'https://threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/neg-y.jpg',
-            'https://threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/pos-z.jpg',
-            'https://threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/neg-z.jpg'
+            'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/pos-x.jpg',
+            'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/neg-x.jpg',
+            'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/pos-y.jpg',
+            'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/neg-y.jpg',
+            'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/pos-z.jpg',
+            'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/neg-z.jpg'
         ], (texture) => {
             SceneManager.scene.background = texture
         })

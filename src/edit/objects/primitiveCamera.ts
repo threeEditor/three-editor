@@ -126,4 +126,18 @@ export class PrimitiveCamera extends BaseObject {
             this.cameraHelper.visible = enabled;
         }
     }
+
+    resize() {
+        const { sizes } = SceneManager;
+        if(this.cameraType === PrimitiveCameraType.PerspectiveCamera) {
+            (this.node as PerspectiveCamera).aspect = sizes.width / sizes.height;
+            (this.node as PerspectiveCamera).updateProjectionMatrix();
+        } else {
+            // (this.node as OrthographicCamera).left = -sizes.width / 2;
+            // (this.node as OrthographicCamera).right = sizes.width / 2;
+            // (this.node as OrthographicCamera).top = sizes.height / 2;
+            // (this.node as OrthographicCamera).bottom = -sizes.height / 2;
+            // (this.node as OrthographicCamera).updateProjectionMatrix();
+        }
+    }
 }
