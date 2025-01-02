@@ -139,7 +139,7 @@ const Display = (props: IDisplayProps) => {
         <SceneSwitch defaultSceneType={SceneType.Edit} onSwitch={(type: SceneType) => {
           console.log('SceneSwitch', type);
           SceneManager.switchSceneMode(type);
-          // EventSystem.broadcast(SceneEvents.ChangeSceneType, type);
+          EventSystem.broadcast(SceneEvents.ChangeSceneType, type);
         }} />
         <SkyCard />
         <ConfigProvider

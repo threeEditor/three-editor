@@ -221,10 +221,16 @@ export default class SceneManager {
     if(type === SceneType.Edit) {
       SceneManager.cameraManager.setEnabled(true);
       SceneManager.grid?.setEnabled(true);
+      SceneManager.selector.setEnabled(true);
+     
       SceneManager._displayCamera?.setCameraHelper(true);
+      
     } else {
       SceneManager.cameraManager.setEnabled(false);
       SceneManager.grid?.setEnabled(false);
+      SceneManager.selector.unSelect();
+      SceneManager.selector.unSelectSprite();
+      SceneManager.selector.setEnabled(false);
       SceneManager._displayCamera?.setCameraHelper(false);
     }
   }

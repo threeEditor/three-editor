@@ -1,3 +1,6 @@
+# 25/01/03 @石灰
+- feat 完善 `SceneTypeSwitch` 的场景设置和相机设置
+
 # 25/01/02 @石灰
 - feat 完善 `SceneTypeSwitch` 的场景设置和相机设置
 
