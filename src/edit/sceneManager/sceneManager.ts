@@ -17,7 +17,7 @@ import { removeAllChild } from '../utils/dispose';
 import { EventSystem } from '@/utils/event/EventSystem';
 import GizmoManager from '../gizmo';
 import { BaseObject } from '../objects/baseObject';
-import { DisplayEvents, SceneSelectorEvents } from '@/common/constant';
+import { DisplayEvents, SceneSelectorEvents, SceneType } from '@/common/constant';
 import { Sky } from '../sky';
 import { PrimitiveLight, PrimitiveLightType } from '../objects/primitiveLight';
 import assets from '@/assets/assets';
@@ -42,6 +42,8 @@ export default class SceneManager {
   private static grid: Grid | null = null;
   private static sky = new Sky();
   private static _children: BaseObject[] = [];
+  private static _sceneType = SceneType.Edit;
+  private static _displayCamera: PrimitiveCamera | null;
 
   static get info() {
     return {
@@ -136,7 +138,7 @@ export default class SceneManager {
    */
   static loadCameras(cameras: ICamera[]) {
     // Iterate over each camera configuration in the array
-    cameras?.forEach(cameraConfig => {
+    cameras?.forEach((cameraConfig, index) => {
       // Destructure the camera configuration object to get default values if not provided
       const { position = { x: 10, y: 10, z: 10 }, target = { x: 0, y: 0, z: 0 }, up = { x: 0, y: 1, z: 0 }, name } = cameraConfig;
       // Create a new primitive camera with the specified type and orientation
@@ -150,6 +152,10 @@ export default class SceneManager {
       primitiveCamera.setPosition(position.x, position.y, position.z);
       // Add the primitive camera to the scene
       SceneManager.add(primitiveCamera);
+      // 暂时用第一个相机作为 display 相机
+      if(index === 0 && !SceneManager._displayCamera) {
+        SceneManager._displayCamera = primitiveCamera;
+      }
     })
   }
 
@@ -165,9 +171,10 @@ export default class SceneManager {
       return;
     }
     SceneManager._children.push(object);
+    SceneManager.updateConfig();
+
     const { node } = object;
     SceneManager.scene.add(node);
-    SceneManager.updateConfig();
     SceneManager.cache.add(object.uuid, node, object.type as SceneObjectType);
     cacheTreeNodes.push({
       key: object.uuid,
@@ -185,17 +192,39 @@ export default class SceneManager {
     // TODO 待完善
     // const config = [];
     const childInfos: any[] = [];
+    const cameraInfos: any[] = [];
     SceneManager._children.forEach((child) => {
       // const { children } = child;
       // config.push(child.info);
-      childInfos.push(child.info);
-      // console.log('child.info', child.info)
+      switch(child.type) {
+        case SceneObjectType.Camera:
+          cameraInfos.push(child.info);
+          break;
+        case SceneObjectType.LIGHT:
+        default:
+          childInfos.push(child.info);
+      }
     });
     SceneManager.config = {
       sceneInfo: SceneManager.info,
+      cameraInfos,
       childInfos,
     };
-    // console.log(SceneManager.config)
+  }
+
+  // 切换场景类型 编辑模式/预览模式
+  static switchSceneMode(type: SceneType) {
+    if(SceneManager._sceneType === type) return;
+    SceneManager._sceneType = type;
+    if(type === SceneType.Edit) {
+      SceneManager.cameraManager.setEnabled(true);
+      SceneManager.grid?.setEnabled(true);
+      SceneManager._displayCamera?.setCameraHelper(true);
+    } else {
+      SceneManager.cameraManager.setEnabled(false);
+      SceneManager.grid?.setEnabled(false);
+      SceneManager._displayCamera?.setCameraHelper(false);
+    }
   }
 
   static remove(object: BaseObject) {
@@ -213,11 +242,22 @@ export default class SceneManager {
 
   static update() {
     if (!SceneManager.inited) return;
-    if (SceneManager.cameraManager.outlinePassEnable) {
-      SceneManager.cameraManager.update();
+    if(SceneManager._sceneType === SceneType.Edit) {
+      if (SceneManager.cameraManager.outlinePassEnable) {
+        // console.log('&&&')
+        SceneManager.cameraManager.update();
+      } else {
+        // const currentCamera = SceneManager._sceneType
+        SceneManager.renderer.update(SceneManager.cameraManager.instance);
+      }
     } else {
-      SceneManager.renderer.update(SceneManager.cameraManager.instance);
+      if(SceneManager._displayCamera) {
+        SceneManager.renderer.update(SceneManager._displayCamera.node);
+      } else {
+        SceneManager.renderer.update(SceneManager.cameraManager.instance);
+      }
     }
+    
     SceneManager._modelAnimationMixer.forEach((mixer) => {
       mixer.update(0.01);
     });

@@ -5,12 +5,13 @@ import type { TreeDataNode, TreeProps } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { Key } from 'antd/es/table/interface';
 import { EventSystem } from '@/utils/event/EventSystem';
-import { DisplayEvents, SceneEvents, SystemEvents } from '@/common/constant';
+import { DisplayEvents, SceneEvents, SceneType, SystemEvents } from '@/common/constant';
 import { SkyCard } from './skyCard';
 import { titleRender, TreeMenuEvent } from './treeMenu';
 import { InputTextModal } from '@/components/modal';
 import { filterNode, updateNodeName } from './utils';
 import { SceneSwitch } from '@/components/sceneSwitch';
+import SceneManager from '@/edit/sceneManager/sceneManager';
 export interface IDisplayProps {
     treeData: TreeDataNode[];
     onTreeDropUpdate: (treeData: TreeDataNode[]) => void;
@@ -135,7 +136,11 @@ const Display = (props: IDisplayProps) => {
     }, [gData, editNode])
 
     return <div className="display_content">
-        <SceneSwitch />
+        <SceneSwitch defaultSceneType={SceneType.Edit} onSwitch={(type: SceneType) => {
+          console.log('SceneSwitch', type);
+          SceneManager.switchSceneMode(type);
+          // EventSystem.broadcast(SceneEvents.ChangeSceneType, type);
+        }} />
         <SkyCard />
         <ConfigProvider
             theme={{

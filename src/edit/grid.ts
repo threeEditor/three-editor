@@ -129,11 +129,7 @@ export default class Grid {
       .applyMatrix4(this.gridInstance.matrixWorld);
   }
 
-  toggleVisible() {
-    if (Grid.gridVisible === true) {
-      this.gridInstance.visible = false;
-    } else if (Grid.gridVisible === false) {
-      this.gridInstance.visible = true;
-    }
+  setEnabled(enable: boolean) {
+    this.gridInstance.visible = enable;
   }
 }

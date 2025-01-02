@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import Config from "./utils/config";
 import SceneManager from "./sceneManager/sceneManager";
+import { Camera } from "three";
 export default class Renderer {
   public instance!: THREE.WebGLRenderer;
   private scene: THREE.Scene | null = null;
@@ -40,7 +41,7 @@ export default class Renderer {
     this.instance?.setPixelRatio(this.config!.pixelRatio!);
   }
 
-  update(camera: THREE.Camera) {
+  update(camera: Camera) {
     if(!this.instance || !this.scene) return;    
     this.instance.render(this.scene, camera);
   }

@@ -43,6 +43,7 @@ export interface IScene {
 }
 
 export interface ICamera {
+    isMain?: boolean;
     name?: string;
     position?: {
         x: number;
