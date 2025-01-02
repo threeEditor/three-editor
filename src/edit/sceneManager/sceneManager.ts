@@ -51,7 +51,7 @@ export default class SceneManager {
     };
   }
 
-  static init(options: ISceneManagerProps) {
+  static async init(options: ISceneManagerProps) {
     const { sizes, config, wrap } = options;
     SceneManager.config = config;
     SceneManager.wrap = wrap;
@@ -69,7 +69,9 @@ export default class SceneManager {
     SceneManager.cameraManager.setPosition(0, 10, 30);
 
     // 初始化资源
-    SceneManager.resources = new Resources(assets);
+    SceneManager.resources = new Resources();
+    // 加载资源
+    SceneManager.resources.loadAssets(assets);
 
     // 初始化gizmo
     SceneManager.GizmoManager = new GizmoManager();

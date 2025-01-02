@@ -9,16 +9,13 @@ class Resources extends EventEmitter {
   private loaded: number;
   public progress: number;
   public items: { [key: string]: any };
-  constructor(assets: Asset[]) {
+  constructor() {
     super();
     this.loader = SceneManager.loader;
     this.loaded = 0;
     this.toLoad = 0;
     this.progress = 0;
     this.items = {};
-
-    // 加载资源
-    this.loadAssets(assets);
   }
 
   loadAssets(assets: Asset[]) {

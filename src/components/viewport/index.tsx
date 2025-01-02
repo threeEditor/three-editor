@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import './index.less';
 import EditManager from '../../edit/core';
 import SceneManager from '@/edit/sceneManager/sceneManager';

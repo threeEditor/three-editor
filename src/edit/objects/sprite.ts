@@ -27,6 +27,7 @@ export class Sprite extends BaseObject {
 
         const material = new SpriteMaterial({
             ...params,
+            depthTest: false,
         });
         this.node = new ThreeSprite(material);        
         this.node.name = name;
@@ -40,6 +41,7 @@ export class Sprite extends BaseObject {
                 opacity: 0,
                 transparent: true,
                 depthWrite: false,
+                depthTest: false,
             }))
         }
         const scale = 1.02;
