@@ -8,6 +8,7 @@ export class Selector extends EventEmitter {
     private selectRaycaster = new Raycaster();
     private selectedObject: Object3D | null = null;
     private selectedSprite: Sprite | null = null;
+    private _enabled: boolean = true;
 
     // 触发一个 tree component 的选中节点事件
     emitTreeSelect(uuid?: string) {
@@ -98,51 +99,56 @@ export class Selector extends EventEmitter {
     }
 
     onSelect = (event: MouseEvent) => {
-        if(SceneManager.GizmoManager.draggedDelay){
-          return;
+      if(!this._enabled) return;
+      if(SceneManager.GizmoManager.draggedDelay){
+        return;
+      }
+      const {cameraManager, cache } = SceneManager;
+      this.updateSelectPosition(event);
+      this.selectRaycaster.setFromCamera(this.selectPosition, cameraManager.instance);
+      const selectList: Object3D[] = [];
+      SceneManager.cache.selectList.forEach(node => {
+        if(node.type === 'Sprite') {
+          selectList.push(node.userData.outline);
+        } else {
+          selectList.push(node);
         }
-        const {cameraManager, cache } = SceneManager;
-        this.updateSelectPosition(event);
-        this.selectRaycaster.setFromCamera(this.selectPosition, cameraManager.instance);
-        const selectList: Object3D[] = [];
-        SceneManager.cache.selectList.forEach(node => {
-          if(node.type === 'Sprite') {
-            selectList.push(node.userData.outline);
-          } else {
-            selectList.push(node);
-          }
-        })
+      })
 
-        // Object3D
-        const intersects = this.selectRaycaster.intersectObjects(selectList);
+      // Object3D
+      const intersects = this.selectRaycaster.intersectObjects(selectList);
 
-        const intersectedObject = intersects[0]?.object;        
-        if (intersectedObject) {
-          if(intersectedObject.userData.type === 'outline') {
-            this.selectSprite(intersectedObject.userData.connectObject as Sprite);
-            return;
-          }
-
-          if(cache.include(intersectedObject.uuid)) {
-            // 选中的是场景中的物体
-            this.select(intersectedObject);
-          } else {
-            // 1. 选中的是模型的子物体
-            this.select(cache.getIncludeParent(intersectedObject));
-          }
+      const intersectedObject = intersects[0]?.object;        
+      if (intersectedObject) {
+        if(intersectedObject.userData.type === 'outline') {
+          this.selectSprite(intersectedObject.userData.connectObject as Sprite);
           return;
         }
 
-        this.unSelect();
-        this.unSelectSprite();
-      };
+        if(cache.include(intersectedObject.uuid)) {
+          // 选中的是场景中的物体
+          this.select(intersectedObject);
+        } else {
+          // 1. 选中的是模型的子物体
+          this.select(cache.getIncludeParent(intersectedObject));
+        }
+        return;
+      }
 
-      private updateSelectPosition(event: MouseEvent) {
-        const { sizes, wrap } = SceneManager;
-        const { top, left } = wrap.getBoundingClientRect();
-        this.selectPosition.set(
-            ((event.clientX - left) / sizes.width) * 2 - 1,
-            -((event.clientY - top) / sizes.height) * 2 + 1
-        )
+      this.unSelect();
+      this.unSelectSprite();
+    };
+
+    setEnabled(enable: boolean) {
+      this._enabled = enable;
+    }
+
+    private updateSelectPosition(event: MouseEvent) {
+      const { sizes, wrap } = SceneManager;
+      const { top, left } = wrap.getBoundingClientRect();
+      this.selectPosition.set(
+          ((event.clientX - left) / sizes.width) * 2 - 1,
+          -((event.clientY - top) / sizes.height) * 2 + 1
+      )
     }
 }

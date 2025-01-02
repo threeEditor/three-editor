@@ -33,7 +33,7 @@ export default class Grid {
       worldCamProjPosition: new Uniform(new Vector3()),
       worldPlanePosition: new Uniform(new Vector3()),
     };
-
+    this.plane = new Plane();
     const material = new ShaderMaterial({
       uniforms,
       vertexShader: `
@@ -103,13 +103,14 @@ export default class Grid {
       `,
       side: DoubleSide,
       transparent: true,
-      depthWrite: false,
+      // depthWrite: false,
+      // depthTest: false,
+      // depthFunc: NotEqualDepth,
     });
-
-    this.plane = new Plane();
-
     this.gridInstance = new Mesh(geometry, material);
+    this.gridInstance.renderOrder = -999;
     this.gridInstance.frustumCulled = false;
+    this.gridInstance.position.y = 0.01;
     SceneManager.scene.add(this.gridInstance);
   }
 
@@ -127,6 +128,10 @@ export default class Grid {
     worldPlanePosition.value
       .set(0, 0, 0)
       .applyMatrix4(this.gridInstance.matrixWorld);
+  }
+
+  setOffset(offset: number) {
+    this.gridInstance.position.y = offset;
   }
 
   setEnabled(enable: boolean) {

@@ -1,10 +1,11 @@
-import { BoxGeometry, Material, Mesh } from "three";
+import { BoxGeometry, Material, Mesh, PlaneGeometry } from "three";
 import MaterialManager from "../materialManager";
 import { BaseObject } from "./baseObject";
 import { SceneObjectType } from "../sceneManager/interface";
 
 export enum PrimitiveMeshType {
     BOX = 'BOX',
+    PLANE = 'PLANE',
 }
 
 export interface IPrimitiveMeshConfig {
@@ -29,6 +30,9 @@ export class PrimitiveMesh extends BaseObject {
             case PrimitiveMeshType.BOX:
                 this.node = this.initBox(config.name);
                 break;
+            case PrimitiveMeshType.PLANE:
+                this.node = this.initPlane(config.name);
+                break;
             default:
                 this.node = this.initBox();
         }
@@ -42,5 +46,14 @@ export class PrimitiveMesh extends BaseObject {
         box.name = name;
         this.node = box;
         return box;
+    }
+
+    initPlane(name = 'PrimitivePlane') {
+        const { width = this.size, height = this.size, material = MaterialManager.defaultMaterial } = this.config;
+        const geometry = new PlaneGeometry(width, height);
+        const plane = new Mesh(geometry, material);
+        plane.name = name;
+        this.node = plane;
+        return plane;
     }
 }

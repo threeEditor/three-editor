@@ -51,7 +51,7 @@ export default class SceneManager {
     };
   }
 
-  static init(options: ISceneManagerProps) {
+  static async init(options: ISceneManagerProps) {
     const { sizes, config, wrap } = options;
     SceneManager.config = config;
     SceneManager.wrap = wrap;
@@ -69,7 +69,9 @@ export default class SceneManager {
     SceneManager.cameraManager.setPosition(0, 10, 30);
 
     // 初始化资源
-    SceneManager.resources = new Resources(assets);
+    SceneManager.resources = new Resources();
+    // 加载资源
+    SceneManager.resources.loadAssets(assets);
 
     // 初始化gizmo
     SceneManager.GizmoManager = new GizmoManager();
@@ -219,10 +221,16 @@ export default class SceneManager {
     if(type === SceneType.Edit) {
       SceneManager.cameraManager.setEnabled(true);
       SceneManager.grid?.setEnabled(true);
+      SceneManager.selector.setEnabled(true);
+     
       SceneManager._displayCamera?.setCameraHelper(true);
+      
     } else {
       SceneManager.cameraManager.setEnabled(false);
       SceneManager.grid?.setEnabled(false);
+      SceneManager.selector.unSelect();
+      SceneManager.selector.unSelectSprite();
+      SceneManager.selector.setEnabled(false);
       SceneManager._displayCamera?.setCameraHelper(false);
     }
   }
@@ -267,6 +275,7 @@ export default class SceneManager {
     if (!SceneManager.inited) return;
     SceneManager.renderer.resize();
     SceneManager.cameraManager.resize();
+    SceneManager._displayCamera?.resize();
   }
 
   static destory() {
