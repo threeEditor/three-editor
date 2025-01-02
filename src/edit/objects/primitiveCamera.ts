@@ -120,4 +120,10 @@ export class PrimitiveCamera extends BaseObject {
         }
         this.node.lookAt(this.target)
     }
+
+    setCameraHelper(enabled: boolean) {
+        if(this.cameraHelper) {
+            this.cameraHelper.visible = enabled;
+        }
+    }
 }

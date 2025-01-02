@@ -3,7 +3,6 @@ import {
   Scene,
   AnimationMixer,
   Vector3,
-  Camera,
 } from 'three';
 import MaterialManager from '../materialManager';
 import Renderer from '../renderer';
@@ -44,7 +43,7 @@ export default class SceneManager {
   private static sky = new Sky();
   private static _children: BaseObject[] = [];
   private static _sceneType = SceneType.Edit;
-  private static _displayCamera: Camera | null;
+  private static _displayCamera: PrimitiveCamera | null;
 
   static get info() {
     return {
@@ -155,7 +154,7 @@ export default class SceneManager {
       SceneManager.add(primitiveCamera);
       // 暂时用第一个相机作为 display 相机
       if(index === 0 && !SceneManager._displayCamera) {
-        SceneManager._displayCamera = primitiveCamera.node;
+        SceneManager._displayCamera = primitiveCamera;
       }
     })
   }
@@ -211,7 +210,6 @@ export default class SceneManager {
       cameraInfos,
       childInfos,
     };
-    // console.log(SceneManager.config)
   }
 
   // 切换场景类型 编辑模式/预览模式
@@ -219,9 +217,13 @@ export default class SceneManager {
     if(SceneManager._sceneType === type) return;
     SceneManager._sceneType = type;
     if(type === SceneType.Edit) {
-
+      SceneManager.cameraManager.setEnabled(true);
+      SceneManager.grid?.setEnabled(true);
+      SceneManager._displayCamera?.setCameraHelper(true);
     } else {
-      // SceneManager.scene
+      SceneManager.cameraManager.setEnabled(false);
+      SceneManager.grid?.setEnabled(false);
+      SceneManager._displayCamera?.setCameraHelper(false);
     }
   }
 
@@ -249,9 +251,8 @@ export default class SceneManager {
         SceneManager.renderer.update(SceneManager.cameraManager.instance);
       }
     } else {
-      console.log('&')
       if(SceneManager._displayCamera) {
-        SceneManager.renderer.update(SceneManager._displayCamera);
+        SceneManager.renderer.update(SceneManager._displayCamera.node);
       } else {
         SceneManager.renderer.update(SceneManager.cameraManager.instance);
       }

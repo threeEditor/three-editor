@@ -1,3 +1,6 @@
+# 25/01/02 @石灰
+- feat 完善 `SceneTypeSwitch` 的场景设置和相机设置
+
 # 2024/12/31 @石灰
 - feat 增加 `Camera` 的可视化 `Sprite` 精灵
 

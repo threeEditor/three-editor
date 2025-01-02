@@ -81,6 +81,10 @@ export default class CameraManager {
     }
   }
 
+  setEnabled(enable: boolean) {
+    this.setControlEnable(enable);
+  }
+
   update() {
     this.control?.update();
     this.composer.render();
