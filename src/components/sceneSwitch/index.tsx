@@ -6,10 +6,11 @@ import { SceneType, SceneTypeDesc } from '@/common/constant';
 
 interface IProps {
   defaultSceneType?: SceneType;
+  onSwitch?: (type: SceneType) => void;
 }
 
 export const SceneSwitch = React.memo((props: IProps) => {
-  const { defaultSceneType = SceneType.Edit } = props;
+  const { defaultSceneType = SceneType.Edit, onSwitch } = props;
   const [type, setType] = useState(defaultSceneType);
   /**
    * 目前只有编辑状态和运行时两种状态
@@ -21,11 +22,13 @@ export const SceneSwitch = React.memo((props: IProps) => {
   const handlePrev = () => {
     (carouselRef.current as CarouselRef).prev();
     setType(defaultSceneType);
+    onSwitch && onSwitch(defaultSceneType);
   };
 
   const handleNext = () => {
     (carouselRef.current as CarouselRef).next();
     setType(prefSceneType);
+    onSwitch && onSwitch(prefSceneType);
   };
 
   return (

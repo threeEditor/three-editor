@@ -45,7 +45,6 @@ export class PrimitiveCamera extends BaseObject {
         const { target = new Vector3(), up = new Vector3(0, 1, 0), name, type = PrimitiveCameraType.PerspectiveCamera } = config;
         this.config = config;
         this.type = SceneObjectType.Camera;
-        // this.type = SceneObjectType.LIGHT;
         this.cameraType = type;
         this.target = target;
         this.up = up;

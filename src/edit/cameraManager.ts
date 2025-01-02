@@ -1,4 +1,4 @@
-import { Scene, PerspectiveCamera, Vector2, WebGLRenderer, Object3D } from "three";
+import { Scene, PerspectiveCamera, Vector2, WebGLRenderer, Object3D, OrthographicCamera } from "three";
 import Sizes from "./utils/sizes";
 import Config from "./utils/config";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -18,6 +18,7 @@ export default class CameraManager {
   private sizes: Sizes;
   private scene: Scene;
   private renderer: WebGLRenderer;
+  private renderPass!: RenderPass;
   private composer!: EffectComposer;
   private outlinePass!: OutlinePass;
   constructor() {
@@ -46,6 +47,7 @@ export default class CameraManager {
     const composer = new EffectComposer(renderer);
 
     const renderPass = new RenderPass(scene, camera);
+    this.renderPass = renderPass;
     composer.addPass(renderPass);
 
     const gammaCorrectionShader = new ShaderPass(GammaCorrectionShader);
