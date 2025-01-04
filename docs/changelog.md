@@ -1,5 +1,6 @@
 # 25/01/04 @石灰
 - feat 增加 `Camera` 的 `target` & `up` 属性更新
+- feat 测试运行时挂载脚本的能力
 
 # 25/01/03 @石灰
 - feat 完善 `SceneTypeSwitch` 的场景设置和相机设置

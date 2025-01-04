@@ -11,6 +11,7 @@ import { titleRender, TreeMenuEvent } from './treeMenu';
 import { InputTextModal } from '@/components/modal';
 import { filterNode, updateNodeName } from './utils';
 import { SceneSwitch } from '@/components/sceneSwitch';
+import { executeScript } from '../runtime/core';
 import SceneManager from '@/edit/sceneManager/sceneManager';
 export interface IDisplayProps {
     treeData: TreeDataNode[];
@@ -137,7 +138,9 @@ const Display = (props: IDisplayProps) => {
 
     return <div className="display_content">
         <SceneSwitch defaultSceneType={SceneType.Edit} onSwitch={(type: SceneType) => {
-          console.log('SceneSwitch', type);
+          // TODO 测试为运行时单独添加脚本
+          // executeScript();
+
           SceneManager.switchSceneMode(type);
           EventSystem.broadcast(SceneEvents.ChangeSceneType, type);
         }} />
