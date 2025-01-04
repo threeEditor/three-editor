@@ -35,5 +35,18 @@
 3. 渲染系统
 - 后处理系统
 
-4. 运行时 & 动画
-- ScriptComponent
+4. 本地文件系统 OPFS
+- 将一些编辑文件做本地存储 Chrome
+- 浏览器插件 https://chromewebstore.google.com/detail/opfs-explorer/acndjpgkpaclldomagafnognkcgjignd?pli=1
+
+### Player 运行时
+- 内置的运行时功能
+1. 可以在如相机、Entity 上挂载内置的功能，如相机跟随、相机控制器、角色控制器等，在切换到运行时自动打开
+
+- 从编辑状态切换到运行时的时候，执行运行时的脚本
+1. 读取存储在项目中的默认 ScriptComponent 脚本 or 用户自定义的，存储在 OPFS 的脚本
+2. 执行挂载，将 Entity 的 ScriptComponent 挂载到 SceneManager（或者单独的控制器） 进行统一管理（参考 ECS）
+
+- 从运行时切换回编辑状态，关闭运行时功能并卸载 ScriptComponent 脚本
+
+### 部署发布

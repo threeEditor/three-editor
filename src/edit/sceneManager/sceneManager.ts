@@ -37,10 +37,10 @@ export default class SceneManager {
   static _modelAnimationMixer: AnimationMixer[] = [];
   static GizmoManager: GizmoManager;
   static resources: Resources;
+  static sky = new Sky();
   private static materialManager: MaterialManager = new MaterialManager();
   private static inited = false;
   private static grid: Grid | null = null;
-  private static sky = new Sky();
   private static _children: BaseObject[] = [];
   private static _sceneType = SceneType.Edit;
   private static _displayCamera: PrimitiveCamera | null;
