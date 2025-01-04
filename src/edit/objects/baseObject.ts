@@ -73,6 +73,14 @@ export class BaseObject {
                 case 'rotation':
                     this.setRotation(value[0], value[1], value[2]);
                     break;
+                case 'target':
+                    // @ts-ignore PrimitiveCamera 自己实现的 target
+                    this.setTarget && this.setTarget(value[0], value[1], value[2]);
+                    break;
+                case 'up':
+                    // @ts-ignore PrimitiveCamera 自己实现的 up
+                    this.setUp && this.setUp(value[0], value[1], value[2]);
+                    break;
                 case 'scale':
                     // TODO 待优化
                     // this.setScale(value[0], value[1], value[2]);

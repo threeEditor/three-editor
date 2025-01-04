@@ -1,11 +1,11 @@
 import { ModelAniUpdate, SceneEvents } from '@/common/constant';
 import './index.less';
 import Card from "@/components/card";
-import { toFix } from "@/edit/utils/func";
 import { EventSystem } from '@/utils/event/EventSystem';
 import { Input, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { isNumber } from '@/utils/is';
+import { Vec3 } from './vec3';
 const { Option } = Select;
 
 export enum ViewType {
@@ -19,42 +19,28 @@ interface IPanelProps {
     [key: string]: any;
 }
 
-interface IV3 {
-    vec3?: any, 
-    title: string
-    onChange: (x: number, y: number, z: number) => void;
-}
-
-const Vec3 = ({ vec3, title, onChange }: IV3) =>{
-    const v1 = Number(toFix(vec3[0] || 0));
-    const v2 = Number(toFix(vec3[1] || 0));
-    const v3 = Number(toFix(vec3[2] || 0));
-    return (vec3 ?  <div className='cardItem'>
-    <span className='propertyTitle'>{title}</span>
-    <Input className='input' type="number" onChange={(v) => {
-        onChange(Number(v.target.value), v2, v3);
-    }} value={v1} />
-    <Input className='input' type="number" onChange={(v) => {
-        onChange(v1, Number(v.target.value), v3);
-    }}  value={v2} />
-    <Input className='input' type="number" onChange={(v) => {
-        onChange(v1, v2, Number(v.target.value));
-    }}  value={v3} />
-    </div> : null)
-}
-
 const PropertyPanel = (props: IPanelProps) => {
     // Transform
     const [position, setPosition] = useState([0, 0, 0]);
     const [rotation, setRotation] = useState([0, 0, 0]);
     const [scale, setScale] = useState([1, 1, 1]);
+    const [target, setTarget] = useState([0, 0, 0]);
+    const [up, setUp] = useState([0, 0, 0]);
     useEffect(() => {
         if(props.viewType !== ViewType.Node) return;
         const {position, rotation, scale} = props;
-        setPosition([position.x, position.y, position.z]);
-        setRotation([rotation.x, rotation.y, rotation.z]);
-        setScale([scale.x, scale.y, scale.z]);
+        position && setPosition([position.x, position.y, position.z]);
+        rotation && setRotation([rotation.x, rotation.y, rotation.z]);
+        scale && setScale([scale.x, scale.y, scale.z]);
     }, [props.position, props.rotation, props.scale])
+
+    // camera
+    useEffect(() => {
+        if(props.viewType !== ViewType.Node) return;
+        const {target, up} = props;
+        target && setTarget([target.x, target.y, target.z]);
+        up && setUp([up.x, up.y, up.z]);
+    }, [props.target, props.up])
 
     // Model Animation hook
     const [animation, setAnimation] = useState<string | null>(null);
@@ -64,10 +50,10 @@ const PropertyPanel = (props: IPanelProps) => {
             setAnimation(props.animations[0]);
         }
         if(isNumber(props.animationSpeed)) {
-            setAnimationSeed(props.animationSpeed)
+            setAnimationSeed(props.animationSpeed);
         }
-    }, [props.animations, props.animationSpeed]);
 
+    }, [props.animations, props.animationSpeed]);
 
     return <div className='panel properties'>
         <div className="content">
@@ -136,7 +122,7 @@ const PropertyPanel = (props: IPanelProps) => {
                             </div>
                         </Card>
                     }
-                     {
+                    {
                         props.isLight &&  <Card>
                             <div className={'title'}>Light</div>
                             <div className='cardItem'>
@@ -151,6 +137,27 @@ const PropertyPanel = (props: IPanelProps) => {
                                     console.log(e);
                                 })} />
                             </div>
+                        </Card>
+                    }
+                    {
+                        props.isCamera && <Card>
+                            <div className={'title'}>Camera</div>
+                            <Vec3 vec3={target} title={'target'} onChange={(x, y, z) => {
+                                setTarget([x, y, z]);
+                                EventSystem.broadcast(SceneEvents.PropertyTransform, {
+                                    ...props,
+                                    type: 'target',
+                                    value: [x, y, z],
+                                });
+                            }}/>
+                            <Vec3 vec3={up} title={'up'} onChange={(x, y, z) => {
+                                setUp([x, y, z]);
+                                EventSystem.broadcast(SceneEvents.PropertyTransform, {
+                                    ...props,
+                                    type: 'up',
+                                    value: [x, y, z],
+                                });
+                            }}/>
                         </Card>
                     }
                 </>

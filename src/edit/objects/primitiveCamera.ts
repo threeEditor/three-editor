@@ -30,24 +30,50 @@ export class PrimitiveCamera extends BaseObject {
         return {
             ...this._info,
             isCamera: true,
+            cameraType: this.cameraType,
+            target: { 
+                x: this.target.x,
+                y: this.target.y, 
+                z: this.target.z,
+            },
+            up: { 
+                x: this.up.x,
+                y: this.up.y, 
+                z: this.up.z,
+            },
+            far: this.far,
         };
     }
     declare public node: Camera;
     private config: IPrimitiveCameraConfig;
     public target: Vector3;
     public up: Vector3;
+    public far: number;
+    public near: number;
+    public fov: number;
     public cameraType: PrimitiveCameraType;
     public cameraHelper!: CameraHelper;
     public cameraSprite!: ThreeSprite;
    
     constructor(config: IPrimitiveCameraConfig) {
         super();
-        const { target = new Vector3(), up = new Vector3(0, 1, 0), name, type = PrimitiveCameraType.PerspectiveCamera } = config;
+        const { 
+            name, 
+            target = new Vector3(), 
+            up = new Vector3(0, 1, 0), 
+            type = PrimitiveCameraType.PerspectiveCamera,
+            fov = 45,
+            far = 500,
+            near = 0.1,
+         } = config;
         this.config = config;
         this.type = SceneObjectType.Camera;
         this.cameraType = type;
         this.target = target;
         this.up = up;
+        this.fov = fov;
+        this.far = far;
+        this.near = near;
         if(type === PrimitiveCameraType.PerspectiveCamera) {
             this.node = this.initPerspectiveCamera(name);
         } else {
@@ -57,8 +83,8 @@ export class PrimitiveCamera extends BaseObject {
         this.connectObject();
     }
     initPerspectiveCamera(name = 'perspectiveCamera') {
-        const { target, up }  = this;
-        const node = new PerspectiveCamera(45, SceneManager.sizes.width / SceneManager.sizes.height, 0.1, 500);
+        const { target, up, fov, far, near }  = this;
+        const node = new PerspectiveCamera(fov, SceneManager.sizes.width / SceneManager.sizes.height, near, far);
         node.lookAt(target);
         node.up.set(up.x, up.y, up.z);
         node.name = name;
@@ -70,8 +96,8 @@ export class PrimitiveCamera extends BaseObject {
     }
 
     initOrthographicCamera(name = 'orthographicCamera') {
-        const { target, up }  = this;
-        const node = new OrthographicCamera(-10, 10, -10, 10, 0.1, 500);
+        const { target, up, far, near }  = this;
+        const node = new OrthographicCamera(-10, 10, -10, 10, near, far);
         node.lookAt(target);
         node.up.set(up.x, up.y, up.z);
         node.name = name;
@@ -125,6 +151,22 @@ export class PrimitiveCamera extends BaseObject {
         if(this.cameraHelper) {
             this.cameraHelper.visible = enabled;
         }
+    }
+
+    setTarget(x?: number, y?: number, z?: number) {
+        if(!this.node) return;
+        if(x) this.target.x = x;
+        if(y) this.target.y = y;
+        if(z) this.target.z = z;
+        this.node.lookAt(this.target);
+    }
+
+    setUp(x?: number, y?: number, z?: number) {
+        if(!this.node) return;
+        if(x) this.up.x = x;
+        if(y) this.up.y = y;
+        if(z) this.up.z = z;
+        this.node.up.copy(this.up);
     }
 
     resize() {
