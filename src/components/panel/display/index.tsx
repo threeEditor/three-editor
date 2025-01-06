@@ -11,8 +11,9 @@ import { titleRender, TreeMenuEvent } from './treeMenu';
 import { InputTextModal } from '@/components/modal';
 import { filterNode, updateNodeName } from './utils';
 import { SceneSwitch } from '@/components/sceneSwitch';
-import { executeScript } from '../runtime/core';
+// import { executeScript } from '../runtime/core';
 import SceneManager from '@/edit/sceneManager/sceneManager';
+import { IconCube } from '@/common/resource';
 export interface IDisplayProps {
     treeData: TreeDataNode[];
     onTreeDropUpdate: (treeData: TreeDataNode[]) => void;
@@ -129,6 +130,7 @@ const Display = (props: IDisplayProps) => {
 
     const InputTextModalOK = useCallback((newName: string) => {
       const nextData = updateNodeName(gData, editNode.key, newName);
+      // TODO 待完善
       EventSystem.broadcast(SceneEvents.ObjectRename, newName);
       editNode = null;
       setGData(nextData);
@@ -164,7 +166,7 @@ const Display = (props: IDisplayProps) => {
             selectedKeys={selectedKeys}
             expandedKeys={expandedKeys}
             showIcon={true}
-            icon={<Icon/>}
+            icon={<Icon src={IconCube} />}
             onDrop={onDrop}
             onSelect={(e: Key[]) => {
                 setSelectedKeys(e);
