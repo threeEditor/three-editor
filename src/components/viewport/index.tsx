@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import './index.less';
 import EditManager from '../../edit/core';
 import SceneManager from '@/edit/sceneManager/sceneManager';
+import { defaultSceneConfig } from '@/sceneConfig/config';
 
 interface IViewPortProps {
   onLoad: (edit: EditManager) => void;
@@ -17,7 +18,7 @@ const ViewPort = (props: IViewPortProps) => {
   useEffect(() => {
     if (!view.current) return;
     const editManager = new EditManager(view.current);
-    editManager.setUp();
+    editManager.setUp(defaultSceneConfig);
     const resources = SceneManager.resources;
     resources.on('loaded',()=>{
       onLoad(editManager);

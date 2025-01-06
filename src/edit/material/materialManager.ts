@@ -1,10 +1,8 @@
-import { Material, MeshPhongMaterial } from "three";
+import { Material } from "three";
+import { MaterialType } from "./interface";
+import { MaterialFactory } from "./materialFactory";
 
-export enum MaterialType {
-    Default = 'DefaultPhong',
-    Phong = 'Phong',
-    Blinn = 'Blinn',
-}
+
 export default class MaterialManager {
     private static map = new Map<string, Material>();
 
@@ -12,7 +10,7 @@ export default class MaterialManager {
         if(MaterialManager.map.has(MaterialType.Default)) {
             return MaterialManager.map.get(MaterialType.Default) as Material;
         } else {
-            const material = new MeshPhongMaterial();
+            const material = MaterialFactory.initMaterial({ type: MaterialType.Default });
             MaterialManager.map.set(MaterialType.Default, material);
             return material;
         }

@@ -1,10 +1,10 @@
-import { ICamera, ISceneConfig } from '@/sceneConfig/config';
+import { defaultPosition, defaultRotation, ICamera, ISceneConfig } from '@/sceneConfig/config';
 import {
   Scene,
   AnimationMixer,
   Vector3,
 } from 'three';
-import MaterialManager from '../materialManager';
+import MaterialManager from '../material/materialManager';
 import Renderer from '../renderer';
 import CameraManager from '../cameraManager';
 import Sizes from '../utils/sizes';
@@ -23,6 +23,8 @@ import { PrimitiveLight, PrimitiveLightType } from '../objects/primitiveLight';
 import assets from '@/assets/assets';
 import Resources from '../resources';
 import { PrimitiveCamera, PrimitiveCameraType } from '../objects/primitiveCamera';
+import { PrimitiveMesh } from '../objects';
+import { MaterialFactory } from '../material/materialFactory';
 
 export default class SceneManager {
   static scene: Scene = new Scene();
@@ -109,9 +111,7 @@ export default class SceneManager {
 
   static loadScene(sceneConfig: ISceneConfig) {
     // TODO 后续需要走解析 sceneConfig， 目前没有默认设置
-    console.log('sceneConfig12', sceneConfig);
-
-    const directLight = new PrimitiveLight({
+     const directLight = new PrimitiveLight({
       color: '#fff',
       intensity: 1,
       type: PrimitiveLightType.DirectLight,
@@ -130,6 +130,8 @@ export default class SceneManager {
 
     // 加载相机
     sceneConfig.cameras && SceneManager.loadCameras(sceneConfig.cameras);
+
+    sceneConfig.objects && SceneManager.loadObjects(sceneConfig.objects);
  
     EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
   }
@@ -158,6 +160,21 @@ export default class SceneManager {
       if(index === 0 && !SceneManager._displayCamera) {
         SceneManager._displayCamera = primitiveCamera;
       }
+    })
+  }
+
+  static loadObjects(objects: any[]) {
+    objects.forEach((object) => {
+      const { name, type, position = defaultPosition, rotation = defaultRotation, size, material, } = object;
+      const baseObject = new PrimitiveMesh({
+        name,
+        type,
+        size,
+        material: material ? MaterialFactory.initMaterial(material) : undefined,
+      });
+      baseObject.setRotation(rotation.x, rotation.y, rotation.z);
+      baseObject.setPosition(position.x, position.y, position.z);
+      SceneManager.add(baseObject);
     })
   }
 
