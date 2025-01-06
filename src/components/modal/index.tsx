@@ -8,6 +8,7 @@ export interface IInputTextModalParams {
     handleCancel: () => void;
     value: string;
 }
+
 export const InputTextModal = React.memo(({ isModalOpen, handleOk, handleCancel, value }: IInputTextModalParams) => {    
     const [ inputV, setInputV ] = useState(value);
     useEffect(() => {

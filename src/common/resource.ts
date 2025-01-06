@@ -1,0 +1,1 @@
+export const IconCube = 'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/cube.png';

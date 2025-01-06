@@ -1,4 +1,9 @@
 import './index.less';
-export const Icon = () => {
-    return <img className="icon" src='https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/cube.png'></img>
+
+interface IIconProps {
+    src: string;
+}
+
+export const Icon = (iconProps: IIconProps) => {
+    return <img className="icon" src={iconProps.src}></img>
 }
