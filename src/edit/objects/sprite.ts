@@ -2,7 +2,7 @@ import { Sprite as ThreeSprite, SpriteMaterial, Texture, Object3D, MeshBasicMate
 import { BaseObject } from './baseObject';
 import { SceneObjectType } from '../sceneManager/interface';
 import SceneManager from '../sceneManager/sceneManager';
-import MaterialManager from '../materialManager';
+import MaterialManager from '../material/materialManager';
 export interface ISpriteConfig {
     color?: string;
     opacity?: number,

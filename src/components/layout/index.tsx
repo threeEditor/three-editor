@@ -2,13 +2,7 @@ import './index.less';
 import { useEffect, useState } from 'react';
 import ViewPort from '../viewport';
 import SceneManager from '@/edit/sceneManager/sceneManager';
-import {
-  GLTFObject,
-  PrimitiveMesh,
-  PrimitiveMeshType,
-  Sprite,
-} from '@/edit/objects';
-import { MeshPhongMaterial } from 'three';
+import { GLTFObject, Sprite } from '@/edit/objects';
 import PropertyPanel, { ViewType } from '../panel/property';
 import { BaseObject } from '@/edit/objects/baseObject';
 import Display from '../panel/display';
@@ -39,20 +33,7 @@ const Layout = () => {
     });
     gltf.setScale(5);
 
-    const box = new PrimitiveMesh({
-      type: PrimitiveMeshType.BOX,
-      size: 5,
-    });
-    box.setPosition(-2.5, 2.5, -5);
-    const ground = new PrimitiveMesh({
-      name: 'ground',
-      type: PrimitiveMeshType.PLANE,
-      size: 100,
-      material: new MeshPhongMaterial({
-        color: 0xddaa00,
-      }),
-    })
-    ground.setRotation(-Math.PI / 2, 0, 0);
+
     const texture = SceneManager.resources.items['https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/unnamed.png'];
     const sprite = new Sprite({
       texture,
@@ -62,8 +43,6 @@ const Layout = () => {
     sprite.setScale(4);
     // name: 'man',
     SceneManager.add(gltf);
-    SceneManager.add(box);
-    SceneManager.add(ground);
     SceneManager.add(sprite);
   };
 

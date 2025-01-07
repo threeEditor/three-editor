@@ -146,7 +146,9 @@ const Display = (props: IDisplayProps) => {
           SceneManager.switchSceneMode(type);
           EventSystem.broadcast(SceneEvents.ChangeSceneType, type);
         }} />
+
         <SkyCard />
+
         <ConfigProvider
             theme={{
                 components: {
@@ -183,10 +185,11 @@ const Display = (props: IDisplayProps) => {
           handleCancel={InputTextModalCancel}
           handleOk={InputTextModalOK}
           />
-        <Button onClick={() => {
+
+        <Button className='ace_json_btn' onClick={() => {
           setJsonEditVis(!jsonEditVis)
           EventSystem.broadcast(jsonEditVis ? SystemEvents.HideAceEdit:SystemEvents.ViewAceEdit);
-        }}>{jsonEditVis ? 'Hide Scene Config' : 'View Scene Config'}</Button>
+        }}>{jsonEditVis ? '隐藏场景 json' : '场景 json'}</Button>
     </div>
 }
 export default Display;

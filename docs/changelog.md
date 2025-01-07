@@ -1,3 +1,7 @@
+# 25/01/07 @石灰
+- feat 增加场景对 `SceneObject.MESH` 类型的加载（对应 `Material` 的设置）
+- fix 修复 `Scene Sky` 背景的切换
+
 # 25/01/04 @石灰
 - feat 增加 `Camera` 的 `target` & `up` 属性更新
 - feat 测试运行时挂载脚本的能力

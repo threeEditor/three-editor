@@ -1,7 +1,22 @@
+import { PrimitiveMeshType } from "@/edit/objects";
+
+
+export const defaultPosition = {
+    x: 0,
+    y: 0,
+    z: 0,
+}
+
+export const defaultRotation = {
+    x: 0,
+    y: 0,
+    z: 0,
+}
+
 // https://www.yuque.com/yiqianyao/vcv10s/uahoo3iq1trz4zyn
 export const defaultSceneConfig = {
     name: 'scene1',
-    cameras: [
+    cameras: [ // SceneObjectType.CAMERA
         {
             name: 'MainCamera',
             position: {
@@ -21,9 +36,33 @@ export const defaultSceneConfig = {
             }
         }
     ],
-    lights: [],
-    helpers: [],
-    objects: [],
+    lights: [], // SceneObjectType.LIGHT
+    helpers: [], // SceneObjectType.HELPER
+    objects: [ // SceneObjectType.MESH
+        {
+            name: 'GrayBox',
+            type: PrimitiveMeshType.BOX,
+            position: {
+                x: -2.5, 
+                y: 2.5,
+                z: -5,
+            },
+            size: 5,
+        },
+        {
+            name: 'Ground',
+            type: PrimitiveMeshType.PLANE,
+            rotation: {
+                x: -Math.PI / 2,
+                y: 0,
+                z: 0,
+            },
+            size: 100,
+            material: {
+                color: 0xddaa00,
+            }
+        }
+    ],
 }
 
 export interface ISceneConfig {
@@ -42,8 +81,9 @@ export interface IScene {
     objects: IObject[];
 }
 
-export interface ICamera {
-    isMain?: boolean;
+export interface IMaterial {}
+
+export interface IBaseObject {
     name?: string;
     position?: {
         x: number;
@@ -62,12 +102,18 @@ export interface ICamera {
     };
 }
 
-export interface ILight {
-    name?: string;
+export interface ICamera extends IBaseObject{
+    isMain?: boolean;
+    
 }
-export interface IHelper {
-    name?: string;
+
+export interface IObject extends IBaseObject {
+    size?: number;
+    type?: PrimitiveMeshType;
+    material?: IMaterial;
 }
-export interface IObject {
-    name?: string;
+
+export interface ILight extends IBaseObject {
+}
+export interface IHelper extends IBaseObject {
 }

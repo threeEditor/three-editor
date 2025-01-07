@@ -37,7 +37,7 @@ export const JsonViewer = () => {
     };   
     return <div className="ace_edit_container">
         <div className='ace_nav_bar'>
-            <div>Scene Config</div>
+            <div>Scene Config JSON</div>
             <CloseOutlined className='ace_nav_bar_close' onClick={() => {
                 setAceEdit(false);
                 EventSystem.broadcast(SystemEvents.HideAceEdit);

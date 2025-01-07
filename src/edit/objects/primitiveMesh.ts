@@ -1,5 +1,5 @@
 import { BoxGeometry, Material, Mesh, PlaneGeometry } from "three";
-import MaterialManager from "../materialManager";
+import MaterialManager from "../material/materialManager";
 import { BaseObject } from "./baseObject";
 import { SceneObjectType } from "../sceneManager/interface";
 
