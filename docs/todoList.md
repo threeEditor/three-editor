@@ -1,9 +1,11 @@
+- `Scene` 初始化的加载
+1. `Storage` 获取本地数据
+2. 天空的加载
 
 - 运行时脚本挂载
 1. `SceneManager` 统一管理每个 `Entity` 的 `Script`
 
 - `Sprite outline` 效果完善
-
 - `SceneObject` 各种类型的场景加载
 - `Cube Map` 背景天空的加载设置
 
