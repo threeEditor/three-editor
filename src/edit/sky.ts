@@ -3,6 +3,7 @@ import SceneManager from "./sceneManager/sceneManager"
 import { EventSystem } from "@/utils/event/EventSystem";
 import { SceneSkyModeUpdate } from "@/common/constant";
 import { SkyMode } from "@/components/panel/display/skyCard";
+import { defaultCubeMap } from "@/common/resource";
 
 // TODO 待完善
 
@@ -17,15 +18,14 @@ export class Sky {
     }
     
     bindEvents() {
-        EventSystem.subscribe(SceneSkyModeUpdate, (mode: SkyMode) => {
-            if(this.currentMode === mode) return;
+        EventSystem.subscribe(SceneSkyModeUpdate, ({ mode, params }: {mode: SkyMode, params: string | string[]}) => {
             this.currentMode = mode;
             switch(mode) {
                 case SkyMode.Pure:
-                    this.setPure();
+                    this.setPure(params as string);
                     break;
                 case SkyMode.CubeMap:
-                    this.setCubeMap();
+                    this.setCubeMap(params as string[]);
                     break;
                 default:
                     this.setPure();
@@ -40,26 +40,18 @@ export class Sky {
             this.pureColor = new Color();
             this.pureColorString = color;
             this.pureColor.setStyle(color);
-            SceneManager.scene.background = this.pureColor;
         } else {
             this.pureColorString = color;
             this.pureColor.setStyle(color);
         }
-      
+        SceneManager.scene.background = this.pureColor;
     }
     
-    setCubeMap() {
+    setCubeMap(textures = defaultCubeMap) {
         if(!SceneManager.scene) return;
         this.currentMode = SkyMode.CubeMap;
         const cubeTextureLoader = new CubeTextureLoader()
-        cubeTextureLoader.load([
-            'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/pos-x.jpg',
-            'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/neg-x.jpg',
-            'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/pos-y.jpg',
-            'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/neg-y.jpg',
-            'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/pos-z.jpg',
-            'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/neg-z.jpg'
-        ], (texture) => {
+        cubeTextureLoader.load(textures, (texture) => {
             SceneManager.scene.background = texture
         })
     }

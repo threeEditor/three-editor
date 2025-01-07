@@ -1,8 +1,7 @@
-import { defaultPosition, defaultRotation, ICamera, ISceneConfig } from '@/sceneConfig/config';
+import { ISceneConfig } from '@/sceneConfig/config';
 import {
   Scene,
   AnimationMixer,
-  Vector3,
 } from 'three';
 import MaterialManager from '../material/materialManager';
 import Renderer from '../renderer';
@@ -22,9 +21,8 @@ import { Sky } from '../sky';
 import { PrimitiveLight, PrimitiveLightType } from '../objects/primitiveLight';
 import assets from '@/assets/assets';
 import Resources from '../resources';
-import { PrimitiveCamera, PrimitiveCameraType } from '../objects/primitiveCamera';
-import { PrimitiveMesh } from '../objects';
-import { MaterialFactory } from '../material/materialFactory';
+import { PrimitiveCamera } from '../objects/primitiveCamera';
+import { SceneLoader } from './sceneLoader';
 
 export default class SceneManager {
   static scene: Scene = new Scene();
@@ -40,12 +38,14 @@ export default class SceneManager {
   static GizmoManager: GizmoManager;
   static resources: Resources;
   static sky = new Sky();
+  static displayCamera: PrimitiveCamera | null;
+
   private static materialManager: MaterialManager = new MaterialManager();
   private static inited = false;
   private static grid: Grid | null = null;
   private static _children: BaseObject[] = [];
   private static _sceneType = SceneType.Edit;
-  private static _displayCamera: PrimitiveCamera | null;
+  
 
   static get info() {
     return {
@@ -129,53 +129,11 @@ export default class SceneManager {
 
 
     // 加载相机
-    sceneConfig.cameras && SceneManager.loadCameras(sceneConfig.cameras);
+    sceneConfig.cameras && SceneLoader.loadCameras(sceneConfig.cameras);
 
-    sceneConfig.objects && SceneManager.loadObjects(sceneConfig.objects);
+    sceneConfig.objects && SceneLoader.loadObjects(sceneConfig.objects);
  
     EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
-  }
-
-  /**
-   * Loads cameras into the scene based on the provided camera configurations.
-   * @param cameras - An array of camera configurations to be loaded.
-   */
-  static loadCameras(cameras: ICamera[]) {
-    // Iterate over each camera configuration in the array
-    cameras?.forEach((cameraConfig, index) => {
-      // Destructure the camera configuration object to get default values if not provided
-      const { position = { x: 10, y: 10, z: 10 }, target = { x: 0, y: 0, z: 0 }, up = { x: 0, y: 1, z: 0 }, name } = cameraConfig;
-      // Create a new primitive camera with the specified type and orientation
-      const primitiveCamera = new PrimitiveCamera({
-        name,
-        type: PrimitiveCameraType.PerspectiveCamera,
-        up: new Vector3(up.x, up.y, up.z),
-        target: new Vector3(target.x, target.y, target.z),
-      })
-      // Set the position of the primitive camera
-      primitiveCamera.setPosition(position.x, position.y, position.z);
-      // Add the primitive camera to the scene
-      SceneManager.add(primitiveCamera);
-      // 暂时用第一个相机作为 display 相机
-      if(index === 0 && !SceneManager._displayCamera) {
-        SceneManager._displayCamera = primitiveCamera;
-      }
-    })
-  }
-
-  static loadObjects(objects: any[]) {
-    objects.forEach((object) => {
-      const { name, type, position = defaultPosition, rotation = defaultRotation, size, material, } = object;
-      const baseObject = new PrimitiveMesh({
-        name,
-        type,
-        size,
-        material: material ? MaterialFactory.initMaterial(material) : undefined,
-      });
-      baseObject.setRotation(rotation.x, rotation.y, rotation.z);
-      baseObject.setPosition(position.x, position.y, position.z);
-      SceneManager.add(baseObject);
-    })
   }
 
 
@@ -240,7 +198,7 @@ export default class SceneManager {
       SceneManager.grid?.setEnabled(true);
       SceneManager.selector.setEnabled(true);
      
-      SceneManager._displayCamera?.setCameraHelper(true);
+      SceneManager.displayCamera?.setCameraHelper(true);
       
     } else {
       SceneManager.cameraManager.setEnabled(false);
@@ -248,7 +206,7 @@ export default class SceneManager {
       SceneManager.selector.unSelect();
       SceneManager.selector.unSelectSprite();
       SceneManager.selector.setEnabled(false);
-      SceneManager._displayCamera?.setCameraHelper(false);
+      SceneManager.displayCamera?.setCameraHelper(false);
     }
   }
 
@@ -276,8 +234,8 @@ export default class SceneManager {
         SceneManager.renderer.update(SceneManager.cameraManager.instance);
       }
     } else {
-      if(SceneManager._displayCamera) {
-        SceneManager.renderer.update(SceneManager._displayCamera.node);
+      if(SceneManager.displayCamera) {
+        SceneManager.renderer.update(SceneManager.displayCamera.node);
       } else {
         SceneManager.renderer.update(SceneManager.cameraManager.instance);
       }
@@ -292,7 +250,7 @@ export default class SceneManager {
     if (!SceneManager.inited) return;
     SceneManager.renderer.resize();
     SceneManager.cameraManager.resize();
-    SceneManager._displayCamera?.resize();
+    SceneManager.displayCamera?.resize();
   }
 
   static destory() {
