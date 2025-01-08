@@ -18,11 +18,12 @@ import GizmoManager from '../gizmo';
 import { BaseObject } from '../objects/baseObject';
 import { DisplayEvents, SceneSelectorEvents, SceneType } from '@/common/constant';
 import { Sky } from '../sky';
-import { PrimitiveLight, PrimitiveLightType } from '../objects/primitiveLight';
 import assets from '@/assets/assets';
 import Resources from '../resources';
 import { PrimitiveCamera } from '../objects/primitiveCamera';
 import { SceneLoader } from './sceneLoader';
+import { SceneEditor } from './sceneEditor';
+import { SceneRuntime } from './sceneRuntime';
 
 export default class SceneManager {
   static scene: Scene = new Scene();
@@ -38,11 +39,10 @@ export default class SceneManager {
   static GizmoManager: GizmoManager;
   static resources: Resources;
   static sky = new Sky();
-  static displayCamera: PrimitiveCamera | null;
+  static grid: Grid | null = null;
 
   private static materialManager: MaterialManager = new MaterialManager();
   private static inited = false;
-  private static grid: Grid | null = null;
   private static _children: BaseObject[] = [];
   private static _sceneType = SceneType.Edit;
   
@@ -105,37 +105,9 @@ export default class SceneManager {
 
   static setScene(sceneConfig: ISceneConfig) {
     // 清空场景中的对象
-    SceneManager.loadScene(sceneConfig);
+    SceneLoader.loadScene(sceneConfig);
     // SceneManagerEvent.SCENELOAD
   }
-
-  static loadScene(sceneConfig: ISceneConfig) {
-    // TODO 后续需要走解析 sceneConfig， 目前没有默认设置
-     const directLight = new PrimitiveLight({
-      color: '#fff',
-      intensity: 1,
-      type: PrimitiveLightType.DirectLight,
-    });
-    directLight.setPosition(1, 1, 0);
-
-    const ambientLight = new PrimitiveLight({
-      color: '#fff',
-      intensity: 0.5,
-      type: PrimitiveLightType.AmbientLight,
-    });
-
-    SceneManager.add(directLight);
-    SceneManager.add(ambientLight);
-
-
-    // 加载相机
-    sceneConfig.cameras && SceneLoader.loadCameras(sceneConfig.cameras);
-
-    sceneConfig.objects && SceneLoader.loadObjects(sceneConfig.objects);
- 
-    EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
-  }
-
 
   // 在场景的根节点上添加
   static add(object: BaseObject) {
@@ -194,19 +166,11 @@ export default class SceneManager {
     if(SceneManager._sceneType === type) return;
     SceneManager._sceneType = type;
     if(type === SceneType.Edit) {
-      SceneManager.cameraManager.setEnabled(true);
-      SceneManager.grid?.setEnabled(true);
-      SceneManager.selector.setEnabled(true);
-     
-      SceneManager.displayCamera?.setCameraHelper(true);
-      
+      SceneEditor.triggerIn();
+      SceneRuntime.triggerOff();
     } else {
-      SceneManager.cameraManager.setEnabled(false);
-      SceneManager.grid?.setEnabled(false);
-      SceneManager.selector.unSelect();
-      SceneManager.selector.unSelectSprite();
-      SceneManager.selector.setEnabled(false);
-      SceneManager.displayCamera?.setCameraHelper(false);
+      SceneEditor.triggerOff();
+      SceneRuntime.triggerIn();
     }
   }
 
@@ -226,21 +190,11 @@ export default class SceneManager {
   static update() {
     if (!SceneManager.inited) return;
     if(SceneManager._sceneType === SceneType.Edit) {
-      if (SceneManager.cameraManager.outlinePassEnable) {
-        // console.log('&&&')
-        SceneManager.cameraManager.update();
-      } else {
-        // const currentCamera = SceneManager._sceneType
-        SceneManager.renderer.update(SceneManager.cameraManager.instance);
-      }
+      SceneEditor.update();
     } else {
-      if(SceneManager.displayCamera) {
-        SceneManager.renderer.update(SceneManager.displayCamera.node);
-      } else {
-        SceneManager.renderer.update(SceneManager.cameraManager.instance);
-      }
+      SceneRuntime.update();
     }
-    
+    // model 动画 update
     SceneManager._modelAnimationMixer.forEach((mixer) => {
       mixer.update(0.01);
     });
@@ -250,7 +204,7 @@ export default class SceneManager {
     if (!SceneManager.inited) return;
     SceneManager.renderer.resize();
     SceneManager.cameraManager.resize();
-    SceneManager.displayCamera?.resize();
+    SceneRuntime.runtimeCamera?.resize();
   }
 
   static destory() {

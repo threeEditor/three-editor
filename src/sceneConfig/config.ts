@@ -83,23 +83,17 @@ export interface IScene {
 
 export interface IMaterial {}
 
+export interface IVec3 {
+    x: number;
+    y: number;
+    z: number;
+}
+
 export interface IBaseObject {
     name?: string;
-    position?: {
-        x: number;
-        y: number;
-        z: number;
-    };
-    target?: {
-        x: number;
-        y: number;
-        z: number;
-    };
-    up?: {
-        x: number;
-        y: number;
-        z: number;
-    };
+    position?: IVec3;
+    target?: IVec3;
+    up?: IVec3;
 }
 
 export interface ICamera extends IBaseObject{

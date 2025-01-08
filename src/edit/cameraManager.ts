@@ -1,4 +1,4 @@
-import { Scene, PerspectiveCamera, Vector2, WebGLRenderer, Object3D, OrthographicCamera } from "three";
+import { Scene, PerspectiveCamera, Vector2, WebGLRenderer, Object3D } from "three";
 import Sizes from "./utils/sizes";
 import Config from "./utils/config";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
