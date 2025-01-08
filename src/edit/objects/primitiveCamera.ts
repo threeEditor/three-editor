@@ -3,6 +3,7 @@ import { BaseObject } from "./baseObject";
 import SceneManager from "../sceneManager/sceneManager";
 import { LoaderResourceType } from "../loader";
 import { SceneObjectType } from "../sceneManager/interface";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 export enum PrimitiveCameraType {
     PerspectiveCamera = 'PerspectiveCamera',
@@ -23,6 +24,11 @@ export interface IPrimitiveCameraConfig {
     zoom?: number;
     fov?: number;
     aspect?: number;
+}
+
+export enum CameraControl {
+    Orbit = 'Orbit',
+    None = 'None',
 }
 
 export class PrimitiveCamera extends BaseObject {
@@ -54,6 +60,8 @@ export class PrimitiveCamera extends BaseObject {
     public cameraType: PrimitiveCameraType;
     public cameraHelper!: CameraHelper;
     public cameraSprite!: ThreeSprite;
+    public controlType = CameraControl.Orbit; // 相机默认设置为 orbit
+    public controller!: OrbitControls;
    
     constructor(config: IPrimitiveCameraConfig) {
         super();
@@ -81,6 +89,16 @@ export class PrimitiveCamera extends BaseObject {
         }
         this.initCameraSprite();
         this.connectObject();
+    }
+
+    initController() {
+        switch(this.controlType) {
+            case CameraControl.Orbit:
+                this.controller = new OrbitControls(this.node, SceneManager.wrap);
+                return this.controller;
+            default:
+                return null;
+        }
     }
     initPerspectiveCamera(name = 'perspectiveCamera') {
         const { target, up, fov, far, near }  = this;

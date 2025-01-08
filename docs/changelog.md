@@ -1,3 +1,6 @@
+# 25/01/08 @石灰
+- feat 支持 `Runtime` 运行时挂载 `OrbitControls` 相机控制器
+
 # 25/01/07 @石灰
 - feat 增加场景对 `SceneObject.MESH` 类型的加载（对应 `Material` 的设置）
 - fix 修复 `Scene Sky` 背景的切换
