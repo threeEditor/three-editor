@@ -37,7 +37,7 @@ const PropertyPanel = (props: IPanelProps) => {
     // camera
     useEffect(() => {
         if(props.viewType !== ViewType.Node) return;
-        const {target, up} = props;
+        const { target, up } = props;
         target && setTarget([target.x, target.y, target.z]);
         up && setUp([up.x, up.y, up.z]);
     }, [props.target, props.up])

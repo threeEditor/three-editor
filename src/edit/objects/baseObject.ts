@@ -3,6 +3,7 @@ import { SceneObjectType } from "../sceneManager/interface";
 import { EventSystem } from "@/utils/event/EventSystem";
 import { SceneEvents } from "@/common/constant";
 import SceneManager from "../sceneManager/sceneManager";
+import { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
 export class BaseObject {
     public parent: BaseObject | null = null;
     public children: BaseObject[] = [];
@@ -133,4 +134,6 @@ export class BaseObject {
             this.outline?.scale.set(x, x, x);
         }
     }
+    gizmoUpdateEnd(): void {};
+    gizmoUpdate(mode: TransformControlsMode): void {};
 }

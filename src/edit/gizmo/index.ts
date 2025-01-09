@@ -72,12 +72,24 @@ class GizmoManager extends EventEmitter {
       this.emit(SceneEvents.GizmoTransform, this.selectedObject);
     })
     
+    this.controls.addEventListener('mouseUp', () => {
+      // console.log('controls mouse up');
+      if (!this.selectedObject) return;
+      this.selectedObject.gizmoUpdateEnd();
+    })
     this.controls.addEventListener('objectChange', () => {
       if (!this.selectedObject) return;
-      if (this.selectedObject.type == SceneObjectType.SPRITE) {
-        this.selectedObject?.outline?.userData?.update();
+      // 对场景对象有一些特殊处理
+      switch(this.selectedObject.type)  {
+        case SceneObjectType.SPRITE:
+          this.selectedObject?.outline?.userData?.update();
+          break;
+        case SceneObjectType.Camera:
+          this.selectedObject.gizmoUpdate(this.mode);
+          break;
+        default:
       }
-      console.log('objectChange')
+      // console.log('objectChange');
       throttleEmit();
     });
   }

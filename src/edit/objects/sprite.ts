@@ -53,6 +53,7 @@ export class Sprite extends BaseObject {
         }
         outline.userData.type = 'outline';
         outline.userData.connectObject = this.node;
+        // Gizmo 更新的同步
         outline.userData.update = ()=>{
             outline.position.copy(this.node.position);
             outline.rotation.copy(this.node.rotation);
