@@ -4,6 +4,8 @@ import SceneManager from "../sceneManager/sceneManager";
 import { LoaderResourceType } from "../loader";
 import { SceneObjectType } from "../sceneManager/interface";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
+import { IVec3 } from "@/sceneConfig/config";
 
 export enum PrimitiveCameraType {
     PerspectiveCamera = 'PerspectiveCamera',
@@ -62,6 +64,10 @@ export class PrimitiveCamera extends BaseObject {
     public cameraSprite!: ThreeSprite;
     public controlType = CameraControl.Orbit; // 相机默认设置为 orbit
     public controller!: OrbitControls;
+
+    private _originTarget: IVec3 | null = null;
+    private _originPosition = new Vector3();
+    private _translateOffset = new Vector3();
    
     constructor(config: IPrimitiveCameraConfig) {
         super();
@@ -96,6 +102,7 @@ export class PrimitiveCamera extends BaseObject {
             case CameraControl.Orbit:
                 this.controller = new OrbitControls(this.node, SceneManager.wrap);
                 return this.controller;
+            case CameraControl.None:
             default:
                 return null;
         }
@@ -163,6 +170,7 @@ export class PrimitiveCamera extends BaseObject {
             z !== undefined && this.outline.position.setZ(z);
         }
         this.node.lookAt(this.target)
+        this._originPosition.copy(this.node.position);
     }
 
     setCameraHelper(enabled: boolean) {
@@ -185,6 +193,33 @@ export class PrimitiveCamera extends BaseObject {
         if(y) this.up.y = y;
         if(z) this.up.z = z;
         this.node.up.copy(this.up);
+    }
+
+    gizmoUpdate(mode: TransformControlsMode) {
+        // 需要同步更新 camera 的 target & up
+        // console.log('camera gizmoUpdate', this.target);
+        if(!this._originTarget) this._originTarget = {
+            x: this.target.x,
+            y: this.target.y,
+            z: this.target.z,
+        }
+        switch(mode) {
+            case 'translate':
+                const { x: nx, y: ny, z: nz } = this.node.position;
+                const { x: ox, y: oy, z: oz} = this._originPosition;
+                const { x: ot_x, y: ot_y, z: ot_z } = this._originTarget;
+                this.setTarget(ot_x + nx - ox, ot_y + ny - oy, ot_z + nz - oz)
+                break;
+            case 'rotate':
+                // TODO rotate 待完善补全
+                // this.setCameraHelper(false);
+                break;
+        }
+    }
+
+    gizmoUpdateEnd(): void {
+        this._originPosition.copy(this.node.position);
+        this._originTarget = null;
     }
 
     resize() {

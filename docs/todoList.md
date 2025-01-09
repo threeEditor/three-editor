@@ -1,3 +1,8 @@
+- `three.proton` 例子模块的引入
+1. 使用参考：https://juejin.cn/post/7063282795174428679
+    https://drawcall.github.io/three.proton/
+    https://three-nebula.org/
+
 - `Scene` 初始化的加载
 1. `Storage` 获取本地数据
 2.  `Cube Map` 背景天空的加载设置
@@ -5,7 +10,7 @@
 - `Edit` 编辑运行时
 1. `Sprite outline` 效果完善
 2. `SceneObject` 各种类型的场景加载
-3. 在移动相机位置的同时，修改 `target` 的位置
+3. [30%]在移动相机位置的同时，修改 `target` 的位置
 4. 增加相机的 `target` & `up` 属性更新 & 拖拽更新
 5. 完善 `Scene.Config` ，同步在 `ACE Editor` 中完整的展示
 

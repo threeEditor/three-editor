@@ -1,5 +1,6 @@
 # 25/01/09 @石灰
 - fix 修复 `ace editor viewer` 的同步更新
+- feat 部分完善编辑场景下 `Camera target` 的同步更新
 
 # 25/01/08 @石灰
 - feat 支持 `Runtime` 运行时挂载 `OrbitControls` 相机控制器

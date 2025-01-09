@@ -1,4 +1,5 @@
 
+import { compressNormals } from "three/examples/jsm/utils/GeometryCompressionUtils.js";
 import { PrimitiveCamera } from "../objects/primitiveCamera";
 import SceneManager from "./sceneManager";
 import { IVec3 } from "@/sceneConfig/config";
@@ -46,6 +47,8 @@ export class SceneRuntime {
         runtimeCamera.setCameraHelper(false);
         !SceneRuntime.control && SceneRuntime.initControl(runtimeCamera);
         if(SceneRuntime.control) {
+            // 在切换编辑常见的时候 同步更新
+            SceneRuntime.control.target.copy(runtimeCamera.target)
             SceneRuntime.control.zoom0 = 1;
             SceneRuntime.control.update();
             SceneRuntime.control.enabled = true;
