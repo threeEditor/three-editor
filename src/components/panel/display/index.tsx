@@ -39,10 +39,12 @@ const Display = (props: IDisplayProps) => {
         // 触发 tree 节点的选中 keys => uuid[]
         EventSystem.subscribe(DisplayEvents.SelectTreeNode, (keys: string[]) => {
           setSelectedKeys(keys);
-        })       
+        }) 
+        EventSystem.subscribe(SystemEvents.HideAceEdit, () => setJsonEditVis(false));
         return () => {
           EventSystem.unsubscribe(DisplayEvents.SetTreeNodes);
           EventSystem.unsubscribe(DisplayEvents.SelectTreeNode);
+          EventSystem.unsubscribe(SystemEvents.HideAceEdit);
         }
     }, [])
     
@@ -110,7 +112,7 @@ const Display = (props: IDisplayProps) => {
     }
 
     const handleTreeMenuClick = (e: TreeMenuEvent) => {
-      // console.log('handleTreeMenuClick', e)
+      console.log('handleTreeMenuClick', e)
       // setSelectedKeys([]);
       switch(e.type) {
         case 'rename':
