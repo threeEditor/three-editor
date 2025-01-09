@@ -7,6 +7,7 @@
 2. `SceneObject` 各种类型的场景加载
 3. 在移动相机位置的同时，修改 `target` 的位置
 4. 增加相机的 `target` & `up` 属性更新 & 拖拽更新
+5. 完善 `Scene.Config` ，同步在 `ACE Editor` 中完整的展示
 
 - `Runtime` 运行时
 1. `GLTF` 动画在 `Edit` 编辑状态下默认不播放动画，在切换到 `Play` 状态下播放动画（编辑状态下也可以播放动画）

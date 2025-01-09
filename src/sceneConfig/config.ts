@@ -65,8 +65,13 @@ export const defaultSceneConfig = {
     ],
 }
 
+interface ISky {
+
+}
+
 export interface ISceneConfig {
     name?: string;
+    sky?: ISky;
     lights?: ILight[];
     helpers?: IHelper[];
     objects?: IObject[];

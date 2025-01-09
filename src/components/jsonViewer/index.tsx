@@ -20,7 +20,7 @@ export const JsonViewer = () => {
         const json = formatJsonStr(SceneManager.config);        
         // mock
         setCode(json);
-    }, [])
+    }, [aceEdit])
 
     useEffect(() => {
         EventSystem.subscribe(SystemEvents.ViewAceEdit, () => setAceEdit(true));
