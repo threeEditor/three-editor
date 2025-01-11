@@ -16,8 +16,12 @@ export enum SceneEvents {
     GizmoModeChange = 'GizmoModeChange', // Gizmo 模式切换
     GizmoTransform = 'GizmoTransform', // Gizmo 触发 Transform 更新
     PropertyTransform = 'PropertyTransform', // Property 控制面板触发 Transform 更新
-    ObjectRename = 'ObjectRename', // Tree Node update name
     ChangeSceneType = 'ChangeSceneType', // 切换场景类型
+}
+
+export enum TreeEvents {
+    ObjectRename = 'ObjectRename', // Tree Node update name
+    TreeDropUpdate = 'TreeDropUpdate', // 重置节点层级
 }
 
 export enum ModelAniUpdate {

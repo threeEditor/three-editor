@@ -1,6 +1,7 @@
-import { Modal } from "antd"
+import { Input, Modal } from "antd"
 import React from "react";
 import { useEffect, useState } from "react";
+import './index.less';
 
 export interface IInputTextModalParams {
     isModalOpen: boolean;
@@ -14,11 +15,21 @@ export const InputTextModal = React.memo(({ isModalOpen, handleOk, handleCancel,
     useEffect(() => {
         setInputV(value);
     }, [value])
-    return <Modal title="InputTextModal" open={isModalOpen} onOk={() => {
-        handleOk(inputV);
-    }} onCancel={handleCancel}>
-        <input autoFocus type="text" value={inputV} onChange={(e) => {
+    return <Modal 
+            wrapClassName="custom_modal"
+            title="InputTextModal" 
+            centered 
+            open={isModalOpen}
+            width={300}
+            okText="确认"
+            cancelText="取消"
+            onOk={() => {
+                handleOk(inputV);
+            }} 
+            onCancel={handleCancel}
+        >
+        <Input autoFocus type="text" value={inputV} onChange={(e) => {
             setInputV(e.target.value);
         }} />
-</Modal>
+    </Modal>
 })

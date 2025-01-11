@@ -7,7 +7,7 @@ import PropertyPanel, { ViewType } from '../panel/property';
 import { BaseObject } from '@/edit/objects/baseObject';
 import Display from '../panel/display';
 import { TreeDataNode } from 'antd';
-import { SceneEvents, SceneSelectorEvents } from '@/common/constant';
+import { SceneEvents, SceneSelectorEvents, TreeEvents } from '@/common/constant';
 import Toolbar from '../toolbar';
 import { EventSystem } from '@/utils/event/EventSystem';
 
@@ -73,25 +73,21 @@ const Layout = () => {
   useEffect(() => {
     const { viewType } = nodeInfo;
     if (viewType === 'None') return;
-    const handleRename = () => {
-      const object = SceneManager.get(nodeInfo.uuid!);
+    const handleRename = ({newName}: { newName: string }) => {
       setNodeInfo({
         ...nodeInfo,
-        name: object?.name!,
+        name: newName,
       });
     };
-    EventSystem.unsubscribe(SceneEvents.ObjectRename, handleRename);
-    EventSystem.subscribe(SceneEvents.ObjectRename, handleRename);
+    EventSystem.subscribe(TreeEvents.ObjectRename, handleRename);
+    return () => {
+      EventSystem.unsubscribe(TreeEvents.ObjectRename, handleRename);
+    }
   }, [nodeInfo]);
   return (
     <div className="layout">
       <div className="panel display">
-        <Display
-          treeData={treeData}
-          onTreeDropUpdate={(data) => {
-            console.log('onTreeDropUpdate', data);
-          }}
-        />
+        <Display treeData={treeData} />
       </div>
       <div className="center">
         <div className="panel viewport">
