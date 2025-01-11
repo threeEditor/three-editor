@@ -8,6 +8,7 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import SceneManager from "./sceneManager/sceneManager";
+import ViewHelper from "./viewHelper";
 
 export default class CameraManager {
   public instance!: PerspectiveCamera;
@@ -21,6 +22,7 @@ export default class CameraManager {
   private renderPass!: RenderPass;
   private composer!: EffectComposer;
   private outlinePass!: OutlinePass;
+  private viewrHelper!: ViewHelper;
   constructor() {
     this.config = SceneManager.config;
     this.wrap = SceneManager.wrap;
@@ -39,9 +41,11 @@ export default class CameraManager {
     const camera = new PerspectiveCamera(60, sizes.width / sizes.height, 0.1, 1500);
     scene.add(camera);
 
+    
     this.control = new OrbitControls(camera, wrap);
     this.control.update();
-
+    
+    this.viewrHelper = new ViewHelper(camera);
     // 处理后处理 gammer 导致的变暗问题
     // https://blog.csdn.net/qq_23447231/article/details/117995349
     const composer = new EffectComposer(renderer);
@@ -88,5 +92,9 @@ export default class CameraManager {
   update() {
     this.control?.update();
     this.composer.render();
+
+    if(this.viewrHelper){
+      this.viewrHelper.update();
+    }
   }
 }
