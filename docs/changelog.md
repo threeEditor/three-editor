@@ -1,5 +1,11 @@
+# 25/01/12 @石灰
+- feat 增加 `Tree` 组件的跨层级移动
+- feat 优化重命名面板样式
+- fix 修复重命名功能的过滤问题
+
 # 25/01/09 @阿肋
-- feat 增加简单的`viewHelper`
+- feat 增加简单的 `viewHelper`
+
 # 25/01/09 @石灰
 - fix 修复 `ace editor viewer` 的同步更新
 - feat 部分完善编辑场景下 `Camera target` 的同步更新

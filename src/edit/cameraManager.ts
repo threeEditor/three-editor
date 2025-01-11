@@ -22,7 +22,7 @@ export default class CameraManager {
   private renderPass!: RenderPass;
   private composer!: EffectComposer;
   private outlinePass!: OutlinePass;
-  private viewrHelper: ViewHelper;
+  private viewrHelper!: ViewHelper;
   constructor() {
     this.config = SceneManager.config;
     this.wrap = SceneManager.wrap;

@@ -17,6 +17,7 @@ import {
   Vector2,
 } from 'three';
 
+// 右上角的视角帮助器 用于展示当前场景的视角
 export default class ViewHelper {
   private camera: PerspectiveCamera;
   private viewHelperScene: Scene;
@@ -96,7 +97,7 @@ export default class ViewHelper {
 
     // 初始化渲染器
     this.viewHelperRenderer = new WebGLRenderer({ alpha: true });
-    this.viewHelperRenderer.setSize(200, 200); // 设置大小
+    this.viewHelperRenderer.setSize(120, 120); // 设置大小
     this.viewHelperRenderer.domElement.className = 'viewHelper';
     this.viewHelperRenderer.domElement.style.position = 'absolute';
     this.viewHelperRenderer.domElement.style.top = '24px'; // 放在屏幕左上角
@@ -145,6 +146,9 @@ export default class ViewHelper {
 
   // 更新视角帮助器的渲染
   public update() {
+    // copy editor camera position
+    // Look at the editor camera target
+    // keep up direction 0, 1, 0
     this.viewHelperCamera.position.copy(
       this.camera.position.clone().normalize()
     );

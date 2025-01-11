@@ -30,6 +30,9 @@ export class Selector extends EventEmitter {
       } else {
         cache.selectList.forEach(node => {
           if(node.uuid !== uuid) return;
+          // 新选中对象 执行清除操作
+          this.selectedSprite = null;
+          this.selectedObject = null;
           if(node.type === 'Sprite') {
             this.selectedSprite = node as Sprite;
             cameraManager.setOutline([node.userData.outline]);

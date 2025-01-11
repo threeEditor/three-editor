@@ -83,7 +83,7 @@ export default class SceneManager {
     // 在 display 面板的 tree 组件中选中对象
     EventSystem.subscribe(DisplayEvents.TreeSelectNode, (keys: string[]) => {
       const uuid = keys[0];
-      SceneManager.selector.emitTreeSelect(uuid);
+      uuid && SceneManager.selector.emitTreeSelect(uuid);
     });
 
     // 在场景中选中对象

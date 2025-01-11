@@ -65,10 +65,10 @@ export class GLTFObject extends BaseObject {
         }
         const defaultAni = animations[0];
         this.play(defaultAni.name);
-        this.bindEvents()
+        this.bindCustomEvents(); // 绑定自定义事件监听
     }
 
-    bindEvents() {
+    bindCustomEvents() {
         EventSystem.subscribe(ModelAniUpdate.UpdateAni, ({ uuid, ani }: any) => {
             if(uuid !== this.uuid) return;
             if(!this.hasAni(ani)) return;

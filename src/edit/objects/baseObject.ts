@@ -1,7 +1,7 @@
 import { Object3D } from "three";
 import { SceneObjectType } from "../sceneManager/interface";
 import { EventSystem } from "@/utils/event/EventSystem";
-import { SceneEvents } from "@/common/constant";
+import { SceneEvents, TreeEvents } from "@/common/constant";
 import SceneManager from "../sceneManager/sceneManager";
 import { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
 export class BaseObject {
@@ -61,7 +61,8 @@ export class BaseObject {
     }
 
     bindEvents() {
-        EventSystem.subscribe(SceneEvents.ObjectRename, (newName: string) => {
+        EventSystem.subscribe(TreeEvents.ObjectRename, ({newName, key}: {key: string, newName: string}) => {
+            if(key !== this.uuid) return;
             this.node.name = newName;
             SceneManager.updateConfig();
         })
