@@ -4,7 +4,7 @@
 - fix 修复重命名功能的过滤问题
 
 # 25/01/09 @阿肋
-- feat 增加简单的`viewHelper`
+- feat 增加简单的 `viewHelper`
 
 # 25/01/09 @石灰
 - fix 修复 `ace editor viewer` 的同步更新
