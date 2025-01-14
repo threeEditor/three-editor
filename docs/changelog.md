@@ -1,5 +1,7 @@
+# 25/01/15 @石灰
+- feat 增加 `ResizeDragger` 拖拽组件
+
 # 25/01/13
-- feat `viewHelper` 点击坐标轴旋转相机角度
 
 # 25/01/12 @石灰
 - feat 增加 `Tree` 组件的跨层级移动
