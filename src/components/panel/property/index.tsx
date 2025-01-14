@@ -6,6 +6,8 @@ import { Input, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { isNumber } from '@/utils/is';
 import { Vec3 } from './vec3';
+import { Layout } from '@/common/layout';
+import { ResizeDragger } from '@/components/resizeDragger';
 const { Option } = Select;
 
 export enum ViewType {
@@ -19,6 +21,7 @@ interface IPanelProps {
     [key: string]: any;
 }
 
+let DefaultPropertyWidth = Layout.PropertyPanelWidth;
 const PropertyPanel = (props: IPanelProps) => {
     // Transform
     const [position, setPosition] = useState([0, 0, 0]);
@@ -26,6 +29,7 @@ const PropertyPanel = (props: IPanelProps) => {
     const [scale, setScale] = useState([1, 1, 1]);
     const [target, setTarget] = useState([0, 0, 0]);
     const [up, setUp] = useState([0, 0, 0]);
+    const [width, setWidth] = useState(DefaultPropertyWidth);
     useEffect(() => {
         if(props.viewType !== ViewType.Node) return;
         const {position, rotation, scale} = props;
@@ -55,7 +59,13 @@ const PropertyPanel = (props: IPanelProps) => {
 
     }, [props.animations, props.animationSpeed]);
 
-    return <div className='panel properties'>
+    return <div className='panel properties' style={{
+        width: width + 'px',
+    }}>
+        <ResizeDragger onDrag={(deltaX) => {
+            DefaultPropertyWidth -= deltaX;
+            setWidth(DefaultPropertyWidth);
+        }} />
         <div className="content">
             <p className={'title'}>属性面板</p>
             {
