@@ -1,5 +1,4 @@
 
-import { compressNormals } from "three/examples/jsm/utils/GeometryCompressionUtils.js";
 import { PrimitiveCamera } from "../objects/primitiveCamera";
 import SceneManager from "./sceneManager";
 import { IVec3 } from "@/sceneConfig/config";

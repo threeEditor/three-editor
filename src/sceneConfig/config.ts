@@ -61,6 +61,19 @@ export const defaultSceneConfig = {
             material: {
                 color: 0xddaa00,
             }
+        },
+        {
+            name: 'ball',
+            type: PrimitiveMeshType.SPHERE,
+            position: {
+                x: 2.5,
+                y: 2.5,
+                z: -5,
+            },
+            size: 1,
+            material: {
+                color: 0x00ddaa,
+            }
         }
     ],
 }
@@ -98,12 +111,13 @@ export interface IBaseObject {
     name?: string;
     position?: IVec3;
     target?: IVec3;
+    rotation?: IVec3;
     up?: IVec3;
 }
 
 export interface ICamera extends IBaseObject{
     isMain?: boolean;
-    
+
 }
 
 export interface IObject extends IBaseObject {
