@@ -10,7 +10,12 @@
 
 - `Edit` 编辑运行时
 1. [30%]`Sprite outline` 效果完善
-2. `SceneObject` 各种类型的场景加载
+2. [20%]`SceneObject` 各种内置对象加载
+    - `PrimitiveMesh`   : [`CUBE`, `SPHERE`, `PLANE`]
+    - `PrimitiveLight`  : [`AMBIENT`, `POINT`, `DIRECTIONAL`]
+    - `PrimitiveCamera` : [`PERSPECTIVE`, `ORTHOGRAPHIC`]
+    - `Model`           : [`GLTF`]
+    - `Material`        : [`PBR`]
 3. [30%]在移动相机位置的同时，修改 `target` 的位置
 4. 增加相机的 `target` & `up` 属性更新 & 拖拽更新
 5. 完善 `Scene.Config` ，同步在 `ACE Editor` 中完整的展示

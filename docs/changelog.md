@@ -1,3 +1,7 @@
+# 25/01/16 @石灰
+- feat 增加 `PrimitiveMesh Sphere`
+- chore 完善初始化加载代码
+
 # 25/01/15 @石灰
 - feat 增加 `ResizeDragger` 拖拽组件
 

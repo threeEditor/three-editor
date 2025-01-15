@@ -1,4 +1,3 @@
-import { ISceneConfig } from '@/sceneConfig/config';
 import {
   Scene,
   AnimationMixer,
@@ -20,10 +19,10 @@ import { DisplayEvents, SceneSelectorEvents, SceneType } from '@/common/constant
 import { Sky } from '../sky';
 import assets from '@/assets/assets';
 import Resources from '../resources';
-import { PrimitiveCamera } from '../objects/primitiveCamera';
 import { SceneLoader } from './sceneLoader';
 import { SceneEditor } from './sceneEditor';
 import { SceneRuntime } from './sceneRuntime';
+import { ISceneConfig } from '@/sceneConfig/interface';
 
 export default class SceneManager {
   static scene: Scene = new Scene();

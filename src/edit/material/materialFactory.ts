@@ -1,10 +1,6 @@
-import { MeshPhongMaterial, MeshPhongMaterialParameters } from "three";
+import { MeshPhongMaterial } from "three";
 import { MaterialType } from "./interface";
-
-type MaterialParameters = MeshPhongMaterialParameters;
-export interface IMaterialParameters extends MaterialParameters {
-    type: MaterialType;
-};
+import { IMaterialParameters } from "@/sceneConfig/interface";
 
 export class MaterialFactory {
     static initMaterial(materialProps: IMaterialParameters) {

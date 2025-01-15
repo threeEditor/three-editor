@@ -1,18 +1,5 @@
 import { PrimitiveMeshType } from "@/edit/objects";
 
-
-export const defaultPosition = {
-    x: 0,
-    y: 0,
-    z: 0,
-}
-
-export const defaultRotation = {
-    x: 0,
-    y: 0,
-    z: 0,
-}
-
 // https://www.yuque.com/yiqianyao/vcv10s/uahoo3iq1trz4zyn
 export const defaultSceneConfig = {
     name: 'scene1',
@@ -61,58 +48,33 @@ export const defaultSceneConfig = {
             material: {
                 color: 0xddaa00,
             }
+        },
+        {
+            name: 'ball',
+            type: PrimitiveMeshType.SPHERE,
+            position: {
+                x: 2.5,
+                y: 2.5,
+                z: -5,
+            },
+            size: 1,
+            material: {
+                color: 0x00ddaa,
+            }
         }
     ],
 }
 
-interface ISky {
-
+export const defaultPosition = {
+    x: 0,
+    y: 0,
+    z: 0,
 }
 
-export interface ISceneConfig {
-    name?: string;
-    sky?: ISky;
-    lights?: ILight[];
-    helpers?: IHelper[];
-    objects?: IObject[];
-    cameras?: ICamera[];
+export const defaultRotation = {
+    x: 0,
+    y: 0,
+    z: 0,
 }
 
-export interface IScene {
-    name: string;
-    cameras: ICamera[];
-    lights: ILight[];
-    helpers: IHelper[];
-    objects: IObject[];
-}
 
-export interface IMaterial {}
-
-export interface IVec3 {
-    x: number;
-    y: number;
-    z: number;
-}
-
-export interface IBaseObject {
-    name?: string;
-    position?: IVec3;
-    target?: IVec3;
-    up?: IVec3;
-}
-
-export interface ICamera extends IBaseObject{
-    isMain?: boolean;
-    
-}
-
-export interface IObject extends IBaseObject {
-    size?: number;
-    type?: PrimitiveMeshType;
-    material?: IMaterial;
-}
-
-export interface ILight extends IBaseObject {
-}
-export interface IHelper extends IBaseObject {
-}

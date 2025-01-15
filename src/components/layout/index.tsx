@@ -33,7 +33,6 @@ const Layout = () => {
     });
     gltf.setScale(5);
 
-
     const texture = SceneManager.resources.items['https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/unnamed.png'];
     const sprite = new Sprite({
       texture,

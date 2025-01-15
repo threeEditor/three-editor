@@ -18,6 +18,7 @@ const ViewPort = (props: IViewPortProps) => {
   useEffect(() => {
     if (!view.current) return;
     const editManager = new EditManager(view.current);
+    // 初始化场景
     editManager.setUp(defaultSceneConfig);
     const resources = SceneManager.resources;
     resources.on('loaded',()=>{
