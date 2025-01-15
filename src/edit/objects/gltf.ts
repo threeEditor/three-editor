@@ -6,10 +6,6 @@ import SceneManager from "../sceneManager/sceneManager";
 import { EventSystem } from "@/utils/event/EventSystem";
 import { ModelAniUpdate } from "@/common/constant";
 
-export enum PrimitiveMeshType {
-    BOX = 'BOX',
-}
-
 export interface IGLTFConfig {
     name?: string;
     gltf: GLTF;

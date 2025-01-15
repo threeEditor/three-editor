@@ -1,14 +1,15 @@
-import { defaultPosition, defaultRotation, ICamera, ILight, IObject, ISceneConfig } from "@/sceneConfig/config";
 import { PrimitiveCamera, PrimitiveCameraType } from "../objects/primitiveCamera";
 import { Vector3 } from "three";
 import SceneManager from "./sceneManager";
 import { PrimitiveMesh } from "../objects";
-import { IMaterialParameters, MaterialFactory } from "../material/materialFactory";
+import { MaterialFactory } from "../material/materialFactory";
 import { EventSystem } from "@/utils/event/EventSystem";
 import { DisplayEvents } from "@/common/constant";
 import { PrimitiveLight, PrimitiveLightType } from "../objects/primitiveLight";
 import { cacheTreeNodes } from "./sceneCache";
 import { SceneRuntime } from "./sceneRuntime";
+import { ICamera, ILight, IObject, ISceneConfig } from "@/sceneConfig/interface";
+import { defaultRotation, defaultPosition } from "@/sceneConfig/config";
 
 export class SceneLoader {
     static async loadScene(sceneConfig: ISceneConfig) {
@@ -70,8 +71,7 @@ export class SceneLoader {
     static async loadObjects(objects?: IObject[]) {
       if(!objects) return;
       objects.forEach((object) => {
-        const { name, type, position = defaultPosition, rotation = defaultRotation, size, material, } = object;
-        console.log('material', material)
+        const { name, type, position = defaultPosition, rotation = defaultRotation, size, material} = object;
         const baseObject = new PrimitiveMesh({
           name,
           type,

@@ -2,7 +2,8 @@ import SceneManager from "./sceneManager/sceneManager"; // 导入场景管理器
 import Time from "./utils/time"; // 导入时间管理器
 import Config from "./utils/config"; // 导入配置管理器
 import Sizes from "./utils/sizes"; // 导入尺寸管理器
-import { defaultSceneConfig, ISceneConfig } from "@/sceneConfig/config";
+import { defaultSceneConfig } from "@/sceneConfig/config";
+import { ISceneConfig } from "@/sceneConfig/interface";
 
 export default class EditManager {
   private wrap: HTMLElement | null = null; // 包裹元素

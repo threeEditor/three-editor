@@ -5,7 +5,8 @@ import { LoaderResourceType } from "../loader";
 import { SceneObjectType } from "../sceneManager/interface";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
-import { IVec3 } from "@/sceneConfig/config";
+import { IVec3 } from "@/sceneConfig/interface";
+
 
 export enum PrimitiveCameraType {
     PerspectiveCamera = 'PerspectiveCamera',
