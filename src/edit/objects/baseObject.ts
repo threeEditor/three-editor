@@ -3,7 +3,7 @@ import { SceneObjectType } from "../sceneManager/interface";
 import { EventSystem } from "@/utils/event/EventSystem";
 import { SceneEvents, TreeEvents } from "@/common/constant";
 import SceneManager from "../sceneManager/sceneManager";
-import { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
+import { IGizmoMode } from "../gizmo";
 export class BaseObject {
     public parent: BaseObject | null = null;
     public children: BaseObject[] = [];
@@ -136,5 +136,5 @@ export class BaseObject {
         }
     }
     gizmoUpdateEnd(): void {};
-    gizmoUpdate(mode: TransformControlsMode): void {};
+    gizmoUpdate(mode: IGizmoMode): void {};
 }

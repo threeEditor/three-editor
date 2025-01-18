@@ -91,7 +91,8 @@ const Layout = () => {
       <div className="center">
         <div className="panel viewport">
           <ViewPort onLoad={onLoad} />
-          <Toolbar {...nodeInfo} />
+          {/* 编辑视窗左上角的工具栏 */}
+          <Toolbar />
         </div>
         <div className="panel assets"></div>
       </div>
