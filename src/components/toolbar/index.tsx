@@ -1,5 +1,6 @@
 import './index.less';
 import {
+  AimOutlined,
   DragOutlined,
   ExpandAltOutlined,
   RetweetOutlined,
@@ -7,18 +8,28 @@ import {
 import SceneManager from '@/edit/sceneManager/sceneManager';
 import { useEffect, useState } from 'react';
 import { SceneEvents, SceneType } from '@/common/constant';
-import { ViewType } from '../panel/property';
-import { TransformControlsMode } from 'three/examples/jsm/Addons.js';
 import { EventSystem } from '@/utils/event/EventSystem';
-const Toolbar = (props: any) => {
-  const [mode, setMode] = useState<TransformControlsMode | null>(null);
+import React from 'react';
+import { IGizmoMode } from '@/edit/gizmo';
+const Toolbar = () => {
+  const [mode, setMode] = useState<IGizmoMode>('view');
   const [sceneType, setSceneType] = useState(SceneType.Edit);
   const toolButtons = [
+    {
+      icon: AimOutlined,
+      title: '观察', // 默认选中
+      mode: 'view',
+      onClick: () => {
+        setMode('view');
+        SceneManager.GizmoManager.setControlsMode('view');
+      },
+    },
     {
       icon: DragOutlined,
       title: '移动',
       mode: 'translate',
       onClick: () => {
+        setMode('translate');
         SceneManager.GizmoManager.setControlsMode('translate');
       },
     },
@@ -27,6 +38,7 @@ const Toolbar = (props: any) => {
       title: '旋转',
       mode: 'rotate',
       onClick: () => {
+        setMode('rotate');
         SceneManager.GizmoManager.setControlsMode('rotate');
       },
     },
@@ -35,20 +47,16 @@ const Toolbar = (props: any) => {
       title: '缩放',
       mode: 'scale',
       onClick: () => {
+        setMode('scale');
         SceneManager.GizmoManager.setControlsMode('scale');
       },
     },
   ];
   useEffect(() => {
-    setMode(SceneManager.GizmoManager.mode);
-    SceneManager.GizmoManager.on(SceneEvents.GizmoModeChange, (mode) => {
-      setMode(mode);
-    });
     EventSystem.subscribe(SceneEvents.ChangeSceneType, (type: SceneType) => {
       setSceneType(type);
     })
     return () => {
-      SceneManager.GizmoManager.off(SceneEvents.GizmoModeChange);
       EventSystem.unsubscribe(SceneEvents.ChangeSceneType);
     }
   }, []);
@@ -57,11 +65,7 @@ const Toolbar = (props: any) => {
       {toolButtons.map((button) => {
         return (
           <div
-            className={`toolbar-button ${
-              props.viewType == ViewType.Node && button.mode == mode
-                ? 'active'
-                : ''
-            }`}
+            className={`toolbar-button ${button.mode == mode ? 'active' : '' }`}
             key={button.mode}
             {...button}
           >
@@ -73,4 +77,4 @@ const Toolbar = (props: any) => {
   );
 };
 
-export default Toolbar;
+export default React.memo(Toolbar);

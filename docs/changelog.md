@@ -1,3 +1,6 @@
+# 25/01/19 @石灰
+- feat 完善 `ToolBar` 工具栏部分切换能力
+
 # 25/01/16 @石灰
 - feat 增加 `PrimitiveMesh Sphere`
 - chore 完善初始化加载代码

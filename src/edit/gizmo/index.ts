@@ -9,6 +9,8 @@ import { BaseObject } from '../objects/baseObject';
 import EventEmitter from 'eventemitter3';
 import { SceneEvents } from '@/common/constant';
 import { throttle } from '../utils/func';
+
+export type IGizmoMode = TransformControlsMode | 'view';
 class GizmoManager extends EventEmitter {
   private controls: TransformControls;
   public draggedDelay: boolean = false;
@@ -17,7 +19,11 @@ class GizmoManager extends EventEmitter {
   private renderer: Renderer;
   private selectedObject: BaseObject | null = null;
   get mode() {
-    return this.controls.mode;
+    if(this.controls.enabled) {
+      return this.controls.mode;
+    } else {
+      return 'view';
+    }
   }
   constructor() {
     super();
@@ -30,9 +36,13 @@ class GizmoManager extends EventEmitter {
       this.camera,
       this.renderer.domElement
     );
-
     this.controls.setSize(0.5);
     this.scene.add(this.controls);
+    this.controls.enabled = false;
+
+    // setTimeout(() => {
+    //   this.controls.enabled = true;
+    // }, 1000)
 
     // 设置事件监听器
     this.initOnDraggingChanged();
@@ -44,6 +54,7 @@ class GizmoManager extends EventEmitter {
   // 绑定需要操作的对象
   attachObject(object: BaseObject) {
     this.selectedObject = object;
+    if(!this.controls.enabled) return;
     this.controls.attach(object.node);
   }
 
@@ -73,7 +84,6 @@ class GizmoManager extends EventEmitter {
     })
     
     this.controls.addEventListener('mouseUp', () => {
-      // console.log('controls mouse up');
       if (!this.selectedObject) return;
       this.selectedObject.gizmoUpdateEnd();
     })
@@ -124,10 +134,21 @@ class GizmoManager extends EventEmitter {
       }
     });
   }
-  public setControlsMode(mode: TransformControlsMode) {
-    if (!this.selectedObject) return;
-    this.controls.setMode(mode);
-    this.emit(SceneEvents.GizmoModeChange, mode);
+  public setControlsMode(mode: IGizmoMode) {
+    // console.log('setControlsMode', this.selectedObject)
+    // if (!this.selectedObject) return;
+    if(mode === 'view') {
+      this.controls.enabled = false;
+      this.detachObject();
+      // 若此时场景中有选中对象，取消选中
+      SceneManager.selector.unSelect();
+    } else {
+      // console.log('setControlsMode', mode);
+      // this.controls.enabled = true;
+      this.controls.enabled = true;
+      this.controls.setMode(mode);
+      this.selectedObject && this.attachObject(this.selectedObject);
+    };
   }
   private toggleSpace() {
     if (this.controls.space === 'local') {
