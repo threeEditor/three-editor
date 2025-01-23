@@ -42,7 +42,7 @@ export const SceneSwitch = React.memo((props: IProps) => {
         }`}</>
       }
     >
-        {/* inert */}
+      {/* 内部的跑马灯实现 */}
       <div className='carouselWrap'>
         <Carousel ref={carouselRef as LegacyRef<CarouselRef>} dots={false}>
             {/* Carousel 需要嵌套一层 div */}

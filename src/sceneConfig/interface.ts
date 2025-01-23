@@ -12,6 +12,7 @@ export interface ISceneConfig {
     lights?: ILight[];
     helpers?: IHelper[];
     objects?: IObject[];
+    models?: IModel[];
     cameras?: ICamera[];
 }
 
@@ -45,6 +46,9 @@ export interface ICamera extends IBaseObject{
 type MaterialParameters = MeshPhongMaterialParameters;
 export interface IMaterialParameters extends MaterialParameters {
     type?: MaterialType;
+    texture?: string;
+    repeatX?: number; // 纹理重复次数
+    repeatY?: number;
 };
 
 export interface IObject extends IBaseObject {
@@ -56,4 +60,8 @@ export interface IObject extends IBaseObject {
 export interface ILight extends IBaseObject {
 }
 export interface IHelper extends IBaseObject {
+}
+
+export interface IModel extends IBaseObject {
+
 }

@@ -9,7 +9,7 @@ import { PrimitiveLight, PrimitiveLightType } from "../objects/primitiveLight";
 import { cacheTreeNodes } from "./sceneCache";
 import { SceneRuntime } from "./sceneRuntime";
 import { ICamera, ILight, IObject, ISceneConfig } from "@/sceneConfig/interface";
-import { defaultRotation, defaultPosition } from "@/sceneConfig/config";
+import { defaultRotation, defaultPosition } from "@/mock/config";
 
 export class SceneLoader {
     static async loadScene(sceneConfig: ISceneConfig) {
@@ -22,6 +22,8 @@ export class SceneLoader {
    
       EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
     }
+
+    /** 加载灯光 */
     static loadLights(lights?: ILight[]) {
       if(!lights) return;
       // TODO 暂时先写死
@@ -68,15 +70,21 @@ export class SceneLoader {
       })
     }
 
+    /**
+     * Loads objects into the scene based on the provided object configurations.
+     * @param objects - An array of object configurations to be loaded.
+     */
     static async loadObjects(objects?: IObject[]) {
       if(!objects) return;
-      objects.forEach((object) => {
-        const { name, type, position = defaultPosition, rotation = defaultRotation, size, material} = object;
+      // 
+      objects.forEach(async (object) => {
+        const { name, type, position = defaultPosition, rotation = defaultRotation, size, material } = object;
+        let mat = material ? await MaterialFactory.initMaterial(material) : undefined;
         const baseObject = new PrimitiveMesh({
           name,
           type,
           size,
-          material: material ? MaterialFactory.initMaterial(material) : undefined,
+          material: mat,
         });
         baseObject.setRotation(rotation.x, rotation.y, rotation.z);
         baseObject.setPosition(position.x, position.y, position.z);
