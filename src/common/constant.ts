@@ -13,6 +13,7 @@ export enum SceneSelectorEvents {
 }
 
 export enum SceneEvents {
+    LayoutUpdate = 'LayoutUpdate', // 布局更新
     GizmoModeChange = 'GizmoModeChange', // Gizmo 模式切换
     GizmoTransform = 'GizmoTransform', // Gizmo 触发 Transform 更新
     PropertyTransform = 'PropertyTransform', // Property 控制面板触发 Transform 更新
