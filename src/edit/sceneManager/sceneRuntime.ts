@@ -1,7 +1,7 @@
 
 import { PrimitiveCamera } from "../objects/primitiveCamera";
 import SceneManager from "./sceneManager";
-import { IVec3 } from "@/sceneConfig/config";
+import { IVec3 } from "@/mock/config";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 let RuntimeCameraOriginInfo: {

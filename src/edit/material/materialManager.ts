@@ -10,7 +10,7 @@ export default class MaterialManager {
         if(MaterialManager.map.has(MaterialType.Default)) {
             return MaterialManager.map.get(MaterialType.Default) as Material;
         } else {
-            const material = MaterialFactory.initMaterial({ type: MaterialType.Default });
+            const material = MaterialFactory.initDefaultMaterial({ type: MaterialType.Default });
             MaterialManager.map.set(MaterialType.Default, material);
             return material;
         }

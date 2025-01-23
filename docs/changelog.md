@@ -1,5 +1,6 @@
 # 25/01/23 @石灰
-- feat: `Layout` 默认布局样式的更新
+- feat `Layout` 默认布局样式的更新
+- feat `load Objects` 增加材质贴图的加载与设置
 
 # 25/01/19 @石灰
 - feat 完善 `ToolBar` 工具栏部分切换能力

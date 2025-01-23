@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import './index.less';
 import EditManager from '../../edit/core';
 import SceneManager from '@/edit/sceneManager/sceneManager';
-import { defaultSceneConfig } from '@/sceneConfig/config';
+import { defaultSceneConfig } from '@/mock/config';
 
 interface IViewPortProps {
   onLoad: (edit: EditManager) => void;

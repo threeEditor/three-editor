@@ -46,7 +46,11 @@ export const defaultSceneConfig = {
             },
             size: 100,
             material: {
-                color: 0xddaa00,
+                // color: 0xddaa00,
+                color: 0xffffff,
+                texture: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/ground.png',
+                repeatX: 10,
+                repeatY: 10,
             }
         },
         {

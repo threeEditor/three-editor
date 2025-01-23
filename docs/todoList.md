@@ -15,19 +15,19 @@
     - `PrimitiveLight`  : [`AMBIENT`, `POINT`, `DIRECTIONAL`]
     - `PrimitiveCamera` : [`PERSPECTIVE`, `ORTHOGRAPHIC`]
     - `Model`           : [`GLTF`]
-    - `Material`        : [`PBR`]
+    - [15%]`Material`        : [`PBRMaterial`, `Map`]
 3. [30%]在移动相机位置的同时，修改 `target` 的位置
 4. 增加相机的 `target` & `up` 属性更新 & 拖拽更新
-5. 完善 `Scene.Config` ，同步在 `ACE Editor` 中完整的展示
-6. `ViewHelper` 视角辅助控制器的完善，运行时状态的切换、拖拽 & 点击同步场景相机
-7. [25%]`ToolBar` 工具栏部分切换
+5. 在属性面板增加材质的属性设置
+6. 完善 `Scene.Config` ，同步在 `ACE Editor` 中完整的展示
+7. `ViewHelper` 视角辅助控制器的完善，运行时状态的切换、拖拽 & 点击同步场景相机
+8. [25%]`ToolBar` 工具栏部分切换
     - `popover` 类型提示
     - `keyboard` 快捷键
     - `Icon` 图标替换优化
-8. [25%]`Selector` 拾取对象功能类的完善
+9. [25%]`Selector` 拾取对象功能类的完善
     - 单击选中 & 支持双击选中（双击选中的对象会让相机聚焦）
     - 物体的选中效果（绘制轮廓、使用新的方案代替 outline pass https://blog.csdn.net/arvin0/article/details/121613144）
-9. 
 
 - `Runtime` 运行时
 1. `GLTF` 动画在 `Edit` 编辑状态下默认不播放动画，在切换到 `Play` 状态下播放动画（编辑状态下也可以播放动画）
