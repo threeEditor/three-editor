@@ -1,9 +1,13 @@
 # three-editor
 simple three editor
 
-## 运行
+## 安装
 ```bash
 pnpm install
+```
+
+## 运行
+```bash
 pnpm run dev
 ```
 

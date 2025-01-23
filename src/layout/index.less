@@ -1,10 +1,4 @@
-@propertyPanelWidth: 300px;
-@displayPanelWidth: 200px;
-@panelAeestHeight: 200px;
-@panelPadding: 8px;
-@panelBorderRadius: 6px;
-@panelColor: rgba(216, 211, 211, 0.923);
-@panelBorderColor: #686868;
+@import url(./constant.less);
 
 .layout {
     display: flex;
@@ -12,33 +6,31 @@
     width: 100%;
     height: 100vh;
     overflow: hidden;
-    .panel {
-        // overflow: hidden;
-        border-radius: @panelBorderRadius;
-        border: 0px solid @panelBorderColor;
-    }
 
-    .display {
+    .hierarchyPanel {
+        display: flex;
+        justify-content: center;
         height: 100%;   
         width: @displayPanelWidth;
         background-color: @panelColor;
+        border-right: 1px solid @panelBorderColor;
     }
     .center {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        width: calc(100vw - @displayPanelWidth - @propertyPanelWidth - @panelPadding * 2);
+        width: calc(100vw - @displayPanelWidth - @propertyPanelWidth);
 
         .viewport {
             position: relative;
-            height: calc(100vh - @panelAeestHeight - @panelPadding);
-            border-radius: 5px;
+            height: calc(100vh - @panelAeestHeight);
             overflow: hidden;
         }
 
         .assets {
             height: @panelAeestHeight;
             background-color: @panelColor;
+            border: 1px solid @panelBorderColor;
         }
     }
     .properties {

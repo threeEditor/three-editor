@@ -26,6 +26,8 @@
     - `Icon` 图标替换优化
 8. [25%]`Selector` 拾取对象功能类的完善
     - 单击选中 & 支持双击选中（双击选中的对象会让相机聚焦）
+    - 物体的选中效果（绘制轮廓、使用新的方案代替 outline pass https://blog.csdn.net/arvin0/article/details/121613144）
+9. 
 
 - `Runtime` 运行时
 1. `GLTF` 动画在 `Edit` 编辑状态下默认不播放动画，在切换到 `Play` 状态下播放动画（编辑状态下也可以播放动画）
