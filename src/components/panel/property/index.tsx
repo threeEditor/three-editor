@@ -6,7 +6,7 @@ import { Input, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { isNumber } from '@/utils/is';
 import { Vec3 } from './vec3';
-import { Layout } from '@/common/layout';
+import { LayoutSize } from '@/common/layout';
 import { ResizeDragger } from '@/components/resizeDragger';
 const { Option } = Select;
 
@@ -21,7 +21,7 @@ interface IPanelProps {
     [key: string]: any;
 }
 
-let DefaultPropertyWidth = Layout.PropertyPanelWidth;
+let DefaultPropertyWidth = LayoutSize.PropertyPanelWidth;
 const PropertyPanel = (props: IPanelProps) => {
     // Transform
     const [position, setPosition] = useState([0, 0, 0]);
@@ -64,6 +64,8 @@ const PropertyPanel = (props: IPanelProps) => {
     }}>
         <ResizeDragger onDrag={(deltaX) => {
             DefaultPropertyWidth -= deltaX;
+            LayoutSize.PropertyPanelWidth = DefaultPropertyWidth;
+            EventSystem.broadcast(SceneEvents.LayoutUpdate);
             setWidth(DefaultPropertyWidth);
         }} />
         <div className="content">

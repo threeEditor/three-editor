@@ -10,6 +10,8 @@ import { TreeDataNode } from 'antd';
 import { SceneEvents, SceneSelectorEvents, TreeEvents } from '@/common/constant';
 import Toolbar from '../components/toolbar';
 import { EventSystem } from '@/utils/event/EventSystem';
+import { LayoutSize } from '@/common/layout';
+import EditManager from '@/edit/core';
 
 interface INodeInfo {
   viewType: ViewType;
@@ -17,14 +19,16 @@ interface INodeInfo {
   name?: string;
 }
 
+let editManagerInstance: EditManager | null = null;
 const Layout = () => {
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
   const [nodeInfo, setNodeInfo] = useState<INodeInfo>({
     viewType: ViewType.None,
   });
+  const [centerPanelWidth, setCenterPanelWidth] = useState(LayoutSize.CenterPanelWidth);
 
-  const onLoad = async () => {
-    // console.log('load')
+  const onLoad = async (edit: EditManager) => {
+    editManagerInstance = edit;
     // cacheTreeNodes
     // mock: 模拟外侧添加
     const gltfResource = SceneManager.resources.items['https://gw.alipayobjects.com/os/bmw-prod/5e3c1e4e-496e-45f8-8e05-f89f2bd5e4a4.glb'];
@@ -67,6 +71,15 @@ const Layout = () => {
         });
       }
     );
+    const handleLayoutUpdate = () => {
+      // console.log('handleLayoutUpdate', LayoutSize.PropertyPanelWidth)
+      setCenterPanelWidth(LayoutSize.CenterPanelWidth);
+      editManagerInstance?.resize();
+    }
+    EventSystem.subscribe(SceneEvents.LayoutUpdate, handleLayoutUpdate);
+    return () => {
+      EventSystem.unsubscribe(SceneEvents.LayoutUpdate, handleLayoutUpdate);
+    };
   }, []);
 
   useEffect(() => {
@@ -89,13 +102,15 @@ const Layout = () => {
         {/* 场景树面板 */}
         <HierarchyPanel treeData={treeData} />
       </div>
-      <div className="center">
+      <div className="panel_center" style={{
+        width: `${centerPanelWidth}px`
+      }}>
         <div className="panel viewport">
           <ViewPort onLoad={onLoad} />
           {/* 编辑视窗左上角的工具栏 */}
           <Toolbar />
         </div>
-        <div className="panel assets"></div>
+        <div className="panel_assets"></div>
       </div>
       <PropertyPanel {...nodeInfo} />
     </div>
