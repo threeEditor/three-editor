@@ -5,7 +5,7 @@ import SceneManager from '@/edit/sceneManager/sceneManager';
 import { GLTFObject, Sprite } from '@/edit/objects';
 import PropertyPanel, { ViewType } from '../components/panel/property';
 import { BaseObject } from '@/edit/objects/baseObject';
-import Display from '../components/panel/display';
+import HierarchyPanel from '../components/panel/hierarchyPanel';
 import { TreeDataNode } from 'antd';
 import { SceneEvents, SceneSelectorEvents, TreeEvents } from '@/common/constant';
 import Toolbar from '../components/toolbar';
@@ -85,8 +85,9 @@ const Layout = () => {
   }, [nodeInfo]);
   return (
     <div className="layout">
-      <div className="panel display">
-        <Display treeData={treeData} />
+      <div className="panel hierarchyPanel">
+        {/* 场景树面板 */}
+        <HierarchyPanel treeData={treeData} />
       </div>
       <div className="center">
         <div className="panel viewport">

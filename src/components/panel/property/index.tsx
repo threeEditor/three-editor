@@ -59,7 +59,7 @@ const PropertyPanel = (props: IPanelProps) => {
 
     }, [props.animations, props.animationSpeed]);
 
-    return <div className='panel properties' style={{
+    return <div className='properties_panel properties' style={{
         width: width + 'px',
     }}>
         <ResizeDragger onDrag={(deltaX) => {

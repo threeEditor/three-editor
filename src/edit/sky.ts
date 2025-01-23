@@ -2,7 +2,7 @@ import { Color, CubeTextureLoader } from "three"
 import SceneManager from "./sceneManager/sceneManager"
 import { EventSystem } from "@/utils/event/EventSystem";
 import { SceneSkyModeUpdate } from "@/common/constant";
-import { SkyMode } from "@/components/panel/display/skyCard";
+import { SkyMode } from "@/components/panel/hierarchyPanel/skyCard";
 import { defaultCubeMap } from "@/common/resource";
 
 // TODO 待完善

@@ -1,7 +1,7 @@
 // React 相关导入
 import { createRoot } from 'react-dom/client'
 // 全局样式
-import './style/index.css'
+import './style/index.less'
 // 组件导入
 import Layout from "./layout";
 import { JsonViewer } from "./components/jsonViewer";

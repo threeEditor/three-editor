@@ -17,7 +17,7 @@ export interface IDisplayProps {
 
 let editNode: any = null;
 
-const Display = (props: IDisplayProps) => {
+const HierarchyPanel = (props: IDisplayProps) => {
     const [jsonEditVis, setJsonEditVis] = useState(false);
     const [inputVis, setInputVis] = useState(false);
     const [inputV, setInputV] = useState('');
@@ -50,7 +50,7 @@ const Display = (props: IDisplayProps) => {
       setInputVis(false);
     }, [gData, editNode])
 
-    return <div className="display_content">
+    return <div className="hierarchy_panel">
         <SceneSwitch defaultSceneType={SceneType.Edit} onSwitch={(type: SceneType) => {
           // TODO 测试为运行时单独添加脚本
           // executeScript();
@@ -93,4 +93,4 @@ const Display = (props: IDisplayProps) => {
         }}>{jsonEditVis ? '隐藏场景 json' : '场景 json'}</Button>
     </div>
 }
-export default Display;
+export default HierarchyPanel;
