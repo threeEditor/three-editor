@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 // 全局样式
 import './style/index.css'
 // 组件导入
-import Layout from "./components/layout";
+import Layout from "./layout";
 import { JsonViewer } from "./components/jsonViewer";
 import { usePreventScroll } from './utils/hook';
 

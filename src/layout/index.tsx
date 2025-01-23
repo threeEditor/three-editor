@@ -1,14 +1,14 @@
 import './index.less';
 import { useEffect, useState } from 'react';
-import ViewPort from '../viewport';
+import ViewPort from '../components/viewport';
 import SceneManager from '@/edit/sceneManager/sceneManager';
 import { GLTFObject, Sprite } from '@/edit/objects';
-import PropertyPanel, { ViewType } from '../panel/property';
+import PropertyPanel, { ViewType } from '../components/panel/property';
 import { BaseObject } from '@/edit/objects/baseObject';
-import Display from '../panel/display';
+import Display from '../components/panel/display';
 import { TreeDataNode } from 'antd';
 import { SceneEvents, SceneSelectorEvents, TreeEvents } from '@/common/constant';
-import Toolbar from '../toolbar';
+import Toolbar from '../components/toolbar';
 import { EventSystem } from '@/utils/event/EventSystem';
 
 interface INodeInfo {
