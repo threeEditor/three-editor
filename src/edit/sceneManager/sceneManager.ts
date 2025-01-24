@@ -35,6 +35,7 @@ export default class SceneManager {
   static cache = new SceneCache();
   static selector = new Selector();
   static _modelAnimationMixer: AnimationMixer[] = [];
+  // static _particleList: any[] = [];
   static GizmoManager: GizmoManager;
   static resources: Resources;
   static sky = new Sky();
@@ -71,7 +72,7 @@ export default class SceneManager {
 
     // 初始化资源
     SceneManager.resources = new Resources();
-    // 加载资源
+    // 加载资源 后续待优化
     SceneManager.resources.loadAssets(assets);
 
     // 初始化gizmo
@@ -193,10 +194,6 @@ export default class SceneManager {
     } else {
       SceneRuntime.update();
     }
-    // model 动画 update
-    SceneManager._modelAnimationMixer.forEach((mixer) => {
-      mixer.update(0.01);
-    });
   }
 
   static resize() {

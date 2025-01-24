@@ -1,7 +1,7 @@
 
+import { IVec3 } from "@/sceneConfig/interface";
 import { PrimitiveCamera } from "../objects/primitiveCamera";
 import SceneManager from "./sceneManager";
-import { IVec3 } from "@/mock/config";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 let RuntimeCameraOriginInfo: {
@@ -17,6 +17,10 @@ export class SceneRuntime {
         return this.cameraList[0];
     }
     static update() {
+        // model 动画 update
+        SceneManager._modelAnimationMixer.forEach((mixer) => {
+            mixer.update(0.01);
+        });
         const runtimeCamera = SceneRuntime.runtimeCamera;
         if(runtimeCamera) {
             SceneManager.renderer.update(runtimeCamera.node);

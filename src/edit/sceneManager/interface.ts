@@ -14,6 +14,7 @@ export enum SceneObjectType {
     SPRITE = 'sprite', // 精灵
     LIGHT = 'light', // 灯光
     Camera = 'Camera', // 相机
+    Particle = 'Particle', // 粒子
 }
 
 export const AllowedValues: SceneObjectType[] = [

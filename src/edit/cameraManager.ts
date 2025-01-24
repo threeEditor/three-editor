@@ -38,7 +38,7 @@ export default class CameraManager {
 
   init() {
     const { sizes, scene, renderer, wrap } = this;
-    const camera = new PerspectiveCamera(60, sizes.width / sizes.height, 0.1, 1500);
+    const camera = new PerspectiveCamera(60, sizes.width / sizes.height, 0.1, 10000);
     scene.add(camera);
 
     

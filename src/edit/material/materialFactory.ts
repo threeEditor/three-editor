@@ -7,7 +7,7 @@ export class MaterialFactory {
     static async initMaterial(materialProps: IMaterialParameters) {
         const { type, texture, repeatX = 1, repeatY = 1 } = materialProps;
         // const texture = 'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/unnamed.png'
-        const map = texture ? await textureLoader.loadAsync(texture) : undefined;
+        const map = texture ? await textureLoader.loadAsync(texture) : null;
         if(texture && repeatX > 1 && map) {
             map.wrapS = RepeatWrapping;
             map.repeat.setX(repeatX)
@@ -21,7 +21,6 @@ export class MaterialFactory {
             case MaterialType.Phong:
                 return this.initMeshPhongMaterial(materialProps);
             default:
-                console.log(888, map)
                 return this.initMeshPhongMaterial({
                     ...materialProps,
                     map,
@@ -41,9 +40,12 @@ export class MaterialFactory {
     }
 
     private static initMeshPhongMaterial(materialProps: IMaterialParameters) {
-        return new MeshPhongMaterial({
+        const params: Record<string, any> = {
             color: materialProps.color || 0xffffff,
-            map: materialProps.map,
-        });
+        };
+        if(materialProps.map) {
+            params.map = materialProps.map;
+        }
+        return new MeshPhongMaterial(params);
     }
 }

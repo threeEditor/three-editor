@@ -7,3 +7,8 @@ export const formatJsonStr = (json: object) => {
         return 'JSON Format Error!';
     }
 };
+
+// 自定义函数生成指定范围内的随机数
+export const getRandomRange = (min: number, max: number) => {
+    return Math.random() * (max - min) + min;
+};
