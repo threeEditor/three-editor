@@ -17,6 +17,14 @@ export class SceneEditor {
     }
     
     static update() {
+        // model 动画 update 后续优化是否实时更新
+        SceneManager._modelAnimationMixer.forEach((mixer) => {
+            mixer.update(0.01);
+        });
+        // 更新粒子
+        // SceneManager._particleList.forEach((particle) => {
+        //     particle.update();
+        // })
         if (SceneManager.cameraManager.outlinePassEnable) {
             // console.log('&&&')
             SceneManager.cameraManager.update();

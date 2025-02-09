@@ -8,3 +8,5 @@ export const defaultCubeMap = [
     'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/pos-z.jpg',
     'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/three/cube_01/neg-z.jpg'
 ]
+
+export const dot = 'https://lf3-static.bytednsdoc.com/obj/eden-cn/vhfuhpxpf/dot.png';

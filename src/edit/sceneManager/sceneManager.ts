@@ -1,6 +1,9 @@
 import {
   Scene,
   AnimationMixer,
+  SpriteMaterial,
+  AdditiveBlending,
+  Sprite,
 } from 'three';
 import MaterialManager from '../material/materialManager';
 import Renderer from '../renderer';
@@ -23,9 +26,13 @@ import { SceneLoader } from './sceneLoader';
 import { SceneEditor } from './sceneEditor';
 import { SceneRuntime } from './sceneRuntime';
 import { ISceneConfig } from '@/sceneConfig/interface';
+import { Body, Color, ease, Emitter, Gravity, Life, Mass, Position, Proton, RandomDrift, Rate, Scale, Span, SphereZone, SpriteRender, Vector3D, Velocity } from 'yiqianyao_particle';
+import { loadTexture } from '../loader/loadTexture';
+import { dot } from '@/common/resource';
 
 export default class SceneManager {
   static scene: Scene = new Scene();
+  static proton = new Proton();
   static renderer: Renderer;
   static sizes: Sizes;
   static config: any;
@@ -35,6 +42,7 @@ export default class SceneManager {
   static cache = new SceneCache();
   static selector = new Selector();
   static _modelAnimationMixer: AnimationMixer[] = [];
+  // static _particleList: any[] = [];
   static GizmoManager: GizmoManager;
   static resources: Resources;
   static sky = new Sky();
@@ -71,7 +79,7 @@ export default class SceneManager {
 
     // 初始化资源
     SceneManager.resources = new Resources();
-    // 加载资源
+    // 加载资源 后续待优化
     SceneManager.resources.loadAssets(assets);
 
     // 初始化gizmo
@@ -99,6 +107,31 @@ export default class SceneManager {
       SceneManager.GizmoManager.detachObject();
       EventSystem.broadcast(DisplayEvents.SelectTreeNode, []);
     });
+
+    
+    const texture =  await loadTexture(dot);
+    const material = new SpriteMaterial({
+      map: texture,
+      color: 0xff0000,
+      blending: AdditiveBlending,
+    });
+    const sprite = new Sprite(material);
+    const emitter = new Emitter();
+    emitter.rate = new Rate(new Span(10, 15), new Span(.05, .1));
+    emitter.addInitialize(new Body(sprite));
+    emitter.addInitialize(new Mass(1));
+    emitter.addInitialize(new Life(1, 3));
+    emitter.addInitialize(new Position(new SphereZone(0.5))); // 设置粒子的初始位置
+    emitter.addInitialize(new Velocity(new Span(25, 45), new Vector3D(0, 1, 0), 35));
+    emitter.addBehaviour(new RandomDrift(2, 2, 2, .05));
+    emitter.addBehaviour(new Scale(new Span(0.5, 0), 0));
+    emitter.addBehaviour(new Gravity(1));
+    emitter.addBehaviour(new Color('#FF0026', ['#ffff00', '#ffff11'], Infinity, ease.easeOutSine));
+    emitter.p.x = 10;
+    emitter.p.y = 0;
+    emitter.emit();
+    SceneManager.proton.addEmitter(emitter);
+    SceneManager.proton.addRender(new SpriteRender(SceneManager.scene));
     SceneManager.inited = true;
   }
 
@@ -193,10 +226,8 @@ export default class SceneManager {
     } else {
       SceneRuntime.update();
     }
-    // model 动画 update
-    SceneManager._modelAnimationMixer.forEach((mixer) => {
-      mixer.update(0.01);
-    });
+
+    SceneManager.proton.update();
   }
 
   static resize() {

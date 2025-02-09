@@ -10,6 +10,7 @@ import { cacheTreeNodes } from "./sceneCache";
 import { SceneRuntime } from "./sceneRuntime";
 import { ICamera, ILight, IObject, ISceneConfig } from "@/sceneConfig/interface";
 import { defaultRotation, defaultPosition } from "@/mock/config";
+// import { Particle } from "../objects/particle";
 
 export class SceneLoader {
     static async loadScene(sceneConfig: ISceneConfig) {
@@ -19,6 +20,14 @@ export class SceneLoader {
       SceneLoader.loadCameras(sceneConfig.cameras);
       // 加载物体
       await SceneLoader.loadObjects(sceneConfig.objects);
+
+      // setTimeout(() => {
+      //   const particle = new Particle();
+      //   console.log(particle);
+      // }, 100)
+      
+      // SceneManager._particleList.push(particle)
+      
    
       EventSystem.broadcast(DisplayEvents.SetTreeNodes, cacheTreeNodes);
     }
