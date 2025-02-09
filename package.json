@@ -20,7 +20,8 @@
     "react-ace": "^12.0.0",
     "react-dom": "^18.3.1",
     "three": "^0.168.0",
-    "three.proton.js": "^0.2.3"
+    "three.proton.js": "^0.2.3",
+    "yiqianyao_particle": "^0.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.12.0",
@@ -36,5 +37,6 @@
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.9.0",
     "vite": "^5.4.9"
-  }
+  },
+  "packageManager": "pnpm@9.15.4+sha1.ffa0b5c573381e8035b354028ccff97c8e452047"
 }

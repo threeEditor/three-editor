@@ -7,7 +7,7 @@ import { BaseObject } from "./baseObject";
 // import { Proton } from '../../particle/core/'
 
 import SceneManager from "../sceneManager/sceneManager";
-import { getRandomRange } from "@/utils/util";
+// import { getRandomRange } from "@/utils/util";
 
 export class Particle extends BaseObject {
     public type = SceneObjectType.Particle;
