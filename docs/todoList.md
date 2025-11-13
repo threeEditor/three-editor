@@ -1,4 +1,4 @@
-- `three.proton` 例子模块的引入
+- [20%]`three.proton` 例子模块的引入
 1. 使用参考：https://juejin.cn/post/7063282795174428679
     https://drawcall.github.io/three.proton/
     https://three-nebula.org/
@@ -48,5 +48,6 @@
 - `Layout` 布局
 1. [20%] 各种面板支持可拖拽（新增拖拽的条组件）
 2. 面板属性的持久化
+3. 使用 `CSSTransition` 打开面板的动画效果 https://reactcommunity.org/react-transition-group/css-transition
 
 - `Storage` 本地存储
